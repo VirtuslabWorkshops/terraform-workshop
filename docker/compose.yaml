@@ -1,0 +1,26 @@
+version: "1"
+
+# To execute: docker compose run --rm terragrunt
+#
+# Try not to modify this file directly.
+# Create a `docker-compose.override.yaml` (you can copy it from `docker-compose.override.example.yaml`) and modify that file for your needs and configuration.
+services:
+  cloudyna:
+    image: cloudyna:latest
+    working_dir: /src
+    volumes:
+      - /etc/localtime:/etc/localtime              # Synchronize timezone. If this will not work, please setup `TZ` environment variable in docker-compose.override.yaml
+      - ./:/src                                    # Mount folder with reference architecture to `/src`
+      - ~/.azure:/root/.azure                      # Mount Azure CLI folder with credentials to container
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts  # SSH known_hosts
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket
+      - ./bash_history:/root/.bash_history        # SSH public key
+
+      # [Optional] Required for ptrace-based debuggers like C++, Go, and Rust
+      - ~/.terraform.d:/root/.terraform.d  # Mount local .terraform.d folder to container to reuse cached providers (optional)
+      - ~/.config/gh:/root/.config/gh       # GitHub CLI
+
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined

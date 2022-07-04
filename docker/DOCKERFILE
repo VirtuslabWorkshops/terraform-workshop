@@ -1,0 +1,21 @@
+FROM ubuntu:jammy
+
+ARG TERRAFORM_VERSION=1.2.3
+#ARG TERRAFORM_DOCS_VERSION=0.16.0
+#ARG TFLINT_VERSION=0.37.0
+ARG TERRAGRUNT_VERSION=0.38.0
+
+#ARG GH_VERSION=2.12.1
+ARG AZCLI_VERSION=2.37.0
+
+ENV TERM=xterm-256color
+
+
+RUN apt-get update
+RUN apt-get install --yes apt-utils curl wget unzip bash-completion git vim gnupg2 lsb-core
+RUN apt-get install --yes software-properties-common # todo merge
+
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+RUN apt-get update && apt-get install --yes terraform
+
