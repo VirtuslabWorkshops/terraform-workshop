@@ -5,17 +5,34 @@ ARG TERRAFORM_VERSION=1.2.3
 #ARG TFLINT_VERSION=0.37.0
 ARG TERRAGRUNT_VERSION=0.38.0
 
-#ARG GH_VERSION=2.12.1
+ARG GH_VERSION=2.13.0
 ARG AZCLI_VERSION=2.37.0
 
 ENV TERM=xterm-256color
 
 
 RUN apt-get update
-RUN apt-get install --yes apt-utils curl wget unzip bash-completion git vim gnupg2 lsb-core
-RUN apt-get install --yes software-properties-common # todo merge
-
+RUN apt-get install --yes apt-utils curl wget unzip bash-completion git vim gnupg2 lsb-core software-properties-common jq
+RUN echo "source /etc/bash_completion" >> ~/.bashrc
+# terraform
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
 RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-RUN apt-get update && apt-get install --yes terraform
+
+#Github cli
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+RUN apt-get update && apt-get install --yes terraform=${TERRAFORM_VERSION} gh=${GH_VERSION}
+
+#terragrunt
+RUN curl -sL https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 > /usr/bin/terragrunt && \
+      chmod +x usr/bin/terragrunt
+
+RUN echo 'eval "$(gh completion -s bash)"' >> ~/.bashrc
+RUN terraform -install-autocomplete
+
+#kubectl
+RUN curl -sL https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl > /usr/bin/kubectl && \
+    chmod +x /usr/bin/kubectl
+RUN echo 'source <(kubectl completion bash)' >>~/.bashrc && echo 'alias k=kubectl' >>~/.bashrc && echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 
