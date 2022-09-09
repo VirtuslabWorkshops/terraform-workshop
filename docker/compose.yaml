@@ -14,7 +14,7 @@ services:
       - ~/.azure:/root/.azure                      # Mount Azure CLI folder with credentials to container
       - ~/.ssh/known_hosts:/root/.ssh/known_hosts  # SSH known_hosts
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket
-      - ./bash_history:/root/.bash_history        # SSH public key
+#      - ./bash_history:/root/.bash_history         # History file
 
       # [Optional] Required for ptrace-based debuggers like C++, Go, and Rust
       - ~/.terraform.d:/root/.terraform.d  # Mount local .terraform.d folder to container to reuse cached providers (optional)

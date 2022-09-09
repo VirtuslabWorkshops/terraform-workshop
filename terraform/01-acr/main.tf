@@ -1,12 +1,16 @@
-resource "azurerm_resource_group" "example" {
-  location            = var.location
-  name = var.resource_group_name
+locals {
+  postfix = "${var.workload}-${var.environment}-${var.location}"
+  rg_group_name = "rg-${local.postfix}"
 }
 
+resource "azurerm_resource_group" "example" {
+  location = var.location
+  name     = local.rg_group_name
+}
 
 resource "azurerm_container_registry" "example" {
-  name                = "containerRegistry1"
+  name                = "cr-${local.postfix}"
   location            = var.location
-  resource_group_name = var.resource_group_name
-  sku                 = "Basic"
+  resource_group_name = local.rg_group_name
+  sku                 = var.cr_sku
 }

@@ -1,14 +1,41 @@
-variable "resource_group_name" {
+# commons
+variable "workload" {
   type = string
   validation {
-    condition     = can(regex("^[\\w-]+$", var.resource_group_name))
-    error_message = "Resource group name is not valid."
+    condition     = can(regex("^[\\w-]+$", var.workload))
+    error_message = "Workload group name is not valid."
   }
 }
+
+variable "team_name" {
+  type = string
+  validation {
+    condition     = can(regex("^[\\w-]+$", var.team_name))
+    error_message = "Team_name group name is not valid."
+  }
+}
+
+variable "environment" {
+  type = string
+  validation {
+    condition     = can(regex("^[\\w-]+$", var.environment))
+    error_message = "Environment group name is not valid."
+  }
+}
+
 variable "location" {
   type = string
   validation {
     condition     = can(regex("^[\\w-]+$", var.location))
-    error_message = "Argo CD namespace is not valid."
+    error_message = "Location group name is not valid."
+  }
+}
+
+# acr
+variable "cr_sku" {
+  type = string
+  validation {
+    condition     = can(regex("^Basic|Premium$", var.cr_sku))
+    error_message = "Container Registry sku can be Basic or Premium only."
   }
 }
