@@ -36,3 +36,4 @@ RUN curl -sL https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl > /usr/bi
     chmod +x /usr/bin/kubectl
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc && echo 'alias k=kubectl' >>~/.bashrc && echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash

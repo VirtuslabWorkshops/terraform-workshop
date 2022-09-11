@@ -10,7 +10,7 @@ services:
     working_dir: /src
     volumes:
       - /etc/localtime:/etc/localtime              # Synchronize timezone. If this will not work, please setup `TZ` environment variable in docker-compose.override.yaml
-      - ./:/src                                    # Mount folder with reference architecture to `/src`
+      - ../:/src                                    # Mount folder with reference architecture to `/src`
       - ~/.azure:/root/.azure                      # Mount Azure CLI folder with credentials to container
       - ~/.ssh/known_hosts:/root/.ssh/known_hosts  # SSH known_hosts
       - /var/run/docker.sock:/var/run/docker.sock  # Docker socket
