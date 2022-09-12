@@ -37,3 +37,5 @@ RUN curl -sL https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl > /usr/bi
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc && echo 'alias k=kubectl' >>~/.bashrc && echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+RUN git config --global --add safe.directory /src # fix issue with git

@@ -5,14 +5,14 @@ locals {
 #  rg_group_name = "rg-${local.postfix}"
 }
 
-resource "azurerm_resource_group" "example" {
+resource "azurerm_resource_group" "rc_acr" {
   location = var.location
   name     = "rg-${local.postfix}"
 }
 
-resource "azurerm_container_registry" "example" {
+resource "azurerm_container_registry" "acr" {
   name                = "cr${local.postfix_no_dash}"
   location            = var.location
-  resource_group_name = azurerm_resource_group.example.name
+  resource_group_name = azurerm_resource_group.rc_acr.name
   sku                 = var.cr_sku
 }
