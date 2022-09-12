@@ -25,8 +25,8 @@ variable "environment" {
 
 variable "location" {
   type = string
-#  validation {
-#    condition     = can(regex("^[\\w-]+$", var.location))
-#    error_message = "Location group name is not valid."
-#  }
+  #  validation {
+  #    condition     = can(regex("^[\\w-]+$", var.location))
+  #    error_message = "Location group name is not valid."
+  #  }
 }

@@ -1,22 +1,22 @@
 locals {
-  postfix = "${var.workload}-${var.environment}-${var.location}"
+  postfix       = "${var.workload}-${var.environment}-${var.location}"
   rg_group_name = "rg-${local.postfix}"
-  tenant-id = "xx"
-  object-id = "yy"
+  tenant-id     = "xx"
+  object-id     = "yy"
   groups = [
-        "zz", //Developers
-        "cc", //Business
+    "zz", //Developers
+    "cc", //Business
   ]
 }
 
-resource "azurerm_key_vault" "vault" {
-  name                = "kv-${local.postfix}"
-  location            = var.location
-  resource_group_name = local.rg_group_name
-  tenant_id                   = local.tenant-id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
-  sku_name = var.kv_sku
+resource "azurerm_key_vault" "keyvault" {
+  name                       = "kv-${local.postfix}"
+  location                   = var.location
+  resource_group_name        = local.rg_group_name
+  tenant_id                  = local.tenant-id
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
+  sku_name                   = var.kv_sku
 }
 
 resource "azurerm_key_vault_access_policy" "access_policy" {

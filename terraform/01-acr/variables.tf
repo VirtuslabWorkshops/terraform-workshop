@@ -34,8 +34,8 @@ variable "location" {
 # acr
 variable "cr_sku" {
   type = string
-#  validation {
-#    condition     = can(regex("^Basic|Premium$", var.cr_sku))
-#    error_message = "Container Registry sku can be Basic or Premium only."
-#  }
+  #  validation {
+  #    condition     = can(regex("^Basic|Premium$", var.cr_sku))
+  #    error_message = "Container Registry sku can be Basic or Premium only."
+  #  }
 }

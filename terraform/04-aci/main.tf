@@ -5,7 +5,7 @@ locals {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
       name            = "frontend"
       ip_address_type = "Public"
-      image           = "mcr.microsoft.com/azuredocs/aci-helloworld:latest"
+      image           = var.frontendimage #"acr.microsoft.com/azuredocs/aci-helloworld:latest"
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
@@ -15,7 +15,7 @@ locals {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
       name            = "backend"
       ip_address_type = "Private"
-      image           = "mcr.microsoft.com/azuredocs/aci-helloworld:latest"
+      image           = var.backendimage #"acr.microsoft.com/azuredocs/aci-helloworld:latest"
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
@@ -31,7 +31,7 @@ resource "azurerm_container_group" "aci" {
   location            = var.location
   resource_group_name = local.rg_group_name
   ip_address_type     = each.value.ip_address_type
-  dns_name_label      = "aci${local.postfix}"
+  dns_name_label      = "aci${each.value.name}${local.postfix}"
   os_type             = "Linux"
 
   container {
