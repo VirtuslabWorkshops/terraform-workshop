@@ -5,7 +5,7 @@ locals {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
       name            = "frontend"
       ip_address_type = "Public"
-      image           = var.frontendimage #"acr.microsoft.com/azuredocs/aci-helloworld:latest"
+      image           = var.frontendimage
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
@@ -15,7 +15,7 @@ locals {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
       name            = "backend"
       ip_address_type = "Private"
-      image           = var.backendimage #"acr.microsoft.com/azuredocs/aci-helloworld:latest"
+      image           = var.backendimage
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
