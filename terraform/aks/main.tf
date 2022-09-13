@@ -3,7 +3,7 @@
 #  location = "West Europe"
 #}
 
-data "azurerm_resource_group"  "rg" {
+data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
@@ -29,7 +29,7 @@ resource "azurerm_kubernetes_cluster" "example" {
 }
 
 data "azurerm_container_registry" "example" {
-  name = var.acr_name
+  name                = var.acr_name
   resource_group_name = var.resource_group_name
 }
 

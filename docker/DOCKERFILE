@@ -1,11 +1,11 @@
-FROM ubuntu:jammy
+FROM ubuntu:bionic
 
 ARG TERRAFORM_VERSION=1.2.3
 #ARG TERRAFORM_DOCS_VERSION=0.16.0
 #ARG TFLINT_VERSION=0.37.0
 ARG TERRAGRUNT_VERSION=0.38.0
 
-ARG GH_VERSION=2.13.0
+ARG GH_VERSION=2.15.0
 ARG AZCLI_VERSION=2.37.0
 
 ENV TERM=xterm-256color
@@ -36,3 +36,6 @@ RUN curl -sL https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl > /usr/bi
     chmod +x /usr/bin/kubectl
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc && echo 'alias k=kubectl' >>~/.bashrc && echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+RUN git config --global --add safe.directory /src # fix issue with git
