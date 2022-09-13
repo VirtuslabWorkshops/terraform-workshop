@@ -25,9 +25,6 @@ provider "azurerm" {
 EOF
 }
 
-
-
-
 inputs = {
   workload = local.workload
   team_name = local.team_name

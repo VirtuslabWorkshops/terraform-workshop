@@ -4,7 +4,7 @@ include "root" {
 }
 
 terraform {
-  source = "../..//terraform/00-storage_account"
+  source = "../..//terraform/storage_account"
 }
 
 inputs = {

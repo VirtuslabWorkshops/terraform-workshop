@@ -1,7 +1,7 @@
 locals {
-  postfix = "${var.workload}-${var.environment}-${var.location}"
-  postfix_no_dash = replace(local.postfix,"-" , "")
-  location = var.location == "ewu" ?  "westeurope" : "northeurope"
+  postfix         = "${var.workload}-${var.environment}-${var.location}"
+  postfix_no_dash = replace(local.postfix, "-", "")
+  location        = var.location == "ewu" ? "westeurope" : "northeurope"
 }
 output "postfix" {
   value = "rg-${local.postfix}"
@@ -25,11 +25,3 @@ resource "azurerm_storage_container" "storage_container" {
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
 }
-
-##resource "azurerm_storage_blob" "example" {
-##  name                   = "my-awesome-content.zip"
-##  storage_account_name   = azurerm_storage_account.example.name
-##  storage_container_name = azurerm_storage_container.example.name
-##  type                   = "Block"
-##  source                 = "some-local-file.zip"
-##}
