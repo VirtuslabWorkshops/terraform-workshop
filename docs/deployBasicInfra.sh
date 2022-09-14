@@ -42,6 +42,7 @@ az sql db create \
     --family Gen5 \
     --capacity 2 
 
+# Login to SQL server and execute queries from populateDB.txt file
 
 export ACRNAME="acr${PROJECTNAME}devweu"
 
