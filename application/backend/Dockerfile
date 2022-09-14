@@ -7,6 +7,6 @@ RUN npm install
 
 COPY /api/* .
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD [ "node", "server.js" ]

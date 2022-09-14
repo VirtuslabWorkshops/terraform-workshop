@@ -85,7 +85,7 @@ az container create \
     --ports 8080 \
     --cpu 1 \
     --memory 1 \
-    --environment-variables 'PGHOST'=$PSQLSERVER 'PGUSER'=$PSQLUSER 'PGPASSWORD'=$PSQLPASSWORD 'PGDATABASE'=$PSQLDATABASE
+    --environment-variables 'SERVER'=$SQLSERVER 'USER'=$SQLOGIN 'PASSWORD'=$SQLPASSWORD 'DATABASE'=$DATABASENAME
 
 az container show --resource-group $RGNAME --name $BACKENDNAME
 
