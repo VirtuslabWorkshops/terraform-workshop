@@ -14,7 +14,7 @@ const getArticles = (request, response) => {
           var req = new sql.Request(conn);
 
           // Call mssql's query method passing in params
-          req.query("SELECT * FROM [SalesLT].[Customer]")
+          req.query("SELECT * FROM ARTICLES")
               .then(function (recordset) {
                 response.status(200).json(recordset);
                   conn.close();

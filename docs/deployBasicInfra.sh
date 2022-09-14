@@ -8,25 +8,39 @@ export LOCATION="westeurope"
 export RGNAME="rg-${PROJECTNAME}-dev-weu"
 az group create --location $LOCATION --name $RGNAME
 
-export PSQLUSER="labadmin"
-export PSQLPASSWORD="passw0rd"
-export PSQLDATABASE="psqldb${PROJECTNAME}devweu"
-export PSQLSERVER="psql${PROJECTNAME}devuw"
 
-az postgres flexible-server create \
+let "randomIdentifier=$RANDOM*$RANDOM"
+
+export SQLSERVER="sql${PROJECTNAME}devweu"
+export DATABASENAME="db${PROJECTNAME}devweu"
+export SQLLOGIN="azureuser"
+export SQLPASSWORD="Pa$$w0rD-$randomIdentifier"
+export SQLstartIp=0.0.0.0
+export SQLendIp=0.0.0.0
+
+az sql server create \
     --location $LOCATION \
     --resource-group $RGNAME \
-    --name $PSQLSERVER \
-    --sku-name Standard_B1ms \
-    --storage-size 32 \
-    --tier Burstable \
-    --version 14 \
-    --public-access 0.0.0.0 \
-    --database-name $PGDATABASE \
-    --admin-user $PSQLUSER \
-    --admin-password $PSQLPASSWORD
+    --name $SQLSERVER \
+    --admin-user $SQLLOGIN \
+    --admin-password $SQLPASSWORD
 
-export PSQLURL=$(az postgres flexible-server show --resource-group $RGNAME --name $PSQLSERVER --query fullyQualifiedDomainName | tr -d '"')
+
+az sql server firewall-rule create \
+    --resource-group $RGNAME \
+    --server $SQLSERVER \
+    -n AllowYourIp \
+    --start-ip-address $SQLstartIp \
+    --end-ip-address $SQLendIp
+
+
+az sql db create \
+    --resource-group $RGNAME \
+    --server $SQLSERVER \
+    --name $DATABASENAME \
+    --edition GeneralPurpose \
+    --family Gen5 \
+    --capacity 2 
 
 
 export ACRNAME="acr${PROJECTNAME}devweu"
