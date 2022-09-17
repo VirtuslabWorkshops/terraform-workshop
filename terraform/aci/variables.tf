@@ -32,16 +32,10 @@ variable "location" {
 
 variable "frontendimage" {
   type = string
-  validation {
-    condition     = can(regex("^[a-z0-9](([a-z0-9-[^-])){1,61}[a-z0-9]$", var.frontendimage))
-    error_message = "Container name is not valid."
-  }
+  default = "acrwglabprodwesteurope.azurecr.io/frontend"
 }
 
 variable "backendimage" {
   type = string
-  validation {
-    condition     = can(regex("^[a-z0-9](([a-z0-9-[^-])){1,61}[a-z0-9]$", var.backendimage))
-    error_message = "Container name is not valid."
-  }
+  default = "acrwglabprodwesteurope.azurecr.io/backend"
 }

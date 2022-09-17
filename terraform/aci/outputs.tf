@@ -1,4 +1,4 @@
-output "aci-url" {
-  description = "Container instance URI"
-  value       = azurerm_key_vault.vault.vault_uri
-}
+//output "aci-url" {
+//  description = "Container instance URI"
+//  value       = azurerm_container_group.aci.*.fqdn
+//}

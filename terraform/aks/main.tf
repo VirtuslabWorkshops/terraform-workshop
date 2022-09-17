@@ -1,5 +1,6 @@
 locals {
-  postfix       = "${var.workload}-${var.environment}-${var.location}"
+  postfix         = "${var.workload}-${var.environment}-${var.location}"
+  postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name = "rg-${local.postfix}"
 }
 
@@ -10,8 +11,8 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_container_registry" "acr" {
-  name                = var.acr_name
-  resource_group_name = var.resource_group_name
+  name                = "acr${local.postfix_no_dash}"
+  resource_group_name = local.rg_group_name
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
