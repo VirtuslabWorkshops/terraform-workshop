@@ -1,7 +1,7 @@
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
-  rg_group_name = "rg-${local.postfix}"
+  rg_group_name   = "rg-${local.postfix}"
 }
 
 data "azurerm_client_config" "current" {}
@@ -16,10 +16,10 @@ data "azurerm_container_registry" "acr" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "aks-${postfix}"
+  name                = "aks-${local.postfix}"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
-  dns_prefix          = "aks-${postfix}"
+  dns_prefix          = "aks-${local.postfix}"
 
   default_node_pool {
     name       = "default"
@@ -32,7 +32,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = {
-    Environment = "Production"
+    environment = var.environment
+    team        = var.team_name
   }
 }
 

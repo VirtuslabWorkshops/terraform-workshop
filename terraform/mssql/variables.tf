@@ -35,11 +35,11 @@ variable "location" {
 }
 
 # kv
-variable "kv_sku" {
+variable "db_sku" {
   type = string
   validation {
-    condition     = can(regex("^standard|premium$", var.kv_sku))
-    error_message = "KV sku can be Standard or Premium only."
+    condition     = can(regex("^Basic|S0|P2$", var.db_sku))
+    error_message = "MSSQL sku can be Basic, S0, P2 only."
   }
-  default = "standard"
+  default = "Basic"
 }

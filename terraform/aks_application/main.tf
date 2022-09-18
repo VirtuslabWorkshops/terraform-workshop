@@ -45,8 +45,8 @@ data "azurerm_container_registry" "acr" {
 }
 
 
-resource "kubernetes_deployment" "example" {
-    for_each = local.applications
+resource "kubernetes_deployment" "app" {
+  for_each = local.applications
   metadata {
     name = "${each.value.name}-${each.value.postfix}"
     labels = {

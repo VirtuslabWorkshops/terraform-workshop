@@ -2,19 +2,28 @@
 
 #`<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
-export PROJECTNAME="wgvl"
+export PROJECTNAME="mgmt"
 
 export LOCATION="westeurope"
 export RGNAME="rg-${PROJECTNAME}-dev-weu"
 az group create --location $LOCATION --name $RGNAME
 
+export KVNAME="kv-${PROJECTNAME}-dev-weu"
+az keyvault create --name $KVNAME --resource-group $RGNAME --location $LOCATION
 
-let "randomIdentifier=$RANDOM*$RANDOM"
+let "RAND=$RANDOM*$RANDOM"
+
+export SQLUSER="${PROJECTNAME}"
+export SQLPASSWORD="Passw0rd!${RAND}"
+
+az keyvault secret set --vault-name $KVNAME --name "SQLUSER" --value $SQLUSER
+
+az keyvault secret set --vault-name $KVNAME --name "SQLPASSWORD" --value $SQLPASSWORD
 
 export SQLSERVER="sql${PROJECTNAME}devweu"
 export DATABASENAME="db${PROJECTNAME}devweu"
-export SQLLOGIN="azureuser"
-export SQLPASSWORD="Pa$$w0rD-$randomIdentifier"
+export SQLLOGIN=$SQLUSER
+export SQLPASSWORD=$SQLPASSWORD
 export SQLstartIp=0.0.0.0
 export SQLendIp=0.0.0.0
 
@@ -29,7 +38,7 @@ az sql server create \
 az sql server firewall-rule create \
     --resource-group $RGNAME \
     --server $SQLSERVER \
-    -n AllowYourIp \
+    --name letallin \
     --start-ip-address $SQLstartIp \
     --end-ip-address $SQLendIp
 
@@ -64,10 +73,9 @@ ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPALNAME --query "[].app
 echo "Service principal ID: $ACRUSERNAME"
 echo "Service principal password: $ACRPASSWORD"
 
-
 az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-id" --value $ACRUSERNAME
-az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-password" --value $ACRPASSWORD
 
+az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-password" --value $ACRPASSWORD
 
 cd ..
 cd application/backend

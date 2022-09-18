@@ -18,6 +18,11 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = azurerm_resource_group.rg_storage_account.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+
+  tags = {
+    environment = var.environment
+    team        = var.team_name
+  }
 }
 
 resource "azurerm_storage_container" "storage_container" {

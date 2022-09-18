@@ -15,4 +15,9 @@ resource "azurerm_container_registry" "acr" {
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   sku                 = var.acr_sku
+
+  tags = {
+    environment = var.environment
+    team        = var.team_name
+  }
 }

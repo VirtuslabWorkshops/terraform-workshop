@@ -1,7 +1,7 @@
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
-  rg_group_name = "rg-${local.postfix}"
+  rg_group_name   = "rg-${local.postfix}"
   applications = {
     frontend = {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
@@ -33,17 +33,17 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_key_vault" "kv" {
-  name                = "kv${postfix_no_dash}"
+  name                = "kv-${local.postfix}"
   resource_group_name = local.rg_group_name
 }
 
 data "azurerm_key_vault_secret" "spn_id" {
-  name = "spn-${postfix}-id"
+  name         = "spn-${local.postfix}-id"
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
 data "azurerm_key_vault_secret" "spn_password" {
-  name = "spn-${postfix}-password"
+  name         = "spn-${local.postfix}-password"
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
@@ -78,5 +78,10 @@ resource "azurerm_container_group" "aci" {
       port     = each.value.port
       protocol = each.value.protocol
     }
+  }
+
+  tags = {
+    environment = var.environment
+    team        = var.team_name
   }
 }
