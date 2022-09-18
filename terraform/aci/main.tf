@@ -32,8 +32,22 @@ data "azurerm_resource_group" "rg" {
   name = local.rg_group_name
 }
 
-data "azurerm_container_registry" "acr" {
+data "azurerm_key_vault" "kv" {
+  name                = "kv${postfix_no_dash}"
+  resource_group_name = local.rg_group_name
+}
 
+data "azurerm_key_vault_secret" "spn_id" {
+  name = "spn-${postfix}-id"
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_secret" "spn_password" {
+  name = "spn-${postfix}-password"
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_container_registry" "acr" {
   name                = "acr${local.postfix_no_dash}"
   resource_group_name = local.rg_group_name
 }
@@ -50,8 +64,8 @@ resource "azurerm_container_group" "aci" {
 
   image_registry_credential {
     server   = data.azurerm_container_registry.acr.login_server
-    username = data.azurerm_container_registry.acr.admin_username
-    password = data.azurerm_container_registry.acr.admin_password
+    username = data.azurerm_key_vault_secret.spn_id.value
+    password = data.azurerm_key_vault_secret.spn_password.value
   }
 
   container {

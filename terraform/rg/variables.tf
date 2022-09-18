@@ -22,7 +22,7 @@ variable "environment" {
     condition     = can(regex("^[\\w-]+$", var.environment))
     error_message = "Environment group name is not valid."
   }
-  default = "prod"
+  default = "dev"
 }
 
 variable "location" {

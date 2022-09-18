@@ -65,6 +65,10 @@ echo "Service principal ID: $ACRUSERNAME"
 echo "Service principal password: $ACRPASSWORD"
 
 
+az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-id" --value $ACRUSERNAME
+az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-password" --value $ACRPASSWORD
+
+
 cd ..
 cd application/backend
 docker build -t backend:latest .

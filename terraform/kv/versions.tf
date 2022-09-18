@@ -13,6 +13,6 @@ provider "azurerm" {
   features {
     
   }
-    subscription_id = "fcaa2d1d-a60f-45a5-85e5-ec5691d48130"
-    tenant_id       = "e1f301d1-f447-42b5-b1da-1cd6f79ed0eb"
+    subscription_id = "2e0a8c21-a160-4d9b-b9af-16e54f7663b8"
+    tenant_id       = "32268039-35b0-4dc1-961a-989ebea1bcae"
 }
