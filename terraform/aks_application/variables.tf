@@ -1,23 +1,45 @@
+variable "workload" {
+  type = string
+  validation {
+    condition     = can(regex("^[\\w-]+$", var.workload))
+    error_message = "Workload group name is not valid."
+  }
+  default = "mgmt"
+}
+
+variable "team_name" {
+  type = string
+  validation {
+    condition     = can(regex("^[\\w-]+$", var.team_name))
+    error_message = "Team_name group name is not valid."
+  }
+  default = "vl"
+}
+
+variable "environment" {
+  type = string
+  validation {
+    condition     = can(regex("^[\\w-]+$", var.environment))
+    error_message = "Environment group name is not valid."
+  }
+  default = "dev"
+}
+
 variable "location" {
   type = string
   validation {
     condition     = can(regex("^[\\w-]+$", var.location))
-    error_message = "Argo CD namespace is not valid."
+    error_message = "Location group name is not valid."
   }
+  default = "westeurope"
 }
 
-variable "resource_group_name" {
-  type = string
-  validation {
-    condition     = can(regex("^[\\w-]+$", var.resource_group_name))
-    error_message = "Resource group name is not valid."
-  }
+variable "frontendimage" {
+  type    = string
+  default = "acrmgmtdevwesteurope.azurecr.io/frontend"
 }
 
-variable "acr_name" {
-  type = string
-  validation {
-    condition     = can(regex("^[\\w-]+$", var.acr_name))
-    error_message = "Resource group name is not valid."
-  }
+variable "backendimage" {
+  type    = string
+  default = "acrmgmtdevwesteurope.azurecr.io/backend"
 }

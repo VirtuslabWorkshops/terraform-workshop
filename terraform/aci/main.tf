@@ -52,6 +52,27 @@ data "azurerm_container_registry" "acr" {
   resource_group_name = local.rg_group_name
 }
 
+data "azurerm_key_vault_secret" "sql_user" {
+  name         = "sqluser"
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_secret" "sql_password" {
+  name         = "sqlpassword"
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_mssql_server" "mssql" {
+  name                = "mssql-${local.postfix}"
+  resource_group_name = local.rg_group_name
+}
+
+data "azurerm_mssql_database" "db" {
+  name      = "db${local.postfix_no_dash}"
+  server_id = data.azurerm_mssql_server.mssql.id
+
+}
+
 resource "azurerm_container_group" "aci" {
   for_each = local.applications
 
@@ -73,6 +94,15 @@ resource "azurerm_container_group" "aci" {
     image  = each.value.image
     cpu    = each.value.cpu
     memory = each.value.memory
+
+    secure_environment_variables = {
+      USER     = data.azurerm_key_vault_secret.sql_user.value
+      PASSWORD = data.azurerm_key_vault_secret.sql_password.value
+    }
+    environment_variables = {
+      SERVER   = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+      DATABASE = data.azurerm_mssql_database.db.name
+    }
 
     ports {
       port     = each.value.port
