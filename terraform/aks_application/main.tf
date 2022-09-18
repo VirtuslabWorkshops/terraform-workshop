@@ -14,17 +14,17 @@ locals {
       protocol        = "TCP"
       replicas        = 2
     }
-    backend = {
-      postfix         = "${var.workload}-${var.environment}-${var.location}"
-      name            = "backend"
-      ip_address_type = "Private"
-      image           = var.backendimage
-      cpu             = "500m"
-      memory          = "500Mi"
-      port            = 80
-      protocol        = "TCP"
-      replicas        = 3
-    }
+    //backend = {
+    //  postfix         = "${var.workload}-${var.environment}-${var.location}"
+    //  name            = "backend"
+    //  ip_address_type = "Private"
+    //  image           = var.backendimage
+    //  cpu             = "500m"
+    //  memory          = "500Mi"
+    //  port            = 80
+    //  protocol        = "TCP"
+    //  replicas        = 3
+    //}
   }
 }
 
@@ -147,6 +147,104 @@ resource "kubernetes_deployment" "app" {
               memory = each.value.memory
             }
             requests = {
+              cpu    = each.value.cpu
+              memory = each.value.memory
+            }
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = each.value.port
+
+              //http_header {
+              //  name  = "X-Custom-Header"
+              //  value = "Awesome"
+              //}
+            }
+
+            initial_delay_seconds = 5
+            period_seconds        = 5
+          }
+
+          //env {
+          //  name = "SERVER"
+          //  value_from {
+          //    config_map_key_ref {
+          //      name = "backend-config-map"
+          //      key  = "mssql_url"
+          //    }
+          //  }
+          //}
+          //
+          //env {
+          //  name = "DATABASE"
+          //  value_from {
+          //    config_map_key_ref {
+          //      name = "backend-config-map"
+          //      key  = "SERVER"
+          //    }
+          //  }
+          //}
+          //env {
+          //  name = "USER"
+          //  value_from {
+          //    config_map_key_ref {
+          //      name = "backend-config-map"
+          //      key  = "USER"
+          //    }
+          //  }
+          //}
+          //env {
+          //  name = "PASSWORD"
+          //  value_from {
+          //    config_map_key_ref {
+          //      name = "backend-config-map"
+          //      key  = "PASSWORD"
+          //    }
+          //  }
+          //}
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_deployment" "nginx" {
+  metadata {
+    name = "terraform-example"
+    labels = {
+      test = "MyExampleApp"
+    }
+  }
+
+  spec {
+    replicas = 3
+
+    selector {
+      match_labels = {
+        test = "MyExampleApp"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          test = "MyExampleApp"
+        }
+      }
+
+      spec {
+        container {
+          image = "nginx:1.21.6"
+          name  = "example"
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
               cpu    = "250m"
               memory = "50Mi"
             }
@@ -165,44 +263,6 @@ resource "kubernetes_deployment" "app" {
 
             initial_delay_seconds = 3
             period_seconds        = 3
-          }
-
-          env {
-            name = "SERVER"
-            value_from {
-              config_map_key_ref {
-                name = "backend-config-map"
-                key  = "mssql_url"
-              }
-            }
-          }
-
-          env {
-            name = "DATABASE"
-            value_from {
-              config_map_key_ref {
-                name = "backend-config-map"
-                key  = "SERVER"
-              }
-            }
-          }
-          env {
-            name = "USER"
-            value_from {
-              config_map_key_ref {
-                name = "backend-config-map"
-                key  = "USER"
-              }
-            }
-          }
-          env {
-            name = "PASSWORD"
-            value_from {
-              config_map_key_ref {
-                name = "backend-config-map"
-                key  = "PASSWORD"
-              }
-            }
           }
         }
       }
