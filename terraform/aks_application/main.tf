@@ -109,6 +109,8 @@ resource "kubernetes_config_map" "app_config_map" {
 //}
 //
 //
+
+
 resource "kubernetes_deployment" "app" {
   for_each = local.applications
   metadata {
