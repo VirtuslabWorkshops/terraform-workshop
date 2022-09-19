@@ -7,7 +7,17 @@ locals {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
       name            = "app01"
       ip_address_type = "Public"
-      image           = var.app01
+      image           = var.app01image
+      cpu             = "0.5"
+      memory          = "1.5"
+      port            = 80
+      protocol        = "TCP"
+    }
+    app02 = {
+      postfix         = "${var.workload}-${var.environment}-${var.location}"
+      name            = "app02"
+      ip_address_type = "Public"
+      image           = var.app02image
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
@@ -15,9 +25,9 @@ locals {
     }
     api = {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
-      name            = "backend"
+      name            = "api"
       ip_address_type = "Public"
-      image           = var.backendimage
+      image           = var.apiimage
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
@@ -118,11 +128,4 @@ resource "azurerm_container_group" "aci" {
     environment = var.environment
     team        = var.team_name
   }
-}
-
-resource "azurerm_role_assignment" "akstoacrrole" {
-  principal_id                     = azurerm_container_group.aci[0].identity
-  role_definition_name             = "AcrPull"
-  scope                            = data.azurerm_container_registry.acr.id
-  skip_service_principal_aad_check = true
 }

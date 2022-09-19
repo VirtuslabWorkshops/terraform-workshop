@@ -11,17 +11,23 @@ data "azurerm_resource_group" "rg" {
   name = local.rg_group_name
 }
 
+data "azurerm_key_vault" "kv" {
+  name                = "kv-${local.postfix}"
+  resource_group_name = local.rg_group_name
+}
+
+data "azurerm_subnet" "aks_app" {
+  name                 = "sub-app-${local.postfix}"
+  virtual_network_name = "vnet-${local.postfix}"
+  resource_group_name  = local.rg_group_name
+}
+
 resource "random_password" "sql_password" {
   length           = 16
   min_upper        = 2
   special          = true
   min_special      = 1
   override_special = "!$#"
-}
-
-data "azurerm_key_vault" "kv" {
-  name                = "kv-${local.postfix}"
-  resource_group_name = local.rg_group_name
 }
 
 resource "azurerm_key_vault_secret" "sql_password" {
@@ -72,4 +78,11 @@ resource "azurerm_mssql_firewall_rule" "mssql-fw" {
   server_id        = azurerm_mssql_server.mssql.id
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
+}
+
+
+resource "azurerm_mssql_virtual_network_rule" "aks_mssql_service_endpoint" {
+  name      = "sql-vnet-rule"
+  server_id = azurerm_mssql_server.mssql.id
+  subnet_id = data.azurerm_subnet.aks_app.id
 }
