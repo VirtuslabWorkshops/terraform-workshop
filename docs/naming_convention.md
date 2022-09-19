@@ -15,3 +15,5 @@ We will align our naming convention with [Azure proposed](https://docs.microsoft
 | KeyVault           | Microsoft.KeyVault/vaults                   | `kv`         | 
 | MSSQL Server       | Microsoft.Sql/servers                       | `mssql`      |
 | MSSQL Database     | Microsoft.Sql/servers/databases             | `db`         |
+| Virtual Network    | Microsoft.Network/virtualnetworks           | `vnet`       |
+| Virtual Network    | Microsoft.Network/virtualnetworks/subnets   | `sub`        |
