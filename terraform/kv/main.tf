@@ -36,4 +36,9 @@ resource "azurerm_key_vault" "kv" {
       "Get",
     ]
   }
+
+  tags = {
+    environment = var.environment
+    team        = var.team_name
+  }
 }

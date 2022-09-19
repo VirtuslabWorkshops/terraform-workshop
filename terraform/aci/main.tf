@@ -3,17 +3,17 @@ locals {
   postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name   = "rg-${local.postfix}"
   applications = {
-    frontend = {
+    app01 = {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
-      name            = "frontend"
+      name            = "app01"
       ip_address_type = "Public"
-      image           = var.frontendimage
+      image           = var.app01
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
       protocol        = "TCP"
     }
-    backend = {
+    api = {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
       name            = "backend"
       ip_address_type = "Public"
@@ -89,6 +89,10 @@ resource "azurerm_container_group" "aci" {
     password = data.azurerm_key_vault_secret.spn_password.value
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
+  
   container {
     name   = each.key
     image  = each.value.image
@@ -114,4 +118,11 @@ resource "azurerm_container_group" "aci" {
     environment = var.environment
     team        = var.team_name
   }
+}
+
+resource "azurerm_role_assignment" "akstoacrrole" {
+  principal_id                     = azurerm_container_group.aci[0].identity
+  role_definition_name             = "AcrPull"
+  scope                            = data.azurerm_container_registry.acr.id
+  skip_service_principal_aad_check = true
 }
