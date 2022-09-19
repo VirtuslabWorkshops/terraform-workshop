@@ -49,6 +49,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
     environment = var.environment
     team        = var.team_name
   }
+  network_profile {
+    network_plugin    = "kubenet"
+    load_balancer_sku = "standard"
+  }
+}
+
+data "azurerm_public_ip" "aks_ip" {
+  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.example.network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
