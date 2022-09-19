@@ -1,17 +1,25 @@
-#resource "azurerm_resource_group" "example" {
-#  name     = "example-resources"
-#  location = "West Europe"
-#}
-
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
+locals {
+  postfix         = "${var.workload}-${var.environment}-${var.location}"
+  postfix_no_dash = replace(local.postfix, "-", "")
+  rg_group_name   = "rg-${local.postfix}"
 }
 
-resource "azurerm_kubernetes_cluster" "example" {
-  name                = "example-aks1"
+data "azurerm_client_config" "current" {}
+
+data "azurerm_resource_group" "rg" {
+  name = local.rg_group_name
+}
+
+data "azurerm_container_registry" "acr" {
+  name                = "acr${local.postfix_no_dash}"
+  resource_group_name = local.rg_group_name
+}
+
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = "aks-${local.postfix}"
   location            = data.azurerm_resource_group.rg.location
-  resource_group_name = var.resource_group_name
-  dns_prefix          = "exampleaks1"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  dns_prefix          = "aks-${local.postfix}"
 
   default_node_pool {
     name       = "default"
@@ -24,19 +32,14 @@ resource "azurerm_kubernetes_cluster" "example" {
   }
 
   tags = {
-    Environment = "Production"
+    environment = var.environment
+    team        = var.team_name
   }
 }
 
-data "azurerm_container_registry" "example" {
-  name                = var.acr_name
-  resource_group_name = var.resource_group_name
-}
-
-
-resource "azurerm_role_assignment" "example" {
-  principal_id                     = azurerm_kubernetes_cluster.example.kubelet_identity[0].object_id
+resource "azurerm_role_assignment" "akstoacrrole" {
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
-  scope                            = data.azurerm_container_registry.example.id
+  scope                            = data.azurerm_container_registry.acr.id
   skip_service_principal_aad_check = true
 }

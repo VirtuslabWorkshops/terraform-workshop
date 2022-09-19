@@ -34,12 +34,12 @@ variable "location" {
   default = "westeurope"
 }
 
-# acr
-variable "acr_sku" {
+# kv
+variable "db_sku" {
   type = string
   validation {
-    condition     = can(regex("^Basic|Premium$", var.acr_sku))
-    error_message = "Container Registry sku can be Basic or Premium only."
+    condition     = can(regex("^Basic|S0|P2$", var.db_sku))
+    error_message = "MSSQL sku can be Basic, S0, P2 only."
   }
   default = "Basic"
 }

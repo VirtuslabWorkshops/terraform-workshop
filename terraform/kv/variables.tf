@@ -34,12 +34,12 @@ variable "location" {
   default = "westeurope"
 }
 
-# acr
-variable "acr_sku" {
+# kv
+variable "kv_sku" {
   type = string
   validation {
-    condition     = can(regex("^Basic|Premium$", var.acr_sku))
-    error_message = "Container Registry sku can be Basic or Premium only."
+    condition     = can(regex("^standard|premium$", var.kv_sku))
+    error_message = "KV sku can be Standard or Premium only."
   }
-  default = "Basic"
+  default = "standard"
 }

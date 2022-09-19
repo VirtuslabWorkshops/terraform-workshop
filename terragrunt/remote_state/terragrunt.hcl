@@ -4,7 +4,11 @@ include "root" {
 }
 
 terraform {
+<<<<<<< HEAD
+  source = "../..//terraform/00-storage_account"
+=======
   source = "../..//terraform/storage_account"
+>>>>>>> master
 }
 
 inputs = {

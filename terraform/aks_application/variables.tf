@@ -34,12 +34,12 @@ variable "location" {
   default = "westeurope"
 }
 
-# acr
-variable "acr_sku" {
-  type = string
-  validation {
-    condition     = can(regex("^Basic|Premium$", var.acr_sku))
-    error_message = "Container Registry sku can be Basic or Premium only."
-  }
-  default = "Basic"
+variable "frontendimage" {
+  type    = string
+  default = "acrmgmtdevwesteurope.azurecr.io/frontend"
+}
+
+variable "backendimage" {
+  type    = string
+  default = "acrmgmtdevwesteurope.azurecr.io/backend"
 }
