@@ -4,6 +4,10 @@ We will align our naming convention with [Azure proposed](https://docs.microsoft
 ![naming_convention.png](naming_convention.png)
 `<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
+> In some cases dashes are ommited as they are not allowed or become problematic with several type of resources.
+
+## Resources
+
 | Asset type         | Resource provider namespace/Entity          | Abbreviation |
 |--------------------|---------------------------------------------|--------------|
 | Resource group     | Microsoft.Resources/resourceGroups          | `rg`         |
@@ -17,3 +21,7 @@ We will align our naming convention with [Azure proposed](https://docs.microsoft
 | MSSQL Database     | Microsoft.Sql/servers/databases             | `db`         |
 | Virtual Network    | Microsoft.Network/virtualnetworks           | `vnet`       |
 | Virtual Network    | Microsoft.Network/virtualnetworks/subnets   | `sub`        |
+
+
+## Locations
+Some resources 

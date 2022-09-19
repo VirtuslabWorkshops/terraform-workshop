@@ -35,10 +35,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = "aks-${local.postfix}"
 
   default_node_pool {
-    name       = "default"
-    node_count = 1
-    vm_size    = "Standard_D2_v2"
-    vnet_subnet_id        = data.azurerm_subnet.aks_default.id   
+    name           = "default"
+    node_count     = 1
+    vm_size        = "Standard_D2_v2"
+    vnet_subnet_id = data.azurerm_subnet.aks_default.id
   }
 
   identity {
@@ -49,24 +49,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
     environment = var.environment
     team        = var.team_name
   }
-  network_profile {
-    network_plugin    = "kubenet"
-    load_balancer_sku = "standard"
-  }
 }
 
-data "azurerm_public_ip" "aks_ip" {
-  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.example.network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-}
 
 resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
-  name = "appworkload"
-  node_count = 1
+  name                  = "appworkload"
+  node_count            = 1
   enable_auto_scaling   = false
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
   vm_size               = "Standard_DS3_v2"
-  vnet_subnet_id        = data.azurerm_subnet.aks_app.id   
+  vnet_subnet_id        = data.azurerm_subnet.aks_app.id
 
   tags = {
     environment = var.environment

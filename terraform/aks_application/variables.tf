@@ -36,15 +36,15 @@ variable "location" {
 
 variable "app01image" {
   type    = string
-  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
+  default = ""
 }
 
 variable "app02image" {
   type    = string
-  default = "acrwglab3devwesteurope.azurecr.io/backend"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
 variable "apiimage" {
   type    = string
-  default = "acrwglab3devwesteurope.azurecr.io/backend"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }

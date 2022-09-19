@@ -18,11 +18,11 @@ terraform {
 }
 
 locals {
-  frontendimage = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
-  backendimage = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
+  app02 = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
+  api = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
 }
 
 inputs = {
-  frontendimage = local.frontendimage
-  backendimage = local.backendimage
+  app02image = local.app02
+  apiimage = local.api
 }

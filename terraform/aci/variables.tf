@@ -41,10 +41,10 @@ variable "app01image" {
 
 variable "app02image" {
   type    = string
-  default = "acrwglab3devwesteurope.azurecr.io/backend"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
 variable "apiimage" {
   type    = string
-  default = "acrwglab3devwesteurope.azurecr.io/backend"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }

@@ -28,5 +28,5 @@ resource "azurerm_subnet" "aks-app" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = data.azurerm_resource_group.rg.name
   address_prefixes     = ["10.1.0.0/16"]
-  service_endpoints = ["Microsoft.Sql"]
+  service_endpoints    = ["Microsoft.Sql"]
 }

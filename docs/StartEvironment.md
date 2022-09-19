@@ -16,8 +16,8 @@ At some point run `populateDB.txt` against created database.
 ### Resource order
 Navigate to resources one by one and run:
 ```bash
-terraform apply -var="workload=jkmlab1"
-# feel free to replace jkm with your initials
+terraform apply -var="workload=jdlab1"
+# feel free to replace jd with your initials
 ```
 - rg
 - kv

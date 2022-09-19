@@ -102,7 +102,7 @@ resource "azurerm_container_group" "aci" {
   identity {
     type = "SystemAssigned"
   }
-  
+
   container {
     name   = each.key
     image  = each.value.image

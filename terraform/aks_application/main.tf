@@ -2,41 +2,40 @@ locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name   = "rg-${local.postfix}"
-  //applications = {
-  //  app01 = {
-  //    postfix         = "${var.workload}-${var.environment}-${var.location}"
-  //    name            = "app01"
-  //    ip_address_type = "Public"
-  //    image           = var.app01image
-  //    cpu             = "200m"
-  //    memory          = "200Mi"
-  //    port            = 80
-  //    protocol        = "TCP"
-  //    replicas        = 1
-  //  }
-  //  app02 = {
-  //    postfix         = "${var.workload}-${var.environment}-${var.location}"
-  //    name            = "app02"
-  //    ip_address_type = "Public"
-  //    image           = var.app02image
-  //    cpu             = "200m"
-  //    memory          = "200Mi"
-  //    port            = 80
-  //    protocol        = "TCP"
-  //    replicas        = 2
-  //  }
-  //  api = {
-  //    postfix         = "${var.workload}-${var.environment}-${var.location}"
-  //    name            = "api"
-  //    ip_address_type = "Private"
-  //    image           = var.apiimage
-  //    cpu             = "200m"
-  //    memory          = "200Mi"
-  //    port            = 80
-  //    protocol        = "TCP"
-  //    replicas        = 2
-  //  }
-  //}
+  applications = {
+    //app01 = {
+    //  name            = "app01"
+    //  ip_address_type = "Public"
+    //  image           = var.app01image
+    //  cpu             = "200m"
+    //  memory          = "200Mi"
+    //  port            = 80
+    //  protocol        = "TCP"
+    //  replicas        = 1
+    //}
+    //app02 = {
+    //  name            = "app02"
+    //  ip_address_type = "Public"
+    //  image           = var.app02image
+    //  cpu             = "200m"
+    //  memory          = "200Mi"
+    //  port            = 80
+    //  protocol        = "TCP"
+    //  replicas        = 2
+    //}
+    api = {
+      name            = "api"
+      ip_address_type = "Private"
+      image           = var.apiimage
+      cpu_min         = "200m"
+      memory_min      = "256Mi"
+      cpu_max         = "0.5"
+      memory_max      = "512Mi"
+      port            = 80
+      protocol        = "TCP"
+      replicas        = 2
+    }
+  }
 }
 
 data "azurerm_client_config" "current" {}
@@ -91,11 +90,22 @@ data "azurerm_mssql_database" "db" {
 
 }
 
+resource "kubernetes_namespace" "api_namespace" {
+  metadata {
+    labels = {
+      app = "api-${local.postfix}"
+    }
+
+    name = "api-${local.postfix}"
+  }
+}
+
 resource "kubernetes_config_map" "app_config_map" {
   metadata {
-    name = "backend-config-map"
+    name      = "api-config-map"
+    namespace = "api-${local.postfix}"
     labels = {
-      app = "backend-${local.postfix}"
+      app = "api-${local.postfix}"
     }
   }
   data = {
@@ -106,166 +116,125 @@ resource "kubernetes_config_map" "app_config_map" {
   }
 }
 
-//resource "kubernetes_deployment" "app" {
-//  for_each = local.applications
-//
-//  metadata {
-//    name = "${each.value.name}-${each.value.postfix}"
-//    labels = {
-//      app = "${each.value.name}-${each.value.postfix}"
-//    }
-//  }
-//
-//  spec {
-//
-//    replicas = each.value.replicas
-//
-//    selector {
-//      match_labels = {
-//        app = "${each.value.name}-${each.value.postfix}"
-//      }
-//    }
-//
-//    template {
-//      metadata {
-//        labels = {
-//          app = "${each.value.name}-${each.value.postfix}"
-//        }
-//      }
-//
-//      spec {
-//        node_name = "appworkload"
-//        container {
-//
-//          image = each.value.image
-//          name  = each.value.name
-//
-//          resources {
-//            limits = {
-//              cpu    = each.value.cpu
-//              memory = each.value.memory
-//            }
-//            requests = {
-//              cpu    = each.value.cpu
-//              memory = each.value.memory
-//            }
-//          }
-//
-//          liveness_probe {
-//            http_get {
-//              path = "/"
-//              port = each.value.port
-//
-//              //http_header {
-//              //  name  = "X-Custom-Header"
-//              //  value = "Awesome"
-//              //}
-//            }
-//
-//            initial_delay_seconds = 5
-//            period_seconds        = 5
-//          }
-//
-//          env {
-//            name = "SERVER"
-//            value_from {
-//              config_map_key_ref {
-//                name = "backend-config-map"
-//                key  = "mssql_url"
-//              }
-//            }
-//          }
-//          
-//          env {
-//            name = "DATABASE"
-//            value_from {
-//              config_map_key_ref {
-//                name = "backend-config-map"
-//                key  = "SERVER"
-//              }
-//            }
-//          }
-//          env {
-//            name = "USER"
-//            value_from {
-//              config_map_key_ref {
-//                name = "backend-config-map"
-//                key  = "USER"
-//              }
-//            }
-//          }
-//          env {
-//            name = "PASSWORD"
-//            value_from {
-//              config_map_key_ref {
-//                name = "backend-config-map"
-//                key  = "PASSWORD"
-//              }
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
-//}
+resource "kubernetes_deployment" "app" {
+  for_each = local.applications
 
-resource "kubernetes_deployment" "nginx" {
   metadata {
-    name = "terraform-example"
+    namespace = "api-${local.postfix}"
+    name      = "${each.value.name}-${local.postfix}"
     labels = {
-      test = "MyExampleApp"
+      app = "${each.value.name}-${local.postfix}"
     }
   }
 
   spec {
-    replicas = 3
+
+    replicas = each.value.replicas
 
     selector {
       match_labels = {
-        test = "MyExampleApp"
+        app = "${each.value.name}-${local.postfix}"
       }
     }
 
     template {
       metadata {
         labels = {
-          test = "MyExampleApp"
+          app = "${each.value.name}-${local.postfix}"
         }
+        namespace = "api-${local.postfix}"
       }
 
       spec {
-       // node_name = "appworkload"
+        node_name = "appworkload"
         container {
-          image = "nginx:1.21.6"
-          name  = "example"
+
+          image = each.value.image
+          name  = each.value.name
 
           resources {
             limits = {
-              cpu    = "0.5"
-              memory = "512Mi"
+              cpu    = each.value.cpu_max
+              memory = each.value.memory_max
             }
             requests = {
-              cpu    = "250m"
-              memory = "50Mi"
+              cpu    = each.value.cpu_min
+              memory = each.value.memory_min
             }
+          }
+
+          port {
+            container_port = 80
           }
 
           liveness_probe {
             http_get {
               path = "/"
-              port = 80
+              port = each.value.port
 
-              http_header {
-                name  = "X-Custom-Header"
-                value = "Awesome"
-              }
             }
 
-            initial_delay_seconds = 3
-            period_seconds        = 3
+            initial_delay_seconds = 5
+            period_seconds        = 5
+          }
+
+          env {
+            name = "SERVER"
+            value_from {
+              config_map_key_ref {
+                name = "api-config-map"
+                key  = "mssql_url"
+              }
+            }
+          }
+
+          env {
+            name = "DATABASE"
+            value_from {
+              config_map_key_ref {
+                name = "api-config-map"
+                key  = "SERVER"
+              }
+            }
+          }
+          env {
+            name = "USER"
+            value_from {
+              config_map_key_ref {
+                name = "api-config-map"
+                key  = "USER"
+              }
+            }
+          }
+          env {
+            name = "PASSWORD"
+            value_from {
+              config_map_key_ref {
+                name = "api-config-map"
+                key  = "PASSWORD"
+              }
+            }
           }
         }
       }
     }
+  }
+}
+
+resource "kubernetes_service" "appservice" {
+  metadata {
+    name      = "appservice"
+    namespace = "api-${local.postfix}"
+  }
+  spec {
+    selector = {
+      app = "api-${local.postfix}"
+    }
+    session_affinity = "ClientIP"
+    port {
+      port        = 80
+      target_port = 80
+    }
+    type = "LoadBalancer"
   }
 }
