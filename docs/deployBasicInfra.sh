@@ -78,52 +78,52 @@ az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-id" --
 az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-password" --value $ACRPASSWORD
 
 cd ..
-cd application/backend
-docker build -t backend:latest .
-docker tag backend $ACRLOGIN/backend
-docker push $ACRLOGIN/backend
 
-export BACKENDNAME="back${PROJECTNAME}devweu"
+cd application/api
+docker build -t api:latest .
+docker tag api $ACRLOGIN/api
+docker push $ACRLOGIN/api
+
+export APINAME="back${PROJECTNAME}devweu"
 
 az container create \
     --resource-group $RGNAME \
-    --name $BACKENDNAME \
-    --image $ACRLOGIN/backend \
+    --name $APINAME \
+    --image $ACRLOGIN/api \
     --registry-login-server $ACRLOGIN \
     --registry-username $ACRUSERNAME \
     --registry-password $ACRPASSWORD \
     --ip-address Public \
+    --dns-name-label $APINAME \
+    --ports 80 \
     --dns-name-label $BACKENDNAME \
     --ports 8080 \
-    --cpu 1 \
-    --memory 1 \
-    --environment-variables 'SERVER'=$SQLSERVER 'USER'=$SQLOGIN 'PASSWORD'=$SQLPASSWORD 'DATABASE'=$DATABASENAME
 
-az container show --resource-group $RGNAME --name $BACKENDNAME
+az container show --resource-group $RGNAME --name $APINAME
 
-export BACKENDURL=$(az container show --resource-group $RGNAME --name $BACKENDNAME --query ipAddress.fqdn | tr -d '"')
+export APIURL=$(az container show --resource-group $RGNAME --name $APINAME --query ipAddress.fqdn | tr -d '"')
 
-cd application/frontend
-docker build -t frontend:latest .
-docker tag frontend $ACRLOGIN/frontend
-docker push $ACRLOGIN/frontend
+cd application/app02
+docker build -t app02:latest .
+docker tag app02 $ACRLOGIN/app02
+docker push $ACRLOGIN/app02
 
-export FRONTENDNAME="front${PROJECTNAME}devweu"
+export APP02NAME="front${PROJECTNAME}devweu"
 
 az container create \
     --resource-group $RGNAME \
-    --name $FRONTENDNAME \
-    --image $ACRLOGIN/frontend \
+    --name $APP02NAME \
+    --image $ACRLOGIN/app02 \
     --registry-login-server $ACRLOGIN \
     --registry-username $ACRUSERNAME \
     --registry-password $ACRPASSWORD \
     --ip-address Public \
+    --dns-name-label $APP02NAME \
     --dns-name-label $FRONTENDNAME \
     --ports 80 \
     --cpu 1 \
     --memory 1 
 
-az container show --resource-group $RGNAME --name $FRONTENDNAME
+az container show --resource-group $RGNAME --name $APP02NAME
 
-export FRONTENDTURL=$(az container show --resource-group $RGNAME --name $FRONTENDNAME --query ipAddress.fqdn | tr -d '"')
-
+export APP02TURL=$(az container show --resource-group $RGNAME --name $APP02NAME --query ipAddress.fqdn | tr -d '"')

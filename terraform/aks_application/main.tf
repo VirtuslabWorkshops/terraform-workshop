@@ -3,28 +3,38 @@ locals {
   postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name   = "rg-${local.postfix}"
   applications = {
-    frontend = {
-      postfix         = "${var.workload}-${var.environment}-${var.location}"
-      name            = "frontend"
-      ip_address_type = "Public"
-      image           = var.frontendimage
-      cpu             = "500m"
-      memory          = "500Mi"
+    //app01 = {
+    //  name            = "app01"
+    //  ip_address_type = "Public"
+    //  image           = var.app01image
+    //  cpu             = "200m"
+    //  memory          = "200Mi"
+    //  port            = 80
+    //  protocol        = "TCP"
+    //  replicas        = 1
+    //}
+    //app02 = {
+    //  name            = "app02"
+    //  ip_address_type = "Public"
+    //  image           = var.app02image
+    //  cpu             = "200m"
+    //  memory          = "200Mi"
+    //  port            = 80
+    //  protocol        = "TCP"
+    //  replicas        = 2
+    //}
+    api = {
+      name            = "api"
+      ip_address_type = "Private"
+      image           = var.apiimage
+      cpu_min         = "200m"
+      memory_min      = "256Mi"
+      cpu_max         = "0.5"
+      memory_max      = "512Mi"
       port            = 80
       protocol        = "TCP"
       replicas        = 2
     }
-    //backend = {
-    //  postfix         = "${var.workload}-${var.environment}-${var.location}"
-    //  name            = "backend"
-    //  ip_address_type = "Private"
-    //  image           = var.backendimage
-    //  cpu             = "500m"
-    //  memory          = "500Mi"
-    //  port            = 80
-    //  protocol        = "TCP"
-    //  replicas        = 3
-    //}
   }
 }
 
@@ -77,195 +87,150 @@ data "azurerm_mssql_server" "mssql" {
 data "azurerm_mssql_database" "db" {
   name      = "db${local.postfix_no_dash}"
   server_id = data.azurerm_mssql_server.mssql.id
-
 }
 
-resource "kubernetes_config_map" "app_config_map" {
+resource "kubernetes_namespace" "api_namespace" {
   metadata {
-    name = "backend-config-map"
     labels = {
-      app = "backend-${local.postfix}"
+      app = "api-${local.postfix}"
     }
-  }
-  data = {
-    SERVER   = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
-    DATABASE = data.azurerm_mssql_database.db.name
-    USER     = data.azurerm_key_vault_secret.sql_user.value
-    PASSWORD = data.azurerm_key_vault_secret.sql_password.value
+
+    name = "api-${local.postfix}"
   }
 }
-//
-//resource "kubernetes_secret" "app_secrets" {
+
+//resource "kubernetes_config_map" "app_config_map" {
 //  metadata {
-//    name = "backend-secrets"
-//    labels = {
-//      app = "backend-${local.value.postfix}"
-//    }
+//    name      = "api-config-map"
+//    namespace = "api-${local.postfix}"
 //  }
 //  data = {
-//      USER = data.azurerm_key_vault.server.sql_user.value
-//      PASSWORD = data.azurerm_key_vault.server.sql_password.value
+//    SERVER   = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+//    DATABASE = data.azurerm_mssql_database.db.name
+//    USER     = data.azurerm_key_vault_secret.sql_user.value
 //  }
 //}
-//
-//
+
+//resource "kubernetes_secret" "app_secret" {
+//  metadata {
+//    name      = "api-secret"
+//    namespace = "api-${local.postfix}"
+//  }
+//  data = {
+//    PASSWORD = data.azurerm_key_vault_secret.sql_password.value
+//  }
+//}
 
 
 resource "kubernetes_deployment" "app" {
   for_each = local.applications
   metadata {
-    name = "${each.value.name}-${each.value.postfix}"
+
+    namespace = "api-${local.postfix}"
+    name      = "${each.value.name}-${local.postfix}"
     labels = {
-      app = "${each.value.name}-${each.value.postfix}"
+      app = "${each.value.name}-${local.postfix}"
     }
   }
-
   spec {
     replicas = each.value.replicas
-
     selector {
       match_labels = {
-        app = "${each.value.name}-${each.value.postfix}"
+        app = "${each.value.name}-${local.postfix}"
       }
     }
-
     template {
       metadata {
         labels = {
-          app = "${each.value.name}-${each.value.postfix}"
+          app = "${each.value.name}-${local.postfix}"
         }
+        namespace = "api-${local.postfix}"
       }
 
       spec {
         container {
           image = each.value.image
           name  = each.value.name
-
           resources {
             limits = {
-              cpu    = each.value.cpu
-              memory = each.value.memory
+              cpu    = each.value.cpu_max
+              memory = each.value.memory_max
             }
             requests = {
-              cpu    = each.value.cpu
-              memory = each.value.memory
+              cpu    = each.value.cpu_min
+              memory = each.value.memory_min
             }
           }
-
+          port {
+            container_port = 80
+          }
+          
           liveness_probe {
             http_get {
               path = "/"
               port = each.value.port
-
-              //http_header {
-              //  name  = "X-Custom-Header"
-              //  value = "Awesome"
-              //}
             }
-
             initial_delay_seconds = 5
             period_seconds        = 5
           }
-
-          //env {
-          //  name = "SERVER"
-          //  value_from {
-          //    config_map_key_ref {
-          //      name = "backend-config-map"
-          //      key  = "mssql_url"
-          //    }
-          //  }
-          //}
-          //
-          //env {
-          //  name = "DATABASE"
-          //  value_from {
-          //    config_map_key_ref {
-          //      name = "backend-config-map"
-          //      key  = "SERVER"
-          //    }
-          //  }
-          //}
-          //env {
-          //  name = "USER"
-          //  value_from {
-          //    config_map_key_ref {
-          //      name = "backend-config-map"
-          //      key  = "USER"
-          //    }
-          //  }
-          //}
-          //env {
-          //  name = "PASSWORD"
-          //  value_from {
-          //    config_map_key_ref {
-          //      name = "backend-config-map"
-          //      key  = "PASSWORD"
-          //    }
-          //  }
-          //}
+          env {
+            name  = "SERVER"
+            value = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+            //value_from {
+            //  config_map_key_ref {
+            //    name = "api-config-map"
+            //    key  = "mssql_url"
+            //  }
+            //}
+          }
+          env {
+            name  = "DATABASE"
+            value = data.azurerm_mssql_database.db.name
+            //value_from {
+            //  config_map_key_ref {
+            //    name = "api-config-map"
+            //    key  = "DATABASE"
+            //  }
+            //}
+          }
+          env {
+            name  = "USER"
+            value = data.azurerm_key_vault_secret.sql_user.value
+            //value_from {
+            //  config_map_key_ref {
+            //    name = "api-config-map"
+            //    key  = "USER"
+            //  }
+            //}
+          }
+          env {
+            name  = "PASSWORD"
+            value = data.azurerm_key_vault_secret.sql_password.value
+            //secret_ref {
+            //  name = "app_secret"
+            //}
+            // }
+          }
         }
       }
     }
   }
 }
 
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_service" "appservice" {
   metadata {
-    name = "terraform-example"
-    labels = {
-      test = "MyExampleApp"
-    }
+    name      = "appservice"
+    namespace = "api-${local.postfix}"
   }
-
   spec {
-    replicas = 3
-
-    selector {
-      match_labels = {
-        test = "MyExampleApp"
-      }
+    selector = {
+      app = "api-${local.postfix}"
     }
-
-    template {
-      metadata {
-        labels = {
-          test = "MyExampleApp"
-        }
-      }
-
-      spec {
-        container {
-          image = "nginx:1.21.6"
-          name  = "example"
-
-          resources {
-            limits = {
-              cpu    = "0.5"
-              memory = "512Mi"
-            }
-            requests = {
-              cpu    = "250m"
-              memory = "50Mi"
-            }
-          }
-
-          liveness_probe {
-            http_get {
-              path = "/"
-              port = 80
-
-              http_header {
-                name  = "X-Custom-Header"
-                value = "Awesome"
-              }
-            }
-
-            initial_delay_seconds = 3
-            period_seconds        = 3
-          }
-        }
-      }
+    session_affinity = "ClientIP"
+    port {
+      port        = 80
+      target_port = 80
     }
+    type = "LoadBalancer"
   }
 }

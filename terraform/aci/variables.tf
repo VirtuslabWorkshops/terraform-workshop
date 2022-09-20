@@ -34,12 +34,17 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "frontendimage" {
+variable "app01image" {
   type    = string
-  default = "acrmgmtdevwesteurope.azurecr.io/frontend"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
-variable "backendimage" {
+variable "app02image" {
   type    = string
-  default = "acrmgmtdevwesteurope.azurecr.io/backend"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
+}
+
+variable "apiimage" {
+  type    = string
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }

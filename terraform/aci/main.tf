@@ -3,21 +3,31 @@ locals {
   postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name   = "rg-${local.postfix}"
   applications = {
-    frontend = {
+    app01 = {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
-      name            = "frontend"
+      name            = "app01"
       ip_address_type = "Public"
-      image           = var.frontendimage
+      image           = var.app01image
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
       protocol        = "TCP"
     }
-    backend = {
+    app02 = {
       postfix         = "${var.workload}-${var.environment}-${var.location}"
-      name            = "backend"
+      name            = "app02"
       ip_address_type = "Public"
-      image           = var.backendimage
+      image           = var.app02image
+      cpu             = "0.5"
+      memory          = "1.5"
+      port            = 80
+      protocol        = "TCP"
+    }
+    api = {
+      postfix         = "${var.workload}-${var.environment}-${var.location}"
+      name            = "api"
+      ip_address_type = "Public"
+      image           = var.apiimage
       cpu             = "0.5"
       memory          = "1.5"
       port            = 80
@@ -87,6 +97,10 @@ resource "azurerm_container_group" "aci" {
     server   = data.azurerm_container_registry.acr.login_server
     username = data.azurerm_key_vault_secret.spn_id.value
     password = data.azurerm_key_vault_secret.spn_password.value
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   container {
