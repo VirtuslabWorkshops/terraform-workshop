@@ -20,8 +20,8 @@ az keyvault secret set --vault-name $KVNAME --name "SQLUSER" --value $SQLUSER
 
 az keyvault secret set --vault-name $KVNAME --name "SQLPASSWORD" --value $SQLPASSWORD
 
-export SQLSERVER="sql${PROJECTNAME}devweu"
-export DATABASENAME="db${PROJECTNAME}devweu"
+export SQLSERVER="sql-${PROJECTNAME}-dev-westeurope"
+export DATABASENAME="sqldb${PROJECTNAME}devwesteurope"
 export SQLLOGIN=$SQLUSER
 export SQLPASSWORD=$SQLPASSWORD
 export SQLstartIp=0.0.0.0
@@ -96,8 +96,8 @@ az container create \
     --ip-address Public \
     --dns-name-label $APINAME \
     --ports 80 \
-    --dns-name-label $BACKENDNAME \
-    --ports 8080 \
+    --dns-name-label $APINAME
+    --environment-variables 'SERVER'="${SQLSERVER}.database.windows.net" 'DATABASE'="${DATABASE}" 'USER'="${SQLUSER}" 'PASSWORD'="${SQLPASSWORD}"
 
 az container show --resource-group $RGNAME --name $APINAME
 
