@@ -9,4 +9,4 @@ INSERT INTO ARTICLES (Title, Author, URL)
 VALUES ('vived', 'VL', 'vived.com');
 
 INSERT INTO ARTICLES (Title, Author, URL) 
-VALUES ('Project Phoenix', 'DevOps', 'finix.com');
+VALUES ('VirtusLab', 'VL', 'virtuslab.com');

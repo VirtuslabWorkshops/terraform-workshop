@@ -7,8 +7,10 @@ locals {
       name            = "app01"
       ip_address_type = "Public"
       image           = var.app01image
-      cpu             = "200m"
-      memory          = "200Mi"
+      cpu_min         = "200m"
+      memory_min      = "256Mi"
+      cpu_max         = "0.5"
+      memory_max      = "512Mi"
       port            = 80
       protocol        = "TCP"
       replicas        = 1
@@ -52,16 +54,6 @@ data "azurerm_kubernetes_cluster" "aks" {
 data "azurerm_key_vault" "kv" {
   name                = "kv-${local.postfix}"
   resource_group_name = data.azurerm_resource_group.rg.name
-}
-
-data "azurerm_key_vault_secret" "spn_id" {
-  name         = "spn-${local.postfix}-id"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "spn_password" {
-  name         = "spn-${local.postfix}-password"
-  key_vault_id = data.azurerm_key_vault.kv.id
 }
 
 data "azurerm_container_registry" "cr" {
@@ -175,7 +167,7 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "SERVER"
-            value = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+            value = data.azurerm_mssql_server.sql.fully_qualified_domain_name
             //value_from {
             //  config_map_key_ref {
             //    name = "api-config-map"
@@ -185,7 +177,7 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "DATABASE"
-            value = data.azurerm_mssql_database.db.name
+            value = data.azurerm_mssql_database.sqldb.name
             //value_from {
             //  config_map_key_ref {
             //    name = "api-config-map"
