@@ -22,9 +22,9 @@ terraform apply -var="workload=jdlab1"
 - rg
 - kv
 - vnet
-- mssql
+- sql
 > Here run file `populateDB.txt` against created database.
-- acr
+- cr
 > Here create SPN:
 ```bash
 $ACRID="/subscriptions/<subid>/resourceGroups/rg-wglab3-dev-westeurope/providers/Microsoft.ContainerRegistry/registries/<acrname>"
@@ -37,6 +37,6 @@ $ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPALNAME --query "[].ap
 echo "Service principal ID: $ACRUSERNAME"
 echo "Service principal password: $ACRPASSWORD"
 ```
-- aci
+- ci
 - aks
 - aks_setup

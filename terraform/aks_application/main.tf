@@ -3,16 +3,16 @@ locals {
   postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name   = "rg-${local.postfix}"
   applications = {
-    //app01 = {
-    //  name            = "app01"
-    //  ip_address_type = "Public"
-    //  image           = var.app01image
-    //  cpu             = "200m"
-    //  memory          = "200Mi"
-    //  port            = 80
-    //  protocol        = "TCP"
-    //  replicas        = 1
-    //}
+    app01 = {
+      name            = "app01"
+      ip_address_type = "Public"
+      image           = var.app01image
+      cpu             = "200m"
+      memory          = "200Mi"
+      port            = 80
+      protocol        = "TCP"
+      replicas        = 1
+    }
     //app02 = {
     //  name            = "app02"
     //  ip_address_type = "Public"
@@ -64,8 +64,8 @@ data "azurerm_key_vault_secret" "spn_password" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-data "azurerm_container_registry" "acr" {
-  name                = "acr${local.postfix_no_dash}"
+data "azurerm_container_registry" "cr" {
+  name                = "cr${local.postfix_no_dash}"
   resource_group_name = local.rg_group_name
 }
 
@@ -79,14 +79,14 @@ data "azurerm_key_vault_secret" "sql_password" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-data "azurerm_mssql_server" "mssql" {
-  name                = "mssql-${local.postfix}"
+data "azurerm_mssql_server" "sql" {
+  name                = "sql-${local.postfix}"
   resource_group_name = local.rg_group_name
 }
 
-data "azurerm_mssql_database" "db" {
-  name      = "db${local.postfix_no_dash}"
-  server_id = data.azurerm_mssql_server.mssql.id
+data "azurerm_mssql_database" "sqldb" {
+  name      = "sqldb${local.postfix_no_dash}"
+  server_id = data.azurerm_mssql_server.sql.id
 }
 
 resource "kubernetes_namespace" "api_namespace" {

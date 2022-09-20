@@ -36,7 +36,7 @@ variable "location" {
 
 variable "app01image" {
   type    = string
-  default = ""
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
 variable "app02image" {
