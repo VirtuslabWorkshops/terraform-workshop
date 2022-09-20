@@ -175,7 +175,7 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "SERVER"
-            value = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+            value = data.azurerm_mssql_server.sql.fully_qualified_domain_name
             //value_from {
             //  config_map_key_ref {
             //    name = "api-config-map"
@@ -185,7 +185,7 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "DATABASE"
-            value = data.azurerm_mssql_database.db.name
+            value = data.azurerm_sql_database.db.name
             //value_from {
             //  config_map_key_ref {
             //    name = "api-config-map"
