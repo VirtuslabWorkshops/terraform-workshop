@@ -185,7 +185,7 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "DATABASE"
-            value = data.azurerm_sql_database.db.name
+            value = data.azurerm_mssql_database.sqldb.name
             //value_from {
             //  config_map_key_ref {
             //    name = "api-config-map"
