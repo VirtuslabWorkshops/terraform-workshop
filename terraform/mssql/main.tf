@@ -80,7 +80,6 @@ resource "azurerm_mssql_firewall_rule" "mssql-fw" {
   end_ip_address   = "0.0.0.0"
 }
 
-
 resource "azurerm_mssql_virtual_network_rule" "aks_mssql_service_endpoint" {
   name      = "sql-vnet-rule"
   server_id = azurerm_mssql_server.mssql.id

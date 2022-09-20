@@ -87,7 +87,6 @@ data "azurerm_mssql_server" "mssql" {
 data "azurerm_mssql_database" "db" {
   name      = "db${local.postfix_no_dash}"
   server_id = data.azurerm_mssql_server.mssql.id
-
 }
 
 resource "kubernetes_namespace" "api_namespace" {
@@ -122,9 +121,11 @@ resource "kubernetes_namespace" "api_namespace" {
 //  }
 //}
 
+
 resource "kubernetes_deployment" "app" {
   for_each = local.applications
   metadata {
+
     namespace = "api-${local.postfix}"
     name      = "${each.value.name}-${local.postfix}"
     labels = {
@@ -145,6 +146,7 @@ resource "kubernetes_deployment" "app" {
         }
         namespace = "api-${local.postfix}"
       }
+
       spec {
         container {
           image = each.value.image
@@ -162,6 +164,7 @@ resource "kubernetes_deployment" "app" {
           port {
             container_port = 80
           }
+          
           liveness_probe {
             http_get {
               path = "/"

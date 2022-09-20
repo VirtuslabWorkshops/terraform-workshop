@@ -78,6 +78,7 @@ az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-id" --
 az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-password" --value $ACRPASSWORD
 
 cd ..
+
 cd application/api
 docker build -t api:latest .
 docker tag api $ACRLOGIN/api
@@ -95,9 +96,8 @@ az container create \
     --ip-address Public \
     --dns-name-label $APINAME \
     --ports 80 \
-    --cpu 1 \
-    --memory 1 \
-    --environment-variables 'SERVER'=$SQLSERVER 'USER'=$SQLOGIN 'PASSWORD'=$SQLPASSWORD 'DATABASE'=$DATABASENAME
+    --dns-name-label $BACKENDNAME \
+    --ports 8080 \
 
 az container show --resource-group $RGNAME --name $APINAME
 
@@ -119,6 +119,7 @@ az container create \
     --registry-password $ACRPASSWORD \
     --ip-address Public \
     --dns-name-label $APP02NAME \
+    --dns-name-label $FRONTENDNAME \
     --ports 80 \
     --cpu 1 \
     --memory 1 
@@ -126,4 +127,3 @@ az container create \
 az container show --resource-group $RGNAME --name $APP02NAME
 
 export APP02TURL=$(az container show --resource-group $RGNAME --name $APP02NAME --query ipAddress.fqdn | tr -d '"')
-

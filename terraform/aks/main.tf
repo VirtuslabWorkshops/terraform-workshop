@@ -15,7 +15,6 @@ data "azurerm_container_registry" "acr" {
   resource_group_name = local.rg_group_name
 }
 
-
 data "azurerm_subnet" "aks_default" {
   name                 = "sub-default-${local.postfix}"
   virtual_network_name = "vnet-${local.postfix}"
@@ -50,7 +49,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     team        = var.team_name
   }
 }
-
 
 resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
   name                  = "appworkload"
