@@ -100,25 +100,30 @@ resource "kubernetes_namespace" "api_namespace" {
   }
 }
 
-resource "kubernetes_config_map" "app_config_map" {
-  metadata {
-    name      = "api-config-map"
-    namespace = "api-${local.postfix}"
-    labels = {
-      app = "api-${local.postfix}"
-    }
-  }
-  data = {
-    SERVER   = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
-    DATABASE = data.azurerm_mssql_database.db.name
-    USER     = data.azurerm_key_vault_secret.sql_user.value
-    PASSWORD = data.azurerm_key_vault_secret.sql_password.value
-  }
-}
+//resource "kubernetes_config_map" "app_config_map" {
+//  metadata {
+//    name      = "api-config-map"
+//    namespace = "api-${local.postfix}"
+//  }
+//  data = {
+//    SERVER   = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+//    DATABASE = data.azurerm_mssql_database.db.name
+//    USER     = data.azurerm_key_vault_secret.sql_user.value
+//  }
+//}
+
+//resource "kubernetes_secret" "app_secret" {
+//  metadata {
+//    name      = "api-secret"
+//    namespace = "api-${local.postfix}"
+//  }
+//  data = {
+//    PASSWORD = data.azurerm_key_vault_secret.sql_password.value
+//  }
+//}
 
 resource "kubernetes_deployment" "app" {
   for_each = local.applications
-
   metadata {
     namespace = "api-${local.postfix}"
     name      = "${each.value.name}-${local.postfix}"
@@ -126,17 +131,13 @@ resource "kubernetes_deployment" "app" {
       app = "${each.value.name}-${local.postfix}"
     }
   }
-
   spec {
-
     replicas = each.value.replicas
-
     selector {
       match_labels = {
         app = "${each.value.name}-${local.postfix}"
       }
     }
-
     template {
       metadata {
         labels = {
@@ -144,14 +145,10 @@ resource "kubernetes_deployment" "app" {
         }
         namespace = "api-${local.postfix}"
       }
-
       spec {
-        node_name = "appworkload"
         container {
-
           image = each.value.image
           name  = each.value.name
-
           resources {
             limits = {
               cpu    = each.value.cpu_max
@@ -162,58 +159,54 @@ resource "kubernetes_deployment" "app" {
               memory = each.value.memory_min
             }
           }
-
           port {
             container_port = 80
           }
-
           liveness_probe {
             http_get {
               path = "/"
               port = each.value.port
-
             }
-
             initial_delay_seconds = 5
             period_seconds        = 5
           }
-
           env {
-            name = "SERVER"
-            value_from {
-              config_map_key_ref {
-                name = "api-config-map"
-                key  = "mssql_url"
-              }
-            }
-          }
-
-          env {
-            name = "DATABASE"
-            value_from {
-              config_map_key_ref {
-                name = "api-config-map"
-                key  = "SERVER"
-              }
-            }
+            name  = "SERVER"
+            value = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
+            //value_from {
+            //  config_map_key_ref {
+            //    name = "api-config-map"
+            //    key  = "mssql_url"
+            //  }
+            //}
           }
           env {
-            name = "USER"
-            value_from {
-              config_map_key_ref {
-                name = "api-config-map"
-                key  = "USER"
-              }
-            }
+            name  = "DATABASE"
+            value = data.azurerm_mssql_database.db.name
+            //value_from {
+            //  config_map_key_ref {
+            //    name = "api-config-map"
+            //    key  = "DATABASE"
+            //  }
+            //}
           }
           env {
-            name = "PASSWORD"
-            value_from {
-              config_map_key_ref {
-                name = "api-config-map"
-                key  = "PASSWORD"
-              }
-            }
+            name  = "USER"
+            value = data.azurerm_key_vault_secret.sql_user.value
+            //value_from {
+            //  config_map_key_ref {
+            //    name = "api-config-map"
+            //    key  = "USER"
+            //  }
+            //}
+          }
+          env {
+            name  = "PASSWORD"
+            value = data.azurerm_key_vault_secret.sql_password.value
+            //secret_ref {
+            //  name = "app_secret"
+            //}
+            // }
           }
         }
       }

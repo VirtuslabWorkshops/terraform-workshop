@@ -46,5 +46,5 @@ variable "app02image" {
 
 variable "apiimage" {
   type    = string
-  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
+  default = "acrwglab3devwesteurope.azurecr.io/backend:latest"
 }
