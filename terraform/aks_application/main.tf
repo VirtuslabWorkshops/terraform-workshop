@@ -56,16 +56,6 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-data "azurerm_key_vault_secret" "spn_id" {
-  name         = "spn-${local.postfix}-id"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "spn_password" {
-  name         = "spn-${local.postfix}-password"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
 data "azurerm_container_registry" "cr" {
   name                = "cr${local.postfix_no_dash}"
   resource_group_name = local.rg_group_name
