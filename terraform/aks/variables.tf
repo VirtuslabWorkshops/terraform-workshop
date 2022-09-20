@@ -33,12 +33,3 @@ variable "location" {
   }
   default = "westeurope"
 }
-
-//variable "acr_name" {
-//  type = string
-//  validation {
-//    condition     = can(regex("^[\\w-]+$", var.acr_name))
-//    error_message = "Resource group name is not valid."
-//  }
-//}
-//

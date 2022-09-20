@@ -84,7 +84,7 @@ docker build -t api:latest .
 docker tag api $ACRLOGIN/api
 docker push $ACRLOGIN/api
 
-export APINAME="back${PROJECTNAME}devweu"
+export APINAME="api${PROJECTNAME}devweu"
 
 az container create \
     --resource-group $RGNAME \
@@ -103,27 +103,20 @@ az container show --resource-group $RGNAME --name $APINAME
 
 export APIURL=$(az container show --resource-group $RGNAME --name $APINAME --query ipAddress.fqdn | tr -d '"')
 
-cd application/app02
-docker build -t app02:latest .
-docker tag app02 $ACRLOGIN/app02
-docker push $ACRLOGIN/app02
+export APP01NAME="app01${PROJECTNAME}devweu"
 
-export APP02NAME="front${PROJECTNAME}devweu"
+export APP01IMAGE="mcr.microsoft.com/azuredocs/aci-helloworld"
 
 az container create \
     --resource-group $RGNAME \
-    --name $APP02NAME \
-    --image $ACRLOGIN/app02 \
-    --registry-login-server $ACRLOGIN \
-    --registry-username $ACRUSERNAME \
-    --registry-password $ACRPASSWORD \
+    --name $APP01NAME \
+    --image $APP01IMAGE \
     --ip-address Public \
-    --dns-name-label $APP02NAME \
-    --dns-name-label $FRONTENDNAME \
+    --dns-name-label $APP01NAME \
     --ports 80 \
     --cpu 1 \
     --memory 1 
 
-az container show --resource-group $RGNAME --name $APP02NAME
+az container show --resource-group $RGNAME --name $APP01NAME
 
-export APP02TURL=$(az container show --resource-group $RGNAME --name $APP02NAME --query ipAddress.fqdn | tr -d '"')
+export APP01URL=$(az container show --resource-group $RGNAME --name $APP01NAME --query ipAddress.fqdn | tr -d '"')

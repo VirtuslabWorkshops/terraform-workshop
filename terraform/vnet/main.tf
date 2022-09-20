@@ -17,14 +17,14 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "aks-default" {
-  name                 = "sub-default-${local.postfix}"
+  name                 = "snet-default-${local.postfix}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = data.azurerm_resource_group.rg.name
   address_prefixes     = ["10.240.0.0/16"]
 }
 
 resource "azurerm_subnet" "aks-app" {
-  name                 = "sub-app-${local.postfix}"
+  name                 = "snet-app-${local.postfix}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = data.azurerm_resource_group.rg.name
   address_prefixes     = ["10.1.0.0/16"]

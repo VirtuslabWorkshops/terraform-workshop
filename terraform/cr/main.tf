@@ -10,11 +10,11 @@ data "azurerm_resource_group" "rg" {
   name = local.rg_group_name
 }
 
-resource "azurerm_container_registry" "acr" {
-  name                = "acr${local.postfix_no_dash}"
+resource "azurerm_container_registry" "cr" {
+  name                = "cr${local.postfix_no_dash}"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
-  sku                 = var.acr_sku
+  sku                 = var.cr_sku
 
   tags = {
     environment = var.environment
