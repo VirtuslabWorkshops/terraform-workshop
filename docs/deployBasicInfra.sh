@@ -1,14 +1,12 @@
-#!/bin/bash
-
 #`<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
 export PROJECTNAME="mgmt"
 
 export LOCATION="westeurope"
-export RGNAME="rg-${PROJECTNAME}-dev-weu"
+export RGNAME="rg-${PROJECTNAME}-dev-westeurope"
 az group create --location $LOCATION --name $RGNAME
 
-export KVNAME="kv-${PROJECTNAME}-dev-weu"
+export KVNAME="kv-${PROJECTNAME}-dev-westeurope"
 az keyvault create --name $KVNAME --resource-group $RGNAME --location $LOCATION
 
 let "RAND=$RANDOM*$RANDOM"
@@ -53,7 +51,7 @@ az sql db create \
 
 # Login to SQL server and execute queries from populateDB.txt file
 
-export ACRNAME="acr${PROJECTNAME}devweu"
+export ACRNAME="acr${PROJECTNAME}devwesteurope"
 
 az acr create --location $LOCATION --resource-group $RGNAME --name $ACRNAME --sku Basic
 
@@ -63,7 +61,7 @@ ac acr show --name $ACRNAME --ou
 
 export ACRLOGIN=$(az acr show -n $ACRNAME --query loginServer | tr -d '"')
 
-export SERVICEPRINCIPALNAME="spn-${PROJECTNAME}-dev-weu"
+export SERVICEPRINCIPALNAME="spn-${PROJECTNAME}-dev-westeurope"
 
 export ACRID=$(az acr show --name $ACRNAME --query "id" --output tsv)
 
