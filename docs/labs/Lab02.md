@@ -1,79 +1,66 @@
-# Lab01
+# Lab02
 
 ## Purpose
-Familiarize with technology stack, login to remote environment and setup basic infra.
+Setup CI to validate terraform code.
+Add tooling to perform code validation.
 
 ## Prerequsites
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
+- Lab01 established
+- fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
 
 ## Initial setup
 
-1. Documentation  
-Familiarize yourself with [naming_convention](../naming_convention.md) and other docs regarding infrastructure and standards.
-
-2. Fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
-  - navigate to repository, click in to right corner 'Fork' button
-  - select proper organization with your space ("Owner" field) and **unselect** "copy the master branch only, then proceed with forking
-
-3. Login to remote environment via SSH
-   - run favourite ssh client and login:
+1. Checkout to branch `cloudyna-lab02'
     ```
-    ssh xx
+    git checkout cloudyna-lab02
     ```
 
-4. Confirm presence of tools
-    ``` bash
-    terraform -version
-    kubectl version --short
-    az cli --version
-    terragrunt -version
+## Add tags to VNet
+1. Navigate to terraform/vnet and edit `main.tf`
+2. Add tags to resource defintion (line 18 onwars)
+    ```hcl
+    tags = {
+      environment = var.environment
+      team        = var.team_name
+    }
     ```
-5. Login to Azure via [Azure Porta](https://portal.azure.com) and find your Resource Group
-
-> If not statet otherwise actions should be executed on remote environment.
-
-6. Clone forked repository to your local
-
-7. Login to Azure via Azure CLI
-   ```
-   az login --use-device-code --tenant e1f301d1-f447-42b5-b1da-1cd6f79ed0eb
-   ```
-
-## Semi manual deployment with AZ CLI
-
-1. Create environment using CLI stored in [deployBasicInfra](../deployBasicInfra.sh)
-   - you will find applicaiton files in <repoName>/application/
   
-2. Once environment is set, validate if it's working
-
-## Deployment with terraform
-
-1. Navigate to repository directory and execute
+    final vnet block should like like:
+    
+    ```hcl
+    resource "azurerm_virtual_network" "vnet" {
+      name                = "vnet-${local.postfix}"
+      location            = data.azurerm_resource_group.rg.location
+      resource_group_name = data.azurerm_resource_group.rg.name
+      address_space       = ["10.0.0.0/8"]
+    
+    tags = {
+      environment = var.environment
+      team        = var.team_name
+    }
+    }
     ```
-    terraform init
-    terraform apply # confirm with yes
+    As you can see, file has proper syntax, but code formatting seems to be a bit off.
+
+3. Run fromatting tool
     ```
+    terraform fmt
+    ```
+    As you can see, file has proper formatting now.
 
-    in every directory:
-    - kv
-    - vnet
-    - sql
-      > Here run file `populateDB.txt` against created database.
-    - cr
-      > SPN should be present in KV.
-    - ci
+## Setup CI with code validation
 
-2. Remove `ci` (container instance) and execute `terraform apply` again - what is the effect?
+<TODO>
+
+
 
 ## Notes
-- terraform keeps 'state' that allows to understand what SHOULD be there and restore resources
-- terraform requires a bit of preparation
-- deploying resources has plenty of auxiliary steps
-- application itself has quite a few of troubles: application 
+
 
 ## Improvement points
-- if you would like to deploy new environment you would have to copy all files
-- it's code, it requires validations
-- no automation
+- not easy to run against multiple environments
+- plenty of `terraform apply` operations
+- 
