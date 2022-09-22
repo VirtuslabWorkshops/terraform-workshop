@@ -67,9 +67,13 @@ Familiarize yourself with [naming_convention](../naming_convention.md) and other
 
 2. Remove `ci` (container instance) and execute `terraform apply` again - what is the effect?
 
-### Notes, gotchas, problems noticed
+## Notes
 - terraform keeps 'state' that allows to understand what SHOULD be there and restore resources
 - terraform requires a bit of preparation
-- deploying resources has pleny of auxiliary steps
-- terraform files are code - that requires some validation and security checks
+- deploying resources has plenty of auxiliary steps
 - application itself has quite a few of troubles: application 
+
+## Improvement points
+- if you would like to deploy new environment you would have to copy all files
+- it's code, it requires validations
+- no automation
