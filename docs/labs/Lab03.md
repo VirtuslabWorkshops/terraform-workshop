@@ -8,7 +8,7 @@ Add tooling to perform code validation.
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
-- Lab01 established
+- Lab02 established
 - fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
 
 ## Initial setup
@@ -126,13 +126,13 @@ Add tooling to perform code validation.
     ```
     Navigate to AKS in Azure Portal and find Cluster, then select 'Services' and find IP adress of published service. 
 
-
 5. Open `URL` to get response.
 
 6. Open `URL/articles` to see details fetched from database
 
-
 ## Notes
 
-
 ## Improvement points
+- plenty of `terraform apply` operations
+- managing multiple environments
+- state is stored on local drive, how to collaborate?

@@ -89,4 +89,3 @@ Familiarize yourself with [naming_convention](../naming_convention.md) and other
 - if you would like to deploy new environment you would have to copy all files
 - it's code, it requires validations
 - no automation
-- application uses public network to reach out to Database, 

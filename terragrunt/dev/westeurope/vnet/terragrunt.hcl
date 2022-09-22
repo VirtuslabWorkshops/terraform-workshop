@@ -14,15 +14,5 @@ include "root" {
 }
 
 terraform {
-  source = "../../../..//terraform/04-aci"
-}
-
-locals {
-  app02 = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
-  api = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
-}
-
-inputs = {
-  app02image = local.app02
-  apiimage = local.api
+  source = "../../../..//terraform/vnet"
 }
