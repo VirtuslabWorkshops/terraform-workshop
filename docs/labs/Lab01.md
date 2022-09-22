@@ -34,12 +34,20 @@ Familiarize yourself with [naming_convention](../naming_convention.md) and other
 
 > If not statet otherwise actions should be executed on remote environment.
 
-6. Clone forked repository to your local
+6. Clone forked repository to your 
+    ```
+    git clone <url>
+    ```
 
 7. Login to Azure via Azure CLI
-   ```
-   az login --use-device-code --tenant e1f301d1-f447-42b5-b1da-1cd6f79ed0eb
-   ```
+    ```
+    az login --use-device-code --tenant e1f301d1-f447-42b5-b1da-1cd6f79ed0eb
+    ```
+
+8. Checkout to branch `cloudyna-lab01'
+    ```
+    git checkout cloudyna-lab01
+    ```
 
 ## Semi manual deployment with AZ CLI
 
@@ -60,20 +68,25 @@ Familiarize yourself with [naming_convention](../naming_convention.md) and other
     - kv
     - vnet
     - sql
-      > Here run file `populateDB.txt` against created database.
+      > Here run file `populateDB.txt` against created database. Use Azure Portal, find databse and use Query tool available there.
     - cr
       > SPN should be present in KV.
     - ci
 
-2. Remove `ci` (container instance) and execute `terraform apply` again - what is the effect?
+2. Open `URL` to get response.
+
+3. Open `URL/articles` to see details fetched from database
+
+4. Remove `ci` (container instance) and execute `terraform apply` again - what is the effect?
 
 ## Notes
 - terraform keeps 'state' that allows to understand what SHOULD be there and restore resources
 - terraform requires a bit of preparation
 - deploying resources has plenty of auxiliary steps
-- application itself has quite a few of troubles: application 
 
-## Improvement points
+
+## Pain points
 - if you would like to deploy new environment you would have to copy all files
 - it's code, it requires validations
 - no automation
+- application uses public network to reach out to Database, 

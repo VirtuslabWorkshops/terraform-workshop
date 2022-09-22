@@ -15,16 +15,6 @@ locals {
       protocol        = "TCP"
       replicas        = 1
     }
-    //app02 = {
-    //  name            = "app02"
-    //  ip_address_type = "Public"
-    //  image           = var.app02image
-    //  cpu             = "200m"
-    //  memory          = "200Mi"
-    //  port            = 80
-    //  protocol        = "TCP"
-    //  replicas        = 2
-    //}
     api = {
       name            = "api"
       ip_address_type = "Private"
@@ -91,29 +81,6 @@ resource "kubernetes_namespace" "api_namespace" {
   }
 }
 
-//resource "kubernetes_config_map" "app_config_map" {
-//  metadata {
-//    name      = "api-config-map"
-//    namespace = "api-${local.postfix}"
-//  }
-//  data = {
-//    SERVER   = data.azurerm_mssql_server.mssql.fully_qualified_domain_name
-//    DATABASE = data.azurerm_mssql_database.db.name
-//    USER     = data.azurerm_key_vault_secret.sql_user.value
-//  }
-//}
-
-//resource "kubernetes_secret" "app_secret" {
-//  metadata {
-//    name      = "api-secret"
-//    namespace = "api-${local.postfix}"
-//  }
-//  data = {
-//    PASSWORD = data.azurerm_key_vault_secret.sql_password.value
-//  }
-//}
-
-
 resource "kubernetes_deployment" "app" {
   for_each = local.applications
   metadata {
@@ -168,40 +135,18 @@ resource "kubernetes_deployment" "app" {
           env {
             name  = "SERVER"
             value = data.azurerm_mssql_server.sql.fully_qualified_domain_name
-            //value_from {
-            //  config_map_key_ref {
-            //    name = "api-config-map"
-            //    key  = "mssql_url"
-            //  }
-            //}
           }
           env {
             name  = "DATABASE"
             value = data.azurerm_mssql_database.sqldb.name
-            //value_from {
-            //  config_map_key_ref {
-            //    name = "api-config-map"
-            //    key  = "DATABASE"
-            //  }
-            //}
           }
           env {
             name  = "USER"
             value = data.azurerm_key_vault_secret.sql_user.value
-            //value_from {
-            //  config_map_key_ref {
-            //    name = "api-config-map"
-            //    key  = "USER"
-            //  }
-            //}
           }
           env {
             name  = "PASSWORD"
             value = data.azurerm_key_vault_secret.sql_password.value
-            //secret_ref {
-            //  name = "app_secret"
-            //}
-            // }
           }
         }
       }
