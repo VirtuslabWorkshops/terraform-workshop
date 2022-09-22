@@ -8,7 +8,7 @@ terraform {
 }
 
 inputs = {
-  workload = "state"
+  workload    = "state"
   environment = "dev"
-  location = "euw"
+  location    = "euw"
 }

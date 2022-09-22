@@ -17,11 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-#      - name: terraform FMT
-#        run: terraform -chdir=terraform fmt -check -recursive
-
-      - name: print PATH
-        run: echo $PATH
+      - name: terraform FMT
+        working-directory: ./terraform
+        run: terraform fmt -check -recursive
 
       - name: terragrunt FMT
-        run: terragrunt hclfmt --terragrunt-check --terragrunt-working-dir terragrunt
+        working-directory: ./terragrunt
+        run: terragrunt hclfmt --terragrunt-check
