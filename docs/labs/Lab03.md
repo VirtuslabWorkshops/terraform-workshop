@@ -126,12 +126,13 @@ Add tooling to perform code validation.
     ```
     Navigate to AKS in Azure Portal and find Cluster, then select 'Services' and find IP adress of published service. 
 
-
 5. Open `URL` to get response.
 
 6. Open `URL/articles` to see details fetched from database
 
 ## Add Terragrunt files to manage parameteres
+
+<to do Terragrunt init>
 
 ## Notes
 
