@@ -14,7 +14,7 @@ include "root" {
 }
 
 locals {
-  apiimage= "aclogin.azurecr.io/backend:latest"
+  apiimage = "aclogin.azurecr.io/backend:latest"
 }
 
 terraform {
