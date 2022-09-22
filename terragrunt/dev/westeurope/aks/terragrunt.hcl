@@ -14,13 +14,13 @@ include "root" {
 }
 
 locals {
-  sku= "Standard"
+  sku= "Basic"
 }
 
 terraform {
-  source = "../../../..//terraform/03-kv"
+  source = "../../../..//terraform/aks"
 }
 
 inputs = {
-  kv_sku = local.sku
+  cr_sku = local.sku
 }

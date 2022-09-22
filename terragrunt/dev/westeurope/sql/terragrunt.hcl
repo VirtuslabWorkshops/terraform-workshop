@@ -18,9 +18,9 @@ locals {
 }
 
 terraform {
-  source = "../../../..//terraform/01-acr"
+  source = "../../../..//terraform/sql"
 }
 
 inputs = {
-  cr_sku = local.sku
+  sqldb_sku = local.sku
 }
