@@ -18,7 +18,7 @@ locals {
 }
 
 terraform {
-  source = "../../../..//terraform/01-acr"
+  source = "../../../..//terraform/cr"
 }
 
 inputs = {

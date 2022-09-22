@@ -14,13 +14,13 @@ include "root" {
 }
 
 locals {
-  sku= "standard"
+  apiimage= "aclogin.azurecr.io/backend:latest"
 }
 
 terraform {
-  source = "../../../..//terraform/kv"
+  source = "../../../..//terraform/aks_application"
 }
 
 inputs = {
-  kv_sku = local.sku
+  apiimage = local.apiimage
 }

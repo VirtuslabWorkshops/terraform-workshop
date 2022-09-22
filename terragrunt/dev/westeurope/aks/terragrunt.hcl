@@ -13,16 +13,14 @@ include "root" {
   expose = true
 }
 
-terraform {
-  source = "../../../..//terraform/04-aci"
+locals {
+  sku= "Basic"
 }
 
-locals {
-  app02 = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
-  api = "acr.microsoft.com/azuredocs/aci-helloworld:latest"
+terraform {
+  source = "../../../..//terraform/aks"
 }
 
 inputs = {
-  app02image = local.app02
-  apiimage = local.api
+  cr_sku = local.sku
 }
