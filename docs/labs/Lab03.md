@@ -8,7 +8,7 @@ Add tooling to perform code validation.
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
-- Lab01 established
+- Lab02 established
 - fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
 
 ## Initial setup
@@ -131,6 +131,7 @@ Add tooling to perform code validation.
 
 6. Open `URL/articles` to see details fetched from database
 
+## Add Terragrunt files to manage parameteres
 
 ## Notes
 
