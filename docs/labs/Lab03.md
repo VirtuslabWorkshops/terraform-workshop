@@ -130,11 +130,9 @@ Add tooling to perform code validation.
 
 6. Open `URL/articles` to see details fetched from database
 
-## Add Terragrunt files to manage parameteres
-
-<to do Terragrunt init>
-
 ## Notes
 
-
 ## Improvement points
+- plenty of `terraform apply` operations
+- managing multiple environments
+- state is stored on local drive, how to collaborate?

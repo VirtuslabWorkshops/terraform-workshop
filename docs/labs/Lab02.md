@@ -56,11 +56,8 @@ Add tooling to perform code validation.
 <TODO>
 
 
-
 ## Notes
 
-
 ## Improvement points
-- not easy to run against multiple environments
-- plenty of `terraform apply` operations
-- 
+- application uses public network to interact, scalability issues
+- many entropoints to create (CLI, manual steps)
