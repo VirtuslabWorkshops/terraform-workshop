@@ -20,5 +20,8 @@ jobs:
 #      - name: terraform FMT
 #        run: terraform -chdir=terraform fmt -check -recursive
 
+      - name: print PATH
+        run: echo $PATH
+
       - name: terragrunt FMT
         run: terragrunt hclfmt --terragrunt-check --terragrunt-working-dir terragrunt
