@@ -1,14 +1,14 @@
-skip=true
+skip = true
 locals {
-  environment            = "dev"
+  environment = "dev"
 }
 
 dependency "remote_state" {
   config_path = "${get_repo_root()}/terragrunt/remote_state"
 
   mock_outputs = {
-    container_name = "dummy_container_name"
-    resource_group_name = "dummy_resource_group_name"
+    container_name       = "dummy_container_name"
+    resource_group_name  = "dummy_resource_group_name"
     storage_account_name = "dummystorageaccountname"
   }
 
@@ -22,11 +22,11 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    container_name = dependency.remote_state.outputs.container_name
-    resource_group_name = dependency.remote_state.outputs.resource_group_name
+    container_name       = dependency.remote_state.outputs.container_name
+    resource_group_name  = dependency.remote_state.outputs.resource_group_name
     storage_account_name = dependency.remote_state.outputs.storage_account_name
 
-    key   = "${local.environment}/${path_relative_to_include()}/terraform.tfstate"
+    key = "${local.environment}/${path_relative_to_include()}/terraform.tfstate"
   }
 }
 

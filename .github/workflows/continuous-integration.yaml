@@ -16,3 +16,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: terraform FMT
+        working-directory: ./terraform
+        run: terraform fmt -check -recursive
+
+      - name: terragrunt FMT
+        working-directory: ./terragrunt
+        run: terragrunt hclfmt --terragrunt-check

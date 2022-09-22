@@ -123,7 +123,7 @@ resource "kubernetes_deployment" "app" {
           port {
             container_port = 80
           }
-          
+
           liveness_probe {
             http_get {
               path = "/"
