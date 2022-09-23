@@ -14,7 +14,7 @@ Add tooling to perform code validation.
 ## Initial setup
 
 1. Checkout to branch `cloudyna-lab02'
-    ```
+    ```bash
     git checkout cloudyna-lab02
     ```
 
@@ -46,7 +46,7 @@ Add tooling to perform code validation.
     As you can see, file has proper syntax, but code formatting seems to be a bit off.
 
 3. Run fromatting tool
-    ```
+    ```bash
     terraform fmt
     ```
     As you can see, file has proper formatting now.

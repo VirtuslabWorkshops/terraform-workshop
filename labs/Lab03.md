@@ -13,7 +13,7 @@ Create AKS resource and deploy application to AKS using terraform.
 ## Initial setup
 
 1. Checkout to branch `cloudyna-lab03'
-    ```
+    ```bash
     git checkout cloudyna-lab03
     ```
 
@@ -32,7 +32,7 @@ Create AKS resource and deploy application to AKS using terraform.
     }
     ```
     - in `main.tf` add section to fetch details of Container registry which helds our Api
-    ```
+    ```hcl
     data "azurerm_container_registry" "cr" {
       name                = "cr${local.postfix_no_dash}"
       resource_group_name = local.rg_group_name
@@ -40,7 +40,7 @@ Create AKS resource and deploy application to AKS using terraform.
     ``` 
 
     - in `main.tf` add 
-    ```
+    ```hcl
     data "azurerm_subnet" "aks_default" {
       name                 = "snet-default-${local.postfix}"
       virtual_network_name = "vnet-${local.postfix}"
@@ -79,7 +79,7 @@ Create AKS resource and deploy application to AKS using terraform.
     }
     ```
     - in `main.tf` add node pool dedicated for applications, it will use dedicated subnet
-    ```
+    ```hcl
     resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
       name                  = "appworkload"
       node_count            = 1
@@ -95,7 +95,7 @@ Create AKS resource and deploy application to AKS using terraform.
     }
     ```
     - in `main.tf` add role assignment: let identity access Container registry
-    ```
+    ```hcl
     resource "azurerm_role_assignment" "akstoacrrole" {
       principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
       role_definition_name             = "AcrPull"
@@ -104,14 +104,14 @@ Create AKS resource and deploy application to AKS using terraform.
     }
     ```
 2. Deploy resource
-    ```
+    ```bash
     terraform init
     terraform apply
     ```
     Now you have AKS cluster and you are ready to deploy application there.
 
 3. In `variables.tf` in `aks_application`  update Container Registry URL:
-    ```
+    ```hcl
     variable "apiimage" {
       type    = string
       default = "<acrlogin>.azurecr.io/api:latest"
@@ -119,7 +119,7 @@ Create AKS resource and deploy application to AKS using terraform.
     ```
 
 4.  Deploy application to AKS
-    ```
+    ```bash
     terraform init
     terraform apply
     ```

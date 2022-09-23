@@ -13,7 +13,7 @@ Introduce CD for environmnet changes
 ## Initial setup
 
 1. Checkout to branch `cloudyna-lab05'
-    ```
+    ```bash
     git checkout cloudyna-lab05
     ```
 

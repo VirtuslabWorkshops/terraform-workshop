@@ -1,6 +1,7 @@
 # How to start environment
 
-## Prerequisited
+## Prerequisites
+
 - terraform
 - azure subscription
 - az cli
@@ -9,21 +10,26 @@
 - contributor role to at least one Resource Group
 
 ## Via Bash script
-Run entirely (or line by line) file `deployBasicInfra.sh`.
-At some point run `populateDB.txt` against created database.
+
+Run entirely (or line by line) file [`scripts/deployBasicInfra.sh`](/scripts/deployBasicInfra.sh).
+At some point run [`populateDB.sql`](/scripts/populateDB.sql) against created database.
 
 ## Via terraform
+
 ### Resource order
+
 Navigate to resources one by one and run:
+
 ```bash
 terraform apply -var="workload=jdlab1"
 # feel free to replace jd with your initials
 ```
+
 - rg
 - kv
 - vnet
 - sql
-> Here run file `populateDB.txt` against created database.
+> Here run file [`populateDB.sql`](/scripts/populateDB.sql) against created database.
 - cr
 > Here create SP:
 ```bash
@@ -37,6 +43,7 @@ $ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPAL --query "[].appId"
 echo "Service principal ID: $ACRUSERNAME"
 echo "Service principal password: $ACRPASSWORD"
 ```
+
 - ci
 - aks
 - aks_setup

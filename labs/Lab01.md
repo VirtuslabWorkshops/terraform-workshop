@@ -1,21 +1,24 @@
 # Lab01
 
 ## Purpose
+
 Familiarize with technology stack, login to remote environment and setup basic infra.
 
 ## Prerequsites
+
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
 
 ## Initial setup
 
-1. Documentation  
-Familiarize yourself with [naming_convention](../naming_convention.md) and other docs regarding infrastructure and standards.
+1. Documentation
+
+    Familiarize yourself with [naming_convention](/docs/naming_convention.md) and other docs regarding infrastructure and standards.
 
 2. Fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
-  - navigate to repository, click in to right corner 'Fork' button
-  - select proper organization with your space ("Owner" field) and **unselect** "copy the master branch only, then proceed with forking
+- navigate to repository, click in to right corner 'Fork' button
+- select proper organization with your space ("Owner" field) and **unselect** "copy the master branch only, then proceed with forking
 
 3. Login to remote environment via SSH
    - run favourite ssh client and login:
@@ -51,8 +54,8 @@ Familiarize yourself with [naming_convention](../naming_convention.md) and other
 
 ## Semi manual deployment with AZ CLI
 
-1. Create environment using CLI stored in [deployBasicInfra](../deployBasicInfra.sh)
-   - you will find applicaiton files in <repoName>/application/
+1. Create environment using CLI stored in [deployBasicInfra](/scripts/deployBasicInfra.sh)
+   - you will find application files in <repoName>/application/
   
 2. Once environment is set, validate if it's working
 
@@ -68,7 +71,7 @@ Familiarize yourself with [naming_convention](../naming_convention.md) and other
     - kv
     - vnet
     - sql
-      > Here run file `populateDB.txt` against created database. Use Azure Portal, find databse and use Query tool available there.
+      > Here run file [`populateDB.sql`](/scripts/populateDB.sql)` against created database. Use Azure Portal, find database and use Query tool available there.
     - cr
       > SPN should be present in KV.
     - ci

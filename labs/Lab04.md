@@ -13,7 +13,7 @@ Introduce remote backend to allow collaboration.
 ## Initial setup
 
 1. Checkout to branch `cloudyna-lab04'
-    ```
+    ```bash
     git checkout cloudyna-lab04
     ```
 

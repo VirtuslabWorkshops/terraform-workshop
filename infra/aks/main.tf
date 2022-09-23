@@ -4,32 +4,38 @@ locals {
   rg_group_name   = "rg-${local.postfix}"
 }
 
-#data "azurerm_client_config" "current" {}
-#
-#data "azurerm_resource_group" "rg" {
-#  name = local.rg_group_name
-#}
-#
-#data "azurerm_container_registry" "cr" {
-#  name                = "cr${local.postfix_no_dash}"
-#  resource_group_name = local.rg_group_name
-#}
-#
-#data "azurerm_subnet" "aks_default" {
-#  name                 = "snet-default-${local.postfix}"
-#  virtual_network_name = "vnet-${local.postfix}"
-#  resource_group_name  = local.rg_group_name
-#}
-#
-#data "azurerm_subnet" "aks_app" {
-#  name                 = "snet-app-${local.postfix}"
-#  virtual_network_name = "vnet-${local.postfix}"
-#  resource_group_name  = local.rg_group_name
-#}
+data "azurerm_client_config" "current" {}
+
+data "azurerm_resource_group" "rg" {
+  name = local.rg_group_name
+}
+
+data "azurerm_container_registry" "cr" {
+  name                = "cr${local.postfix_no_dash}"
+  resource_group_name = local.rg_group_name
+}
+
+data "azurerm_subnet" "aks_default" {
+  name                 = "snet-default-${local.postfix}"
+  virtual_network_name = "vnet-${local.postfix}"
+  resource_group_name  = local.rg_group_name
+}
+
+data "azurerm_subnet" "aks_app" {
+  name                 = "snet-app-${local.postfix}"
+  virtual_network_name = "vnet-${local.postfix}"
+  resource_group_name  = local.rg_group_name
+}
+
+module "aks" {
+  source = "../../terraform/aks"
+
+
+}
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-${local.postfix}"
-  location            = var.location
+  location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   dns_prefix          = "aks-${local.postfix}"
 
@@ -64,9 +70,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
   }
 }
 
-#resource "azurerm_role_assignment" "akstoacrrole" {
-#  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-#  role_definition_name             = "AcrPull"
-#  scope                            = data.azurerm_container_registry.cr.id
-#  skip_service_principal_aad_check = true
-#}
+resource "azurerm_role_assignment" "akstoacrrole" {
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  role_definition_name             = "AcrPull"
+  scope                            = data.azurerm_container_registry.cr.id
+  skip_service_principal_aad_check = true
+}
