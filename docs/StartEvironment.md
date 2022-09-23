@@ -25,15 +25,15 @@ terraform apply -var="workload=jdlab1"
 - sql
 > Here run file `populateDB.txt` against created database.
 - cr
-> Here create SPN:
+> Here create SP:
 ```bash
 $ACRID="/subscriptions/<subid>/resourceGroups/rg-wglab3-dev-westeurope/providers/Microsoft.ContainerRegistry/registries/<acrname>"
 $ACRLOGIN="<acrname>.azurecr.io"
 $KVNAME="<kvname>"
 
-$SERVICEPRINCIPALNAME="spn-<workload>-<environment>-location"
-$ACRPASSWORD=$(az ad sp create-for-rbac --name $SERVICEPRINCIPALNAME --scopes $ACRID --role acrpull --query "password" --output tsv)
-$ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPALNAME --query "[].appId" --output tsv)
+$SERVICEPRINCIPAL="sp-<workload>-<environment>-location"
+$ACRPASSWORD=$(az ad sp create-for-rbac --name $SERVICEPRINCIPAL --scopes $ACRID --role acrpull --query "password" --output tsv)
+$ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPAL --query "[].appId" --output tsv)
 echo "Service principal ID: $ACRUSERNAME"
 echo "Service principal password: $ACRPASSWORD"
 ```

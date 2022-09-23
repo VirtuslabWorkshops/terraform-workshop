@@ -61,19 +61,19 @@ ac acr show --name $ACRNAME --ou
 
 export ACRLOGIN=$(az acr show -n $ACRNAME --query loginServer | tr -d '"')
 
-export SERVICEPRINCIPALNAME="spn-${PROJECTNAME}-dev-westeurope"
+export SERVICEPRINCIPAL="sp-${PROJECTNAME}-dev-westeurope"
 
 export ACRID=$(az acr show --name $ACRNAME --query "id" --output tsv)
 
 
-ACRPASSWORD=$(az ad sp create-for-rbac --name $SERVICEPRINCIPALNAME --scopes $ACRID --role acrpull --query "password" --output tsv)
-ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPALNAME --query "[].appId" --output tsv)
+ACRPASSWORD=$(az ad sp create-for-rbac --name $SERVICEPRINCIPAL --scopes $ACRID --role acrpull --query "password" --output tsv)
+ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPAL --query "[].appId" --output tsv)
 echo "Service principal ID: $ACRUSERNAME"
 echo "Service principal password: $ACRPASSWORD"
 
-az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-id" --value $ACRUSERNAME
+az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPAL-id" --value $ACRUSERNAME
 
-az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPALNAME-password" --value $ACRPASSWORD
+az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPAL-password" --value $ACRPASSWORD
 
 cd ..
 
