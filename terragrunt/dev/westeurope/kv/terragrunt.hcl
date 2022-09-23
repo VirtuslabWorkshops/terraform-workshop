@@ -14,7 +14,7 @@ include "root" {
 }
 
 locals {
-  sku= "standard"
+  sku = "standard"
 }
 
 terraform {

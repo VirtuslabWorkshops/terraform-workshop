@@ -1,8 +1,7 @@
 # Lab03
 
 ## Purpose
-Setup CI to validate terraform code.
-Add tooling to perform code validation.
+Create AKS resource and deploy application to AKS using terraform.
 
 ## Prerequsites
 - Machine with SSH client

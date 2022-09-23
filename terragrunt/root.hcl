@@ -1,8 +1,8 @@
 skip = true # this is just environment terragrunt config, not terraform module
 
 locals {
-  workload               = "app"
-  team_name              = "cdna"
+  workload  = "app"
+  team_name = "cdna"
 }
 
 terraform_version_constraint  = "~> 1.2.3"
@@ -29,6 +29,6 @@ EOF
 
 
 inputs = {
-  workload = local.workload
+  workload  = local.workload
   team_name = local.team_name
 }
