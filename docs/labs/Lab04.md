@@ -1,8 +1,6 @@
 # Lab04
 
 ## Purpose
-Introduce terragrunt to simplify environment deployment and avoid copying code.
-
 Introduce remote backend to allow collaboration.
 
 ## Prerequsites
@@ -19,11 +17,10 @@ Introduce remote backend to allow collaboration.
     git checkout cloudyna-lab04
     ```
 
-## Migrate app to K8s
+## Migrate to remote backend
 
 
 ## Notes
 
 ## Improvement points
-- modules can be shared across projects within one organization
-- standarization issues
+- no single place to track who applied changes against infrastructure

@@ -1,7 +1,7 @@
 # Lab05
 
 ## Purpose
-Introduce CD for environmnet changes
+Introduce Terragrunt
 
 ## Prerequsites
 - Machine with SSH client
@@ -17,11 +17,11 @@ Introduce CD for environmnet changes
     git checkout cloudyna-lab05
     ```
 
-## Enable CD for infrastructure via GitHub pipeline
+## Move to terragrunt
 
 
 ## Notes
 
 ## Improvement points
-- need to run terraform multiple times
-- need to know which resources needs to be applied
+- modules can be shared across projects within one organization
+- standarization issues
