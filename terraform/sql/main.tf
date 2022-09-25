@@ -17,8 +17,11 @@ provider "azurerm" {
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
-  rg_group_name   = "rg-${local.postfix}"
   sql_user        = "${var.workload}adm"
+  tags = merge({
+    environment = var.environment
+    team        = var.team_name
+  }, var.tags)
 }
 
 resource "random_password" "sql_password" {
@@ -51,10 +54,7 @@ resource "azurerm_mssql_server" "sql" {
   minimum_tls_version          = "1.2"
 
 
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
+  tags = local.tags
 }
 
 resource "azurerm_mssql_database" "sqldb" {
@@ -66,10 +66,7 @@ resource "azurerm_mssql_database" "sqldb" {
   sku_name       = var.sqldb_sku
   zone_redundant = false
 
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
+  tags = local.tags
 }
 
 resource "azurerm_mssql_firewall_rule" "sql-fw" {

@@ -10,9 +10,11 @@ terraform {
 }
 
 locals {
-  postfix         = "${var.workload}-${var.environment}-${var.location}"
-  postfix_no_dash = replace(local.postfix, "-", "")
-  rg_group_name   = "rg-${local.postfix}"
+  postfix = "${var.workload}-${var.environment}-${var.location}"
+  tags = merge({
+    environment = var.environment
+    team        = var.team_name
+  }, var.tags)
 }
 
 resource "azurerm_container_group" "ci" {
@@ -56,8 +58,5 @@ resource "azurerm_container_group" "ci" {
     }
   }
 
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
+  tags = local.tags
 }

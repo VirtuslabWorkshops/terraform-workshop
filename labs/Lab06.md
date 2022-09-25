@@ -1,9 +1,11 @@
 # Lab05
 
 ## Purpose
+
 Introduce Terragrunt
 
-## Prerequsites
+## Prerequisites
+
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
@@ -23,5 +25,6 @@ Introduce Terragrunt
 ## Notes
 
 ## Improvement points
+
 - modules can be shared across projects within one organization
 - standarization issues

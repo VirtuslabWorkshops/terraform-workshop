@@ -34,20 +34,26 @@ variable "location" {
   default = "westeurope"
 }
 
+variable "tags" {
+  type        = map(string)
+  description = "[optional] Additional tags."
+  default     = {}
+}
+
 variable "sql_user" {
-  type    = string
+  type = string
 }
 
 variable "sql_password" {
-  type    = string
+  type = string
 }
 
 variable "sqldb_name" {
-  type    = string
+  type = string
 }
 
 variable "sql_fqdn" {
-  type    = string
+  type = string
 }
 
 variable "resource_group_name" {}
@@ -57,16 +63,16 @@ variable "spn_password" {}
 
 variable "applications" {
   type = map(object({
-    cpu_max=string,
-    cpu_min=string,
-    image=string,
-    ip_address_type=string,
-    memory_max=string,
-    memory_min=string,
-    name=string,
-    port=number,
-    protocol=string,
-    replicas=number
+    cpu_max         = string,
+    cpu_min         = string,
+    image           = string,
+    ip_address_type = string,
+    memory_max      = string,
+    memory_min      = string,
+    name            = string,
+    port            = number,
+    protocol        = string,
+    replicas        = number
   }))
   default = {
     app01 = {

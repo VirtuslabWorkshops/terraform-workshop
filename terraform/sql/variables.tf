@@ -34,6 +34,12 @@ variable "location" {
   default = "westeurope"
 }
 
+variable "tags" {
+  type        = map(string)
+  description = "[optional] Additional tags."
+  default     = {}
+}
+
 # kv
 variable "sqldb_sku" {
   type = string

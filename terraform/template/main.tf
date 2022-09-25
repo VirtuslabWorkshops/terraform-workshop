@@ -16,6 +16,10 @@ locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
   rg_group_name   = "rg-${local.postfix}"
+  tags = merge({
+    environment = var.environment
+    team        = var.team_name
+  }, var.tags)
 }
 
 data "azurerm_client_config" "current" {}

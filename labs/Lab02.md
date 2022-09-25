@@ -1,10 +1,12 @@
 # Lab02
 
 ## Purpose
+
 Setup CI to validate terraform code.
 Add tooling to perform code validation.
 
-## Prerequsites
+## Prerequisites
+
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
@@ -19,18 +21,18 @@ Add tooling to perform code validation.
     ```
 
 ## Add tags to VNet
-1. Navigate to terraform/vnet and edit `main.tf`
-2. Add tags to resource defintion (line 18 onwars)
-    ```hcl
+1. Navigate to terraform/vnet and edit [`main.tf`](../terraform/vnet/main.tf)
+2. Add tags to resource definition
+    ```terraform
     tags = {
       environment = var.environment
       team        = var.team_name
     }
     ```
   
-    final vnet block should like like:
+    final vnet block should look like:
     
-    ```hcl
+    ```terraform
     resource "azurerm_virtual_network" "vnet" {
       name                = "vnet-${local.postfix}"
       location            = data.azurerm_resource_group.rg.location
@@ -45,7 +47,7 @@ Add tooling to perform code validation.
     ```
     As you can see, file has proper syntax, but code formatting seems to be a bit off.
 
-3. Run fromatting tool
+3. Run formatting tool
     ```bash
     terraform fmt
     ```
@@ -55,9 +57,9 @@ Add tooling to perform code validation.
 
 <TODO>
 
-
 ## Notes
 
 ## Improvement points
+
 - application uses public network to interact, scalability issues
-- many entropoints to create (CLI, manual steps)
+- many entrypoints to create (CLI, manual steps)

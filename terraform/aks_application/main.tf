@@ -32,10 +32,7 @@ provider "kubernetes" {
 }
 
 locals {
-  postfix         = "${var.workload}-${var.environment}-${var.location}"
-  postfix_no_dash = replace(local.postfix, "-", "")
-  rg_group_name   = "rg-${local.postfix}"
-
+  postfix = "${var.workload}-${var.environment}-${var.location}"
 }
 
 resource "kubernetes_namespace" "api_namespace" {

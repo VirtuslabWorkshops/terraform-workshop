@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
 #`<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
 export PROJECTNAME="mgmt"

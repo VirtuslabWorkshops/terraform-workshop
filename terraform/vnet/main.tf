@@ -1,6 +1,26 @@
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.22"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {
+  }
+}
+
 locals {
   postfix       = "${var.workload}-${var.environment}-${var.location}"
   rg_group_name = "rg-${local.postfix}"
+  tags = merge({
+    environment = var.environment
+    team        = var.team_name
+  }, var.tags)
 }
 
 data "azurerm_client_config" "current" {}
@@ -15,10 +35,7 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = data.azurerm_resource_group.rg.name
   address_space       = ["10.0.0.0/8"]
 
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
+  tags = local.tags
 }
 
 resource "azurerm_subnet" "aks-default" {

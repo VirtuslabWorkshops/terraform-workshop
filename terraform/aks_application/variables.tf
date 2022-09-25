@@ -34,64 +34,55 @@ variable "location" {
   default = "westeurope"
 }
 
-#variable "app01_image" {
-#  type    = string
-#  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
-#}
-#
-#variable "api_image" {
-#  type    = string
-#  default = "aclogin.azurecr.io/backend:latest"
-#}
 variable "sql_user" {
-  type    = string
+  type = string
 }
 
 variable "sql_password" {
-  type    = string
+  type = string
 }
 
 variable "sqldb_name" {
-  type    = string
+  type = string
 }
 
 variable "sql_fqdn" {
-  type    = string
+  type = string
 }
 
 variable "aks_name" {
-  type    = string
+  type = string
 }
 
 variable "aks_resource_group" {
-  type    = string
+  type = string
 }
 
 variable "applications" {
   type = map(object({
-    cpu_max=string,
-    cpu_min=string,
-    image=string,
-    ip_address_type=string,
-    memory_max=string,
-    memory_min=string,
-    name=string,
-    port=number,
-    protocol=string,
-    replicas=number
+    cpu_max         = string,
+    cpu_min         = string,
+    image           = string,
+    ip_address_type = string,
+    memory_max      = string,
+    memory_min      = string,
+    name            = string,
+    port            = number,
+    protocol        = string,
+    replicas        = number
   }))
   default = {
-      app01 = {
-        name            = "app01"
-        ip_address_type = "Public"
-        image           = "app01image"
-        cpu_min         = "200m"
-        memory_min      = "256Mi"
-        cpu_max         = "0.5"
-        memory_max      = "512Mi"
-        port            = 80
-        protocol        = "TCP"
-        replicas        = 1
-      }
+    app01 = {
+      name            = "app01"
+      ip_address_type = "Public"
+      image           = "app01image"
+      cpu_min         = "200m"
+      memory_min      = "256Mi"
+      cpu_max         = "0.5"
+      memory_max      = "512Mi"
+      port            = 80
+      protocol        = "TCP"
+      replicas        = 1
+    }
   }
 }

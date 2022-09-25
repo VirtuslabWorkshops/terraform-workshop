@@ -1,9 +1,11 @@
 # Lab03
 
 ## Purpose
+
 Create AKS resource and deploy application to AKS using terraform.
 
-## Prerequsites
+## Prerequisites
+
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
@@ -18,29 +20,30 @@ Create AKS resource and deploy application to AKS using terraform.
     ```
 
 ## Migrate app to K8s
+
 1.  Create resource definition that deploys AKS cluster that has dedicated node pool for applications and is able to fetch container images from Container Registry
     - copy blank template folder to create structure:
-    ```
+    ```bash
     cd terraform
     mkdir aks
     cp template\*.tf aks
     ```
-    - in `main.tf` add section to fetch details of resource groups
-    ```hcl
+    - in [`main.tf`](../terraform/aks/main.tf) add section to fetch details of resource groups
+    ```terraform
     data "azurerm_resource_group" "rg" {
       name = local.rg_group_name
     }
     ```
-    - in `main.tf` add section to fetch details of Container registry which helds our Api
-    ```hcl
+    - in [`main.tf`](../terraform/aks/main.tf) add section to fetch details of Container registry which holds our Api container
+    ```terraform
     data "azurerm_container_registry" "cr" {
       name                = "cr${local.postfix_no_dash}"
       resource_group_name = local.rg_group_name
     }
     ``` 
 
-    - in `main.tf` add 
-    ```hcl
+    - in [`main.tf`](../terraform/aks/main.tf) add 
+    ```terraform
     data "azurerm_subnet" "aks_default" {
       name                 = "snet-default-${local.postfix}"
       virtual_network_name = "vnet-${local.postfix}"
@@ -53,8 +56,9 @@ Create AKS resource and deploy application to AKS using terraform.
       resource_group_name  = local.rg_group_name
     }
     ```
-    - in `main.tf` add AKS cluster definition which uses reference to Resource group and has default node pool deployed to dedicated subnet. AKS will use `SystemAssigned` identity which simplifies management.
-    ```hcl
+    - in [`main.tf`](../terraform/aks/main.tf) add AKS cluster definition which uses reference to Resource group and has default node pool deployed to dedicated subnet. 
+    AKS will use `SystemAssigned` identity which simplifies management.
+    ```terraform
     resource "azurerm_kubernetes_cluster" "aks" {
       name                = "aks-${local.postfix}"
       location            = data.azurerm_resource_group.rg.location
@@ -78,8 +82,8 @@ Create AKS resource and deploy application to AKS using terraform.
       }
     }
     ```
-    - in `main.tf` add node pool dedicated for applications, it will use dedicated subnet
-    ```hcl
+    - in [`main.tf`](../terraform/aks/main.tf) add node pool dedicated for applications, it will use dedicated subnet
+    ```terraform
     resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
       name                  = "appworkload"
       node_count            = 1
@@ -94,8 +98,8 @@ Create AKS resource and deploy application to AKS using terraform.
       }
     }
     ```
-    - in `main.tf` add role assignment: let identity access Container registry
-    ```hcl
+    - in [`main.tf`](../terraform/aks/main.tf) add role assignment: let identity access Container registry
+    ```terraform
     resource "azurerm_role_assignment" "akstoacrrole" {
       principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
       role_definition_name             = "AcrPull"
@@ -110,8 +114,8 @@ Create AKS resource and deploy application to AKS using terraform.
     ```
     Now you have AKS cluster and you are ready to deploy application there.
 
-3. In `variables.tf` in `aks_application`  update Container Registry URL:
-    ```hcl
+3. In [`main.tf`](../terraform/aks_application/main.tf) in `aks_application`  update Container Registry URL:
+    ```terraform
     variable "apiimage" {
       type    = string
       default = "<acrlogin>.azurecr.io/api:latest"
@@ -123,7 +127,7 @@ Create AKS resource and deploy application to AKS using terraform.
     terraform init
     terraform apply
     ```
-    Navigate to AKS in Azure Portal and find Cluster, then select 'Services' and find IP adress of published service. 
+    Navigate to AKS in Azure Portal and find Cluster, then select 'Services' and find IP address of published service. 
 
 5. Open `URL` to get response.
 
@@ -132,6 +136,7 @@ Create AKS resource and deploy application to AKS using terraform.
 ## Notes
 
 ## Improvement points
+
 - plenty of `terraform apply` operations
 - managing multiple environments
 - state is stored on local drive, how to collaborate?

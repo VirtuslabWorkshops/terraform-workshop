@@ -47,12 +47,12 @@ variable "vnet_subnet_id_default" {
   type = string
 }
 
-variable "vnet_subnet_id_appworkload" {
+variable "vnet_subnet_id_app_workload" {
   type = string
 }
 
 variable "tags" {
-  type    = map(string)
-  description = "[optional] additionl tags"
-  default = {}
+  type        = map(string)
+  description = "[optional] Additional tags."
+  default     = {}
 }

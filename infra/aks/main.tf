@@ -34,10 +34,10 @@ module "aks" {
   resource_group_name = data.azurerm_resource_group.rg.name
 
   vnet_subnet_id_default     =  data.azurerm_subnet.aks_default.id
-  vnet_subnet_id_appworkload = data.azurerm_subnet.aks_app.id
+  vnet_subnet_id_app_workload = data.azurerm_subnet.aks_app.id
 }
 
-resource "azurerm_role_assignment" "akstoacrrole" {
+resource "azurerm_role_assignment" "aks_to_acr_role" {
   principal_id                     = module.aks.aks_principal
   role_definition_name             = "AcrPull"
   scope                            = data.azurerm_container_registry.cr.id

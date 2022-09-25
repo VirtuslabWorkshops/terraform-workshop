@@ -3,9 +3,6 @@ locals {
   postfix_no_dash = replace(local.postfix, "-", "")
   location        = var.location == "ewu" ? "westeurope" : "northeurope"
 }
-output "postfix" {
-  value = "rg-${local.postfix}"
-}
 
 resource "azurerm_resource_group" "rg_storage_account" {
   name     = "rg-${local.postfix}"

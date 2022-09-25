@@ -1,15 +1,17 @@
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
-  location        = var.location == "ewu" ? "westeurope" : "northeurope"
-}
-output "postfix" {
-  value = "rg-${local.postfix}"
+  tags = merge({
+    environment = var.environment
+    team        = var.team_name
+  }, var.tags)
 }
 
 resource "azurerm_resource_group" "rg_storage_account" {
   name     = "rg-${local.postfix}"
-  location = local.location
+  location = var.location
+
+  tags = local.tags
 }
 
 resource "azurerm_storage_account" "storage_account" {
@@ -19,10 +21,7 @@ resource "azurerm_storage_account" "storage_account" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
+  tags = local.tags
 }
 
 resource "azurerm_storage_container" "storage_container" {

@@ -1,14 +1,16 @@
 # Lab04
 
 ## Purpose
+
 Introduce remote backend to allow collaboration.
 
-## Prerequsites
+## Prerequisites
+
 - Machine with SSH client
-- credentials to remote environment (provided by trainers)
+- Credentials to remote environment (provided by trainers)
 - GitHub account
 - Lab03 established
-- fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+- Fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
 
 ## Initial setup
 

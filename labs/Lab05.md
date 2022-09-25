@@ -1,9 +1,11 @@
 # Lab05
 
 ## Purpose
-Introduce CD for environmnet changes
 
-## Prerequsites
+Introduce CD for environment changes
+
+## Prerequisites
+
 - Machine with SSH client
 - credentials to remote environment (provided by trainers)
 - GitHub account
@@ -19,9 +21,9 @@ Introduce CD for environmnet changes
 
 ## Enable CD for infrastructure via GitHub pipeline
 
-
 ## Notes
 
 ## Improvement points
+
 - need to run terraform multiple times
 - need to know which resources needs to be applied
