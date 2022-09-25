@@ -83,49 +83,16 @@ data "azurerm_mssql_database" "sqldb" {
 
 }
 
-resource "azurerm_container_group" "ci" {
-  for_each = local.applications
+module "container_instance" {
+  source = "../../terraform/ci"
+  resource_group_name = ""
 
-  name                = "${each.value.name}-${each.value.postfix}"
-  location            = data.azurerm_resource_group.rg.location
-  resource_group_name = data.azurerm_resource_group.rg.name
-  ip_address_type     = each.value.ip_address_type
-  dns_name_label      = "ci${each.value.name}${local.postfix}"
-  os_type             = "Linux"
+  cr_login_server = data.azurerm_container_registry.cr.login_server
+  spn_id = data.azurerm_key_vault_secret.spn_id.value
+  spn_password = data.azurerm_key_vault_secret.spn_password.value
 
-  image_registry_credential {
-    server   = data.azurerm_container_registry.cr.login_server
-    username = data.azurerm_key_vault_secret.spn_id.value
-    password = data.azurerm_key_vault_secret.spn_password.value
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  container {
-    name   = each.key
-    image  = each.value.image
-    cpu    = each.value.cpu
-    memory = each.value.memory
-
-    secure_environment_variables = {
-      USER     = data.azurerm_key_vault_secret.sql_user.value
-      PASSWORD = data.azurerm_key_vault_secret.sql_password.value
-    }
-    environment_variables = {
-      SERVER   = data.azurerm_mssql_server.sql.fully_qualified_domain_name
-      DATABASE = data.azurerm_mssql_database.sqldb.name
-    }
-
-    ports {
-      port     = each.value.port
-      protocol = each.value.protocol
-    }
-  }
-
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
+  sql_fqdn =  data.azurerm_mssql_server.sql.fully_qualified_domain_name
+  sql_password = data.azurerm_key_vault_secret.sql_password.value
+  sql_user = data.azurerm_key_vault_secret.sql_user.value
+  sqldb_name = data.azurerm_mssql_database.sqldb.name
 }

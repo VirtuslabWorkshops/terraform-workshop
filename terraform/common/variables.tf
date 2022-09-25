@@ -33,3 +33,23 @@ variable "location" {
   }
   default = "westeurope"
 }
+
+# cr
+variable "cr_sku" {
+  type = string
+  validation {
+    condition     = can(regex("^Basic|Premium$", var.cr_sku))
+    error_message = "Container Registry sku can be Basic or Premium only."
+  }
+  default = "Basic"
+}
+
+# kv
+variable "kv_sku" {
+  type = string
+  validation {
+    condition     = can(regex("^standard|premium$", var.kv_sku))
+    error_message = "KV sku can be Standard or Premium only."
+  }
+  default = "standard"
+}

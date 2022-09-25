@@ -71,103 +71,13 @@ data "azurerm_mssql_database" "sqldb" {
   server_id = data.azurerm_mssql_server.sql.id
 }
 
-resource "kubernetes_namespace" "api_namespace" {
-  metadata {
-    labels = {
-      app = "api-${local.postfix}"
-    }
-
-    name = "api-${local.postfix}"
-  }
-}
-
-resource "kubernetes_deployment" "app" {
-  for_each = local.applications
-  metadata {
-
-    namespace = "api-${local.postfix}"
-    name      = "${each.value.name}-${local.postfix}"
-    labels = {
-      app = "${each.value.name}-${local.postfix}"
-    }
-  }
-  spec {
-    replicas = each.value.replicas
-    selector {
-      match_labels = {
-        app = "${each.value.name}-${local.postfix}"
-      }
-    }
-    template {
-      metadata {
-        labels = {
-          app = "${each.value.name}-${local.postfix}"
-        }
-        namespace = "api-${local.postfix}"
-      }
-
-      spec {
-        container {
-          image = each.value.image
-          name  = each.value.name
-          resources {
-            limits = {
-              cpu    = each.value.cpu_max
-              memory = each.value.memory_max
-            }
-            requests = {
-              cpu    = each.value.cpu_min
-              memory = each.value.memory_min
-            }
-          }
-          port {
-            container_port = 80
-          }
-
-          liveness_probe {
-            http_get {
-              path = "/"
-              port = each.value.port
-            }
-            initial_delay_seconds = 5
-            period_seconds        = 5
-          }
-          env {
-            name  = "SERVER"
-            value = data.azurerm_mssql_server.sql.fully_qualified_domain_name
-          }
-          env {
-            name  = "DATABASE"
-            value = data.azurerm_mssql_database.sqldb.name
-          }
-          env {
-            name  = "USER"
-            value = data.azurerm_key_vault_secret.sql_user.value
-          }
-          env {
-            name  = "PASSWORD"
-            value = data.azurerm_key_vault_secret.sql_password.value
-          }
-        }
-      }
-    }
-  }
-}
-
-resource "kubernetes_service" "appservice" {
-  metadata {
-    name      = "appservice"
-    namespace = "api-${local.postfix}"
-  }
-  spec {
-    selector = {
-      app = "api-${local.postfix}"
-    }
-    session_affinity = "ClientIP"
-    port {
-      port        = 80
-      target_port = 80
-    }
-    type = "LoadBalancer"
-  }
+module "aks_application" {
+  source = "../../terraform/aks_application"
+  aks_name = data.azurerm_kubernetes_cluster.aks.name
+  aks_resource_group = data.azurerm_kubernetes_cluster.aks.resource_group_name
+  sql_fqdn = data.azurerm_mssql_server.sql.fully_qualified_domain_name
+  sql_password = data.azurerm_key_vault_secret.sql_password.value
+  sql_user = data.azurerm_key_vault_secret.sql_user.value
+  sqldb_name = data.azurerm_mssql_database.sqldb.name
+  applications = local.applications
 }

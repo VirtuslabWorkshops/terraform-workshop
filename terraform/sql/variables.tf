@@ -43,3 +43,7 @@ variable "sqldb_sku" {
   }
   default = "Basic"
 }
+
+variable "key_vault_id" {}
+
+variable "resource_group_name" {}
