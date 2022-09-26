@@ -3,7 +3,7 @@ set -e
 
 #`<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
-export PROJECTNAME="mgmt"
+export PROJECTNAME="<PutYourIniti"
 
 export LOCATION="westeurope"
 export RGNAME="rg-${PROJECTNAME}-dev-westeurope"
@@ -15,7 +15,7 @@ az keyvault create --name $KVNAME --resource-group $RGNAME --location $LOCATION
 let "RAND=$RANDOM*$RANDOM"
 
 export SQLUSER="${PROJECTNAME}"
-export SQLPASSWORD="Passw0rd!${RAND}"
+export SQLPASSWORD="Passw0rd${RAND}"
 
 az keyvault secret set --vault-name $KVNAME --name "SQLUSER" --value $SQLUSER
 
@@ -54,7 +54,7 @@ az sql db create \
 
 # Login to SQL server and execute queries from populateDB.sql file
 
-export ACRNAME="acr${PROJECTNAME}devwesteurope"
+export ACRNAME="cr${PROJECTNAME}devwesteurope"
 
 az acr create --location $LOCATION --resource-group $RGNAME --name $ACRNAME --sku Basic
 
@@ -114,10 +114,10 @@ az container create \
     --image $APP01IMAGE \
     --ip-address Public \
     --dns-name-label $APP01NAME \
-    --ports 80 \
-    --cpu 1 \
-    --memory 1 
+    --ports 80 
 
 az container show --resource-group $RGNAME --name $APP01NAME
 
 export APP01URL=$(az container show --resource-group $RGNAME --name $APP01NAME --query ipAddress.fqdn | tr -d '"')
+
+echo $APP01URL
