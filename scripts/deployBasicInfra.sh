@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-set -e
 
+set -e
+[[ "${DEBUG}" ]] && set -x
 #`<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
 export PROJECTNAME="mgmt"
