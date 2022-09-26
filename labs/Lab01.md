@@ -2,19 +2,17 @@
 
 ## Purpose
 
-Setup basic infra.
+Setup basic infra using AZ CLI and Terraform.
 
 ## Prerequisites
 
-- Machine with SSH client
-- credentials to remote environment (provided by trainers)
-- GitHub account
+- setup as per Lab00
 
 ## Initial setup
 
-1. Checkout to branch `cloudyna-lab01'
+1. Checkout to relevant branch
     ```bash
-    git checkout cloudyna-lab01
+    git checkout lab01
     ```
 
 ## Semi manual deployment with AZ CLI
@@ -22,21 +20,21 @@ Setup basic infra.
 1. Create environment using CLI stored in [deployBasicInfra](/scripts/deployBasicInfra.sh)
    - you will find application files in <repoName>/application/
   
-2. Once environment is set, validate if it's working
+2. Once environment is set, validate if it's working by openening URLs
 
 ## Deployment with terraform
 
-1. Navigate to repository directory and execute
+1. Navigate to repository component directory and execute
     ```
     terraform init
     terraform apply # confirm with yes
     ```
 
-    in every directory:
+    in every directory in order
     - kv
     - vnet
     - sql
-      > Here run file [`populateDB.sql`](/scripts/populateDB.sql)` against created database. Use Azure Portal, find database and use Query tool available there.
+      > Execute content of file [`populateDB.sql`](/scripts/populateDB.sql)` against created database. Use Azure Portal, find database and use Query tool available there.
     - cr
       > SPN should be present in KV.
     - ci
@@ -45,13 +43,12 @@ Setup basic infra.
 
 3. Open `URL/articles` to see details fetched from database
 
-4. Remove `ci` (container instance) and execute `terraform apply` again - what is the effect?
+4. Remove `ci` (container instance) from Portal and execute `terraform apply` again - what is the effect?
 
 ## Notes
 - terraform keeps 'state' that allows to understand what SHOULD be there and restore resources
 - terraform requires a bit of preparation
 - deploying resources has plenty of auxiliary steps
-
 
 ## Pain points
 - if you would like to deploy new environment you would have to copy all files

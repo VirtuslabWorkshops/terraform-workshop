@@ -6,17 +6,13 @@ Introduce remote backend to allow collaboration.
 
 ## Prerequisites
 
-- Machine with SSH client
-- Credentials to remote environment (provided by trainers)
-- GitHub account
-- Lab03 established
-- Fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+- setup as per Lab00
 
 ## Initial setup
 
-1. Checkout to branch `cloudyna-lab04'
+1. Checkout to branch `lab04'
     ```bash
-    git checkout cloudyna-lab04
+    git checkout lab04
     ```
 
 ## Migrate to remote backend

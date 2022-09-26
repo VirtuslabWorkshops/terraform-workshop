@@ -16,36 +16,55 @@ Familiarize with technology stack, login to remote environment.
 
    Familiarize yourself with [naming_convention](/docs/naming_convention.md) and other docs regarding infrastructure and standards.
 
-2. Fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+2. Login to remote environment via SSH to confirm that credentials are valid and connection is stable
 
-- navigate to repository, click in to right corner 'Fork' button
-- select proper organization with your space ("Owner" field) and **unselect** "copy the master branch only, then proceed with forking
-
-3. Login to remote environment via SSH
    - run favourite ssh client and login:
-    ```bash
-    ssh xx
-    ```
+     ```bash
+     ssh <username>@<IpAddress>
+     ```
+    Confirm defaults and use password provided.
+
+3. Connect via Visual Studio Code
+
+   - run Visual Studio Code, pick `Extensions` from left pane, find and install `Remote - SSH`
+   - hit `F1` to enter command mode and type `Remote-SSH: Add New SSH Host` and type:
+     ```bash
+     ssh <username>@<IpAddress>
+     ```
+   - then select default path to save configuration
+   - hit `F1` to enter command mode and type `Remote-SSH: Connect to host` and type password when asked
+   - open terminal (eg. from main menu) and see you are logged in to remote environment
+
+   >If not stated otherwise all next steps should be executed on remote environment.
 
 4. Confirm presence of tools
 
    ```bash
    terraform -version
-   kubectl version --short
+   kubectl version --shorts
    az cli --version
    terragrunt -version
    ```
-5. Login to Azure via [Azure Portal](https://portal.azure.com) and find your Resource Group
+5. Login to Azure via [Azure Portal](https://portal.azure.com) and ensure you can see subscription named `Cloudyna`
 
-   >If not stated otherwise actions should be executed on remote environment.
+6. Clone your repository 
+   
+   - login to to GitHub using GH Cli
+     ```bash
+     gh auth login
+     ```
+     and follow defaults
 
-6. Clone forked repository to your 
+   - clone repository
+     ```bash
+      git clone <url>
+     ```
 
-   ```bash
-    git clone <url>
-   ```
+7. Login to Azure via Azure CLI
 
-8. Login to Azure via Azure CLI
    ```bash
    az login --use-device-code --tenant e1f301d1-f447-42b5-b1da-1cd6f79ed0eb
    ```
+   and follow instructions on screen.
+
+   > Use browser in incognito mode to avoid conflict with current sessions you may have.

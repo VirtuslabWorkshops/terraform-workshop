@@ -1,22 +1,18 @@
-# Lab05
+# Lab06
 
 ## Purpose
 
-Introduce Terragrunt
+Enable company-wide collaboration via shared resource definitions.
 
 ## Prerequisites
 
-- Machine with SSH client
-- credentials to remote environment (provided by trainers)
-- GitHub account
-- Lab04 established
-- fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+- setup as per Lab00
 
 ## Initial setup
 
-1. Checkout to branch `cloudyna-lab05'
+1. Checkout to branch `lab06'
     ```bash
-    git checkout cloudyna-lab05
+    git checkout lab06
     ```
 
 ## Move to terragrunt

@@ -2,24 +2,24 @@
 
 ## Purpose
 
-Introduce CD for environment changes
+Introduce Terragrunt to manage multiple environments and simplify execution.
 
 ## Prerequisites
 
-- Machine with SSH client
-- credentials to remote environment (provided by trainers)
-- GitHub account
-- Lab04 established
-- fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+- setup as per Lab00
 
 ## Initial setup
 
-1. Checkout to branch `cloudyna-lab05'
+1. Checkout to branch `lab05'
     ```bash
-    git checkout cloudyna-lab05
+    git checkout lab05
     ```
 
-## Enable CD for infrastructure via GitHub pipeline
+## Setup terragrunt
+Terragrunt allows to abstract parameters and resources in highly effective manner.
+
+- navigate to [terraform](./terraform) directory and browse structure
+
 
 ## Notes
 
