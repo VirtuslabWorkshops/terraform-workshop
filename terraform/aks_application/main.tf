@@ -1,74 +1,38 @@
-locals {
-  postfix         = "${var.workload}-${var.environment}-${var.location}"
-  postfix_no_dash = replace(local.postfix, "-", "")
-  rg_group_name   = "rg-${local.postfix}"
-  applications = {
-    app01 = {
-      name            = "app01"
-      ip_address_type = "Public"
-      image           = var.app01image
-      cpu_min         = "200m"
-      memory_min      = "256Mi"
-      cpu_max         = "0.5"
-      memory_max      = "512Mi"
-      port            = 80
-      protocol        = "TCP"
-      replicas        = 1
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.22"
     }
-    api = {
-      name            = "api"
-      ip_address_type = "Private"
-      image           = var.apiimage
-      cpu_min         = "200m"
-      memory_min      = "256Mi"
-      cpu_max         = "0.5"
-      memory_max      = "512Mi"
-      port            = 80
-      protocol        = "TCP"
-      replicas        = 2
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.13"
     }
   }
 }
 
-data "azurerm_client_config" "current" {}
-
-data "azurerm_resource_group" "rg" {
-  name = local.rg_group_name
-}
-
 data "azurerm_kubernetes_cluster" "aks" {
-  name                = "aks-${local.postfix}"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  name                = var.aks_name
+  resource_group_name = var.aks_resource_group
 }
 
-data "azurerm_key_vault" "kv" {
-  name                = "kv-${local.postfix}"
-  resource_group_name = data.azurerm_resource_group.rg.name
+
+provider "kubernetes" {
+  host = data.azurerm_kubernetes_cluster.aks.kube_config.0.host
+
+  username = data.azurerm_kubernetes_cluster.aks.kube_config.0.username
+  password = data.azurerm_kubernetes_cluster.aks.kube_config.0.password
+
+  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
+  client_key             = base64decode(data.azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
 }
 
-data "azurerm_container_registry" "cr" {
-  name                = "cr${local.postfix_no_dash}"
-  resource_group_name = local.rg_group_name
-}
-
-data "azurerm_key_vault_secret" "sql_user" {
-  name         = "sqluser"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "sql_password" {
-  name         = "sqlpassword"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_mssql_server" "sql" {
-  name                = "sql-${local.postfix}"
-  resource_group_name = local.rg_group_name
-}
-
-data "azurerm_mssql_database" "sqldb" {
-  name      = "sqldb${local.postfix_no_dash}"
-  server_id = data.azurerm_mssql_server.sql.id
+locals {
+  postfix = "${var.workload}-${var.environment}-${var.location}"
 }
 
 resource "kubernetes_namespace" "api_namespace" {
@@ -82,7 +46,7 @@ resource "kubernetes_namespace" "api_namespace" {
 }
 
 resource "kubernetes_deployment" "app" {
-  for_each = local.applications
+  for_each = var.applications
   metadata {
 
     namespace = "api-${local.postfix}"
@@ -134,25 +98,26 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "SERVER"
-            value = data.azurerm_mssql_server.sql.fully_qualified_domain_name
+            value = var.sql_fqdn
           }
           env {
             name  = "DATABASE"
-            value = data.azurerm_mssql_database.sqldb.name
+            value = var.sqldb_name
           }
           env {
             name  = "USER"
-            value = data.azurerm_key_vault_secret.sql_user.value
+            value = var.sql_user
           }
           env {
             name  = "PASSWORD"
-            value = data.azurerm_key_vault_secret.sql_password.value
+            value = var.sql_password
           }
         }
       }
     }
   }
 }
+
 
 resource "kubernetes_service" "appservice" {
   metadata {

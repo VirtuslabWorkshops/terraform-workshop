@@ -30,3 +30,9 @@ variable "location" {
     error_message = "Location group name is not valid."
   }
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "[optional] Additional tags."
+  default     = {}
+}

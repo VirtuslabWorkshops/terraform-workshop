@@ -34,12 +34,6 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "[optional] Additional tags."
-  default     = {}
-}
-
 # kv
 variable "sqldb_sku" {
   type = string
@@ -49,7 +43,3 @@ variable "sqldb_sku" {
   }
   default = "Basic"
 }
-
-variable "key_vault_id" {}
-
-variable "resource_group_name" {}

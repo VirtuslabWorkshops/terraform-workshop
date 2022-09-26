@@ -34,22 +34,17 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "[optional] Additional tags."
-  default     = {}
+variable "app01image" {
+  type    = string
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
-# kv
-variable "sqldb_sku" {
-  type = string
-  validation {
-    condition     = can(regex("^Basic|S0|P2$", var.sqldb_sku))
-    error_message = "MSSQL database SKU can be Basic, S0, P2 only."
-  }
-  default = "Basic"
+variable "app02image" {
+  type    = string
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
-variable "key_vault_id" {}
-
-variable "resource_group_name" {}
+variable "apiimage" {
+  type    = string
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
+}
