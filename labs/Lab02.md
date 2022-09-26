@@ -15,14 +15,16 @@ Add tooling to perform code validation.
 
 ## Initial setup
 
-1. Checkout to branch `cloudyna-lab02'
+1. Checkout to relevant branch
     ```bash
-    git checkout cloudyna-lab02
+    git checkout lab01
     ```
 
 ## Add tags to VNet
 1. Navigate to terraform/vnet and edit [`main.tf`](../terraform/vnet/main.tf)
+   
 2. Add tags to resource definition
+   
     ```terraform
     tags = {
       environment = var.environment

@@ -6,17 +6,13 @@ Create AKS resource and deploy application to AKS using terraform.
 
 ## Prerequisites
 
-- Machine with SSH client
-- credentials to remote environment (provided by trainers)
-- GitHub account
-- Lab02 established
-- fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+- setup as per Lab00
 
 ## Initial setup
 
-1. Checkout to branch `cloudyna-lab03'
+1. Checkout to branch `lab03'
     ```bash
-    git checkout cloudyna-lab03
+    git checkout lab03
     ```
 
 ## Migrate app to K8s
