@@ -27,7 +27,7 @@ Setup basic infra using AZ CLI and Terraform.
 1. Navigate to [infra](../infra/) to each component and execute:
     ```
     terraform init
-    terraform apply -var="workload=<yourinitials>" -var="environment=test" # confirm with yes
+    terraform apply -var="workload=<yourinitials>" -var="environment=test" #confirm with yes
     ```
 
     in every directory in order:
