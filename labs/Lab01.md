@@ -20,7 +20,7 @@ Setup basic infra using AZ CLI and Terraform.
 1. Create environment using CLI stored in [deployBasicInfra](/scripts/deployBasicInfra.sh)
    - you will find application files in <repoName>/application/
   
-2. Once environment is set, validate if it's working by openening URLs
+2. Once environment is set, validate it by opening URL you got at the end
 
 ## Deployment with terraform
 

@@ -9,19 +9,19 @@ export SERVICEPRINCIPAL="sp-mgmt-dev"
 
 export SHAREDKV="kv-mgmt-dev-westeurope"
 
-export PROJECTNAME="wgwg"
+export WORKLOAD="<yourinitials>"
 export ENVIRONMENT="dev"
 
 export LOCATION="westeurope"
-export RGNAME="rg-${PROJECTNAME}-${ENVIRONMENT}-westeurope"
+export RGNAME="rg-${WORKLOAD}-${ENVIRONMENT}-westeurope"
 az group create --location $LOCATION --name $RGNAME
 
-export KVNAME="kv-${PROJECTNAME}-${ENVIRONMENT}-westeurope"
+export KVNAME="kv-${WORKLOAD}-${ENVIRONMENT}-westeurope"
 az keyvault create --name $KVNAME --resource-group $RGNAME --location $LOCATION
 
 let "RAND=$RANDOM*$RANDOM"
 
-export SQLUSER="${PROJECTNAME}"
+export SQLUSER="${WORKLOAD}"
 
 export SQLPASSWORD="Passw0rd${RAND}"
 
@@ -29,8 +29,8 @@ az keyvault secret set --vault-name $KVNAME --name "SQLUSER" --value $SQLUSER
 
 az keyvault secret set --vault-name $KVNAME --name "SQLPASSWORD" --value $SQLPASSWORD
 
-export SQLSERVER="sql-${PROJECTNAME}-dev-westeurope"
-export DATABASENAME="sqldb${PROJECTNAME}devwesteurope"
+export SQLSERVER="sql-${WORKLOAD}-dev-westeurope"
+export DATABASENAME="sqldb${WORKLOAD}devwesteurope"
 export SQLLOGIN=$SQLUSER
 export SQLPASSWORD=$SQLPASSWORD
 export SQLstartIp=0.0.0.0
@@ -66,7 +66,7 @@ export ACRUSERNAME=$(az keyvault secret show --vault-name $SHAREDKV --name "$SER
 
 export ACRPASSWORD=$(az keyvault secret show --vault-name $SHAREDKV --name "$SERVICEPRINCIPAL-secret" --query 'value' | tr -d '"')
 
-export APINAME="api${PROJECTNAME}devwesteurope"
+export APINAME="api${WORKLOAD}devwesteurope"
 
 az container create \
     --resource-group $RGNAME \
