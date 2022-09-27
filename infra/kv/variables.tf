@@ -34,12 +34,12 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "app01image" {
-  type    = string
-  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
-}
-
-variable "apiimage" {
-  type    = string
-  default = "aclogin.azurecr.io/backend:latest"
+# kv
+variable "kv_sku" {
+  type = string
+  validation {
+    condition     = can(regex("^standard|premium$", var.kv_sku))
+    error_message = "KV sku can be Standard or Premium only."
+  }
+  default = "standard"
 }

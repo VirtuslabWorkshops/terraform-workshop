@@ -21,7 +21,7 @@ Add tooling to perform code validation.
     ```
 
 ## Add tags to VNet
-1. Navigate to terraform/vnet and edit [`main.tf`](../terraform/vnet/main.tf)
+1. Navigate to terraform/vnet and edit [`main.tf`](../infra/vnet/main.tf)
    
 2. Add tags to resource definition
    
