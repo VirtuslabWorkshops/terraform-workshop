@@ -12,14 +12,13 @@ fi
 bin="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${bin}/.."
 
-#VERSION
+
 NEW_VERSION=${1:-}
 VERSION=$(cat "${REPO_DIR}"/VERSION)
 
 
 
-echo "Bumping VERSION.txt from ${VERSION} to ${NEW_VERSION}"
-git checkout -b "release/${NEW_VERSION}"
+echo "Bumping VERSION from ${VERSION} to ${NEW_VERSION}"
 printf '%s' "${NEW_VERSION}" >"${REPO_DIR}"/VERSION
 printf '%s' "${VERSION}" >"${REPO_DIR}"/PREVIOUS-VERSION
 
@@ -32,8 +31,6 @@ git commit -vam "Bump version to ${NEW_VERSION}"
 git log --pretty=oneline "${VERSION}..HEAD~" | awk '{$1=""; if(NR>1) print "-" $0}' >> release.md
 echo >> release.md
 
-
-
 gh release create "$NEW_VERSION" --title "$NEW_VERSION" --notes-file release.md
-#rm release.md
-git checkout -
+
+rm release.md
