@@ -11,8 +11,8 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_container_registry" "cr" {
-  name                = "cr${local.postfix_no_dash}"
-  resource_group_name = local.rg_group_name
+  name                = var.cr
+  resource_group_name = var.cr_rg
 }
 
 data "azurerm_subnet" "aks_default" {
