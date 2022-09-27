@@ -31,7 +31,7 @@ module "aks" {
   source = "../../terraform/aks"
 
   location            = data.azurerm_resource_group.rg.location
-  resource_group_name = data.azurerm_resource_group.rg.name
+  rg_name = data.azurerm_resource_group.rg.name
 
   vnet_subnet_id_default     =  data.azurerm_subnet.aks_default.id
   vnet_subnet_id_app_workload = data.azurerm_subnet.aks_app.id

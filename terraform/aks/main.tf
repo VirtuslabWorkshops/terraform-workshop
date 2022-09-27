@@ -1,14 +1,3 @@
-terraform {
-  required_version = ">= 1.0"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.10"
-    }
-  }
-}
-
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
@@ -22,7 +11,7 @@ locals {
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-${local.postfix}"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.rg_name
   dns_prefix          = "aks-${local.postfix}"
 
   default_node_pool {

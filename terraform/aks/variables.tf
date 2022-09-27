@@ -34,10 +34,10 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "resource_group_name" {
+variable "rg_name" {
   type = string
   validation {
-    condition     = can(regex("^[\\w-]+$", var.resource_group_name))
+    condition     = can(regex("^[\\w-]+$", var.rg_name))
     error_message = "Location group name is not valid."
   }
   default = "aks"

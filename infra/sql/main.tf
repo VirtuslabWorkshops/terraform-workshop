@@ -45,7 +45,7 @@ resource "azurerm_key_vault_secret" "sql_user" {
 module "mssql" {
   source = "../../terraform/sql"
   key_vault_id = data.azurerm_key_vault
-  resource_group_name = ""
+  rg_name = ""
 }
 resource "azurerm_mssql_virtual_network_rule" "aks_mssql_service_endpoint" {
   name      = "sql-vnet-rule"

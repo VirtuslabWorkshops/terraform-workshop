@@ -34,11 +34,15 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "sql_user" {
+variable "kv_id" {
   type = string
 }
 
-variable "sql_password" {
+variable "kv_sql_user" {
+  type = string
+}
+
+variable "kv_sql_password" {
   type = string
 }
 
