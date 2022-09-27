@@ -20,25 +20,37 @@ Create AKS resource and deploy application to AKS using terraform.
 1.  Create resource definition that deploys AKS cluster that has dedicated node pool for applications and is able to fetch container images from Container Registry
     - copy blank template folder to create structure:
     ```bash
-    cd terraform
+    cd infra
     mkdir aks
     cp template\*.tf aks
     ```
-    - in [`main.tf`](../terraform/aks/main.tf) add section to fetch details of resource groups
+    - in [`main.tf`](../infra/aks/main.tf) add section to fetch details of resource groups
     ```terraform
     data "azurerm_resource_group" "rg" {
       name = local.rg_group_name
     }
     ```
-    - in [`main.tf`](../terraform/aks/main.tf) add section to fetch details of Container registry which holds our Api container
+    - in [`variables.tf`](../infra/aks/variables.tf) add Container registry default values
+    ```terraform
+    variable "cr" {
+      type = string
+      default = "crmgmtdevwesteurope"
+    }
+    
+    variable "cr_rg" {
+      type = string
+      default = "rg-mgmt-dev-westeurope"
+    }
+    ```
+    - in [`main.tf`](../infra/aks/main.tf) add section to fetch details of Container registry which holds our Api container
     ```terraform
     data "azurerm_container_registry" "cr" {
-      name                = "cr${local.postfix_no_dash}"
-      resource_group_name = local.rg_group_name
+      name                = var.cr
+      resource_group_name = var.cr_rg
     }
     ``` 
 
-    - in [`main.tf`](../terraform/aks/main.tf) add 
+    - in [`main.tf`](../infra/aks/main.tf) add 
     ```terraform
     data "azurerm_subnet" "aks_default" {
       name                 = "snet-default-${local.postfix}"
@@ -52,7 +64,7 @@ Create AKS resource and deploy application to AKS using terraform.
       resource_group_name  = local.rg_group_name
     }
     ```
-    - in [`main.tf`](../terraform/aks/main.tf) add AKS cluster definition which uses reference to Resource group and has default node pool deployed to dedicated subnet. 
+    - in [`main.tf`](../infra/aks/main.tf) add AKS cluster definition which uses reference to Resource group and has default node pool deployed to dedicated subnet. 
     AKS will use `SystemAssigned` identity which simplifies management.
     ```terraform
     resource "azurerm_kubernetes_cluster" "aks" {
@@ -78,14 +90,14 @@ Create AKS resource and deploy application to AKS using terraform.
       }
     }
     ```
-    - in [`main.tf`](../terraform/aks/main.tf) add node pool dedicated for applications, it will use dedicated subnet
+    - in [`main.tf`](../infra/aks/main.tf) add node pool dedicated for applications, it will use dedicated subnet
     ```terraform
     resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
       name                  = "appworkload"
       node_count            = 1
       enable_auto_scaling   = false
       kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-      vm_size               = "Standard_DS3_v2"
+      vm_size               = "Standard_D2_v2"
       vnet_subnet_id        = data.azurerm_subnet.aks_app.id
     
       tags = {
@@ -94,7 +106,7 @@ Create AKS resource and deploy application to AKS using terraform.
       }
     }
     ```
-    - in [`main.tf`](../terraform/aks/main.tf) add role assignment: let identity access Container registry
+    - in [`main.tf`](../infra/aks/main.tf) add role assignment: let identity access Container registry
     ```terraform
     resource "azurerm_role_assignment" "akstoacrrole" {
       principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
@@ -106,22 +118,14 @@ Create AKS resource and deploy application to AKS using terraform.
 2. Deploy resource
     ```bash
     terraform init
-    terraform apply
+    terraform apply -var="workload=<yourInitials>" -var="environment=test"
     ```
     Now you have AKS cluster and you are ready to deploy application there.
 
-3. In [`main.tf`](../terraform/aks_application/main.tf) in `aks_application`  update Container Registry URL:
-    ```terraform
-    variable "apiimage" {
-      type    = string
-      default = "<acrlogin>.azurecr.io/api:latest"
-    }
-    ```
-
-4.  Deploy application to AKS
+4.  Navigate to `aks_application` resource and deploy application to AKS:
     ```bash
     terraform init
-    terraform apply
+    terraform apply -var="workload=<yourInitials>" -var="environment=test"
     ```
     Navigate to AKS in Azure Portal and find Cluster, then select 'Services' and find IP address of published service. 
 

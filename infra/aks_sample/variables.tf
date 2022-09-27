@@ -33,3 +33,13 @@ variable "location" {
   }
   default = "westeurope"
 }
+
+variable "cr" {
+  type = string
+  default = "crmgmtdevwesteurope"
+}
+
+variable "cr_rg" {
+  type = string
+  default = "rg-mgmt-dev-westeurope"
+}

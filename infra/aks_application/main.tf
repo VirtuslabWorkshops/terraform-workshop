@@ -6,11 +6,11 @@ locals {
     api = {
       name            = "api"
       ip_address_type = "Private"
-      image           = var.apiimage
-      cpu_min         = "200m"
+      image           = "${var.cr}/${var.apiimage}"
+      cpu_min         = "500m"
       memory_min      = "256Mi"
       cpu_max         = "0.5"
-      memory_max      = "512Mi"
+      memory_max      = "1024Mi"
       port            = 80
       protocol        = "TCP"
       replicas        = 2
@@ -32,11 +32,6 @@ data "azurerm_kubernetes_cluster" "aks" {
 data "azurerm_key_vault" "kv" {
   name                = "kv-${local.postfix}"
   resource_group_name = data.azurerm_resource_group.rg.name
-}
-
-data "azurerm_container_registry" "cr" {
-  name                = "cr${local.postfix_no_dash}"
-  resource_group_name = local.rg_group_name
 }
 
 data "azurerm_key_vault_secret" "sql_user" {

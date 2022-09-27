@@ -11,8 +11,8 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_container_registry" "cr" {
-  name                = "cr${local.postfix_no_dash}"
-  resource_group_name = local.rg_group_name
+  name                = var.cr
+  resource_group_name = var.cr_rg
 }
 
 data "azurerm_subnet" "aks_default" {
@@ -55,7 +55,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
   node_count            = 1
   enable_auto_scaling   = false
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-  vm_size               = "Standard_DS3_v2"
+  vm_size               = "Standard_D2_v2"
   vnet_subnet_id        = data.azurerm_subnet.aks_app.id
 
   tags = {
