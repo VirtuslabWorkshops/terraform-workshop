@@ -7,9 +7,9 @@ export ACRLOGIN="crmgmtdevwesteurope.azurecr.io"
 
 export SERVICEPRINCIPAL="sp-mgmt-dev"
 
-export SHAREDKV = "kv-mgmt-dev-westeurope"
+export SHAREDKV="kv-mgmt-dev-westeurope"
 
-export PROJECTNAME="<PutYourInitials>"
+export PROJECTNAME="wgwg"
 export ENVIRONMENT="dev"
 
 export LOCATION="westeurope"
@@ -22,6 +22,7 @@ az keyvault create --name $KVNAME --resource-group $RGNAME --location $LOCATION
 let "RAND=$RANDOM*$RANDOM"
 
 export SQLUSER="${PROJECTNAME}"
+
 export SQLPASSWORD="Passw0rd${RAND}"
 
 az keyvault secret set --vault-name $KVNAME --name "SQLUSER" --value $SQLUSER
@@ -61,16 +62,9 @@ az sql db create \
 
 export ACRID=$(az acr show --name $ACRLOGIN --query "id" --output tsv)
 
-az keyvault secret get --vault-name $KVNAME --name "$SERVICEPRINCIPAL-id"
+export ACRUSERNAME=$(az keyvault secret show --vault-name $SHAREDKV --name "$SERVICEPRINCIPAL-id" --query 'value' | tr -d '"')
 
-az keyvault secret get --vault-name $KVNAME --name "$SERVICEPRINCIPAL-password"
-
-cd ..
-
-cd application/api
-docker build -t api:latest .
-docker tag api $ACRLOGIN/api
-docker push $ACRLOGIN/api
+export ACRPASSWORD=$(az keyvault secret show --vault-name $SHAREDKV --name "$SERVICEPRINCIPAL-secret" --query 'value' | tr -d '"')
 
 export APINAME="api${PROJECTNAME}devwesteurope"
 
@@ -84,27 +78,9 @@ az container create \
     --ip-address Public \
     --dns-name-label $APINAME \
     --ports 80 \
-    --dns-name-label $APINAME
-    --environment-variables 'SERVER'="${SQLSERVER}.database.windows.net" 'DATABASE'="${DATABASE}" 'USER'="${SQLUSER}" 'PASSWORD'="${SQLPASSWORD}"
-
-az container show --resource-group $RGNAME --name $APINAME
+    --dns-name-label $APINAME \
+    --environment-variables 'SERVER'="${SQLSERVER}.database.windows.net" 'DATABASE'="${DATABASENAME}" 'USER'="${SQLUSER}" 'PASSWORD'="${SQLPASSWORD}"
 
 export APIURL=$(az container show --resource-group $RGNAME --name $APINAME --query ipAddress.fqdn | tr -d '"')
 
-export APP01NAME="app01${PROJECTNAME}devweu"
-
-export APP01IMAGE="mcr.microsoft.com/azuredocs/aci-helloworld"
-
-az container create \
-    --resource-group $RGNAME \
-    --name $APP01NAME \
-    --image $APP01IMAGE \
-    --ip-address Public \
-    --dns-name-label $APP01NAME \
-    --ports 80 
-
-az container show --resource-group $RGNAME --name $APP01NAME
-
-export APP01URL=$(az container show --resource-group $RGNAME --name $APP01NAME --query ipAddress.fqdn | tr -d '"')
-
-echo $APP01URL
+echo $APIURL

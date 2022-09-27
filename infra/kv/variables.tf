@@ -34,22 +34,12 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "[optional] Additional tags."
-  default     = {}
-}
-
 # kv
-variable "sqldb_sku" {
+variable "kv_sku" {
   type = string
   validation {
-    condition     = can(regex("^Basic|S0|P2$", var.sqldb_sku))
-    error_message = "MSSQL database SKU can be Basic, S0, P2 only."
+    condition     = can(regex("^standard|premium$", var.kv_sku))
+    error_message = "KV sku can be Standard or Premium only."
   }
-  default = "Basic"
+  default = "standard"
 }
-
-variable "key_vault_id" {}
-
-variable "resource_group_name" {}

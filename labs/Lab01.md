@@ -24,19 +24,18 @@ Setup basic infra using AZ CLI and Terraform.
 
 ## Deployment with terraform
 
-1. Navigate to repository component directory and execute
+1. Navigate to [infra](../infra/) to each component and execute:
     ```
     terraform init
-    terraform apply # confirm with yes
+    terraform apply -var="workload=<yourinitials>" -var="environment=test" # confirm with yes
     ```
 
-    in every directory in order
+    in every directory in order:
+    - rg
     - kv
     - vnet
     - sql
       > Execute content of file [`populateDB.sql`](/scripts/populateDB.sql)` against created database. Use Azure Portal, find database and use Query tool available there.
-    - cr
-      > SPN should be present in KV.
     - ci
 
 2. Open `URL` to get response.
