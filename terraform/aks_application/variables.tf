@@ -75,18 +75,4 @@ variable "applications" {
     protocol        = string,
     replicas        = number
   }))
-  default = {
-    app01 = {
-      name            = "app01"
-      ip_address_type = "Public"
-      image           = "app01image"
-      cpu_min         = "200m"
-      memory_min      = "256Mi"
-      cpu_max         = "0.5"
-      memory_max      = "512Mi"
-      port            = 80
-      protocol        = "TCP"
-      replicas        = 1
-    }
-  }
 }
