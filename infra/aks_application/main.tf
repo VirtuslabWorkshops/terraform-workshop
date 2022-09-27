@@ -62,13 +62,13 @@ data "azurerm_mssql_database" "sqldb" {
 }
 
 module "aks_application" {
-  source = "../../terraform/aks_application"
-  aks_name = data.azurerm_kubernetes_cluster.aks.name
+  source             = "../../terraform/aks_application"
+  aks_name           = data.azurerm_kubernetes_cluster.aks.name
   aks_resource_group = data.azurerm_kubernetes_cluster.aks.resource_group_name
-  sql_fqdn = data.azurerm_mssql_server.sql.fully_qualified_domain_name
-  kv_id =  data.azurerm_key_vault.kv.id
-  kv_sql_password ="sqlpassword"
-  kv_sql_name ="sqluser"
-  sqldb_name = data.azurerm_mssql_database.sqldb.name
-  applications = local.applications
+  sql_fqdn           = data.azurerm_mssql_server.sql.fully_qualified_domain_name
+  kv_id              = data.azurerm_key_vault.kv.id
+  kv_sql_password    = "sqlpassword"
+  kv_sql_name        = "sqluser"
+  sqldb_name         = data.azurerm_mssql_database.sqldb.name
+  applications       = local.applications
 }

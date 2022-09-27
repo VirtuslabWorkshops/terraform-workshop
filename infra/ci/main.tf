@@ -84,15 +84,15 @@ data "azurerm_mssql_database" "sqldb" {
 }
 
 module "container_instance" {
-  source = "../../terraform/ci"
-  resource_group_name = ""
+  source              = "../../terraform/ci"
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   cr_login_server = data.azurerm_container_registry.cr.login_server
-  spn_id = data.azurerm_key_vault_secret.spn_id.value
-  spn_password = data.azurerm_key_vault_secret.spn_password.value
+  spn_id          = data.azurerm_key_vault_secret.spn_id.value
+  spn_password    = data.azurerm_key_vault_secret.spn_password.value
 
-  sql_fqdn =  data.azurerm_mssql_server.sql.fully_qualified_domain_name
+  sql_fqdn     = data.azurerm_mssql_server.sql.fully_qualified_domain_name
   sql_password = data.azurerm_key_vault_secret.sql_password.value
-  sql_user = data.azurerm_key_vault_secret.sql_user.value
-  sqldb_name = data.azurerm_mssql_database.sqldb.name
+  sql_user     = data.azurerm_key_vault_secret.sql_user.value
+  sqldb_name   = data.azurerm_mssql_database.sqldb.name
 }

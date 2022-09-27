@@ -20,6 +20,6 @@ terraform {
 }
 
 inputs = {
-  cr_sku="Basic"
-  kv_sku="standard"
+  cr_sku = "Basic"
+  kv_sku = "standard"
 }
