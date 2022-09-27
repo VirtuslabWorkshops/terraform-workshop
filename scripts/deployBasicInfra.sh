@@ -3,13 +3,20 @@ set -e
 
 #`<resource_type>-<workload>-<enviroment>-<location>[-<instance>]`
 
-export PROJECTNAME="<PutYourIniti"
+export ACRLOGIN="crmgmtdevwesteurope.azurecr.io"
+
+export SERVICEPRINCIPAL="sp-mgmt-dev"
+
+export SHAREDKV = "kv-mgmt-dev-westeurope"
+
+export PROJECTNAME="<PutYourInitials>"
+export ENVIRONMENT="dev"
 
 export LOCATION="westeurope"
-export RGNAME="rg-${PROJECTNAME}-dev-westeurope"
+export RGNAME="rg-${PROJECTNAME}-${ENVIRONMENT}-westeurope"
 az group create --location $LOCATION --name $RGNAME
 
-export KVNAME="kv-${PROJECTNAME}-dev-westeurope"
+export KVNAME="kv-${PROJECTNAME}-${ENVIRONMENT}-westeurope"
 az keyvault create --name $KVNAME --resource-group $RGNAME --location $LOCATION
 
 let "RAND=$RANDOM*$RANDOM"
@@ -35,14 +42,12 @@ az sql server create \
     --admin-user $SQLLOGIN \
     --admin-password $SQLPASSWORD
 
-
 az sql server firewall-rule create \
     --resource-group $RGNAME \
     --server $SQLSERVER \
     --name letallin \
     --start-ip-address $SQLstartIp \
     --end-ip-address $SQLendIp
-
 
 az sql db create \
     --resource-group $RGNAME \
@@ -54,29 +59,11 @@ az sql db create \
 
 # Login to SQL server and execute queries from populateDB.sql file
 
-export ACRNAME="cr${PROJECTNAME}devwesteurope"
+export ACRID=$(az acr show --name $ACRLOGIN --query "id" --output tsv)
 
-az acr create --location $LOCATION --resource-group $RGNAME --name $ACRNAME --sku Basic
+az keyvault secret get --vault-name $KVNAME --name "$SERVICEPRINCIPAL-id"
 
-az acr login --name $ACRNAME
-
-ac acr show --name $ACRNAME --ou
-
-export ACRLOGIN=$(az acr show -n $ACRNAME --query loginServer | tr -d '"')
-
-export SERVICEPRINCIPAL="sp-${PROJECTNAME}-dev-westeurope"
-
-export ACRID=$(az acr show --name $ACRNAME --query "id" --output tsv)
-
-
-ACRPASSWORD=$(az ad sp create-for-rbac --name $SERVICEPRINCIPAL --scopes $ACRID --role acrpull --query "password" --output tsv)
-ACRUSERNAME=$(az ad sp list --display-name $SERVICEPRINCIPAL --query "[].appId" --output tsv)
-echo "Service principal ID: $ACRUSERNAME"
-echo "Service principal password: $ACRPASSWORD"
-
-az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPAL-id" --value $ACRUSERNAME
-
-az keyvault secret set --vault-name $KVNAME --name "$SERVICEPRINCIPAL-password" --value $ACRPASSWORD
+az keyvault secret get --vault-name $KVNAME --name "$SERVICEPRINCIPAL-password"
 
 cd ..
 
@@ -85,7 +72,7 @@ docker build -t api:latest .
 docker tag api $ACRLOGIN/api
 docker push $ACRLOGIN/api
 
-export APINAME="api${PROJECTNAME}devweu"
+export APINAME="api${PROJECTNAME}devwesteurope"
 
 az container create \
     --resource-group $RGNAME \
