@@ -33,13 +33,3 @@ variable "location" {
   }
   default = "westeurope"
 }
-
-variable "cr" {
-  type = string
-  default = "crmgmtdevwesteurope.azurecr.io"
-}
-
-variable "apiimage" {
-  type    = string
-  default = "api:latest"
-}

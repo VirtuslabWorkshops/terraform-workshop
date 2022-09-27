@@ -5,6 +5,7 @@ variable "workload" {
     condition     = can(regex("^[\\w-]+$", var.workload))
     error_message = "Workload group name is not valid."
   }
+  default = "vl"
 }
 
 variable "team_name" {
@@ -13,6 +14,7 @@ variable "team_name" {
     condition     = can(regex("^[\\w-]+$", var.team_name))
     error_message = "Team_name group name is not valid."
   }
+  default = "vl"
 }
 
 variable "environment" {
@@ -21,6 +23,7 @@ variable "environment" {
     condition     = can(regex("^[\\w-]+$", var.environment))
     error_message = "Environment group name is not valid."
   }
+  default = "dev"
 }
 
 variable "location" {
@@ -29,4 +32,5 @@ variable "location" {
     condition     = can(regex("^[\\w-]+$", var.location))
     error_message = "Location group name is not valid."
   }
+  default = "westeurope"
 }

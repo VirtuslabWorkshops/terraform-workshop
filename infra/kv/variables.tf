@@ -4,7 +4,7 @@ variable "workload" {
     condition     = can(regex("^[\\w-]+$", var.workload))
     error_message = "Workload group name is not valid."
   }
-  default = "mgmt"
+  default = "vl"
 }
 
 variable "team_name" {
@@ -32,16 +32,6 @@ variable "location" {
     error_message = "Location group name is not valid."
   }
   default = "westeurope"
-}
-
-# cr
-variable "cr_sku" {
-  type = string
-  validation {
-    condition     = can(regex("^Basic|Premium$", var.cr_sku))
-    error_message = "Container Registry sku can be Basic or Premium only."
-  }
-  default = "Basic"
 }
 
 # kv
