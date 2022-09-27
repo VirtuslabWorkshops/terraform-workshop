@@ -10,7 +10,7 @@ terragrunt_version_constraint = "~> 0.38.0"
 
 generate "providers" {
   path      = "providers.tf"
-  if_exists = "overwrite_terragrunt"
+  if_exists = "overwrite"
   contents  = <<EOF
 terraform {
   required_providers {

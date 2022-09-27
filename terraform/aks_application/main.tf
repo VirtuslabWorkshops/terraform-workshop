@@ -1,18 +1,13 @@
-terraform {
-  required_version = ">= 1.0"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.22"
-    }
-
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 2.13"
-    }
-  }
+data "azurerm_key_vault_secret" "sql_user" {
+  name         = var.kv_sql_user
+  key_vault_id = var.kv_id
 }
+
+data "azurerm_key_vault_secret" "sql_password" {
+  name         = var.kv_sql_password
+  key_vault_id = var.kv_id
+}
+
 
 data "azurerm_kubernetes_cluster" "aks" {
   name                = var.aks_name
@@ -106,11 +101,11 @@ resource "kubernetes_deployment" "app" {
           }
           env {
             name  = "USER"
-            value = var.sql_user
+            value = data.azurerm_key_vault_secret.sql_user.value
           }
           env {
             name  = "PASSWORD"
-            value = var.sql_password
+            value = data.azurerm_key_vault_secret.sql_password.value
           }
         }
       }

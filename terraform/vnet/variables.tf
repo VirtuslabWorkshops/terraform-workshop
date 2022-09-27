@@ -33,6 +33,7 @@ variable "location" {
   }
   default = "westeurope"
 }
+variable "rg_name" {}
 
 variable "tags" {
   type        = map(string)

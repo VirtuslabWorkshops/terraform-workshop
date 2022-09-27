@@ -51,16 +51,6 @@ data "azurerm_container_registry" "cr" {
   resource_group_name = local.rg_group_name
 }
 
-data "azurerm_key_vault_secret" "sql_user" {
-  name         = "sqluser"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "sql_password" {
-  name         = "sqlpassword"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
 data "azurerm_mssql_server" "sql" {
   name                = "sql-${local.postfix}"
   resource_group_name = local.rg_group_name
@@ -72,12 +62,13 @@ data "azurerm_mssql_database" "sqldb" {
 }
 
 module "aks_application" {
-  source = "../../terraform/aks_application"
-  aks_name = data.azurerm_kubernetes_cluster.aks.name
+  source             = "../../terraform/aks_application"
+  aks_name           = data.azurerm_kubernetes_cluster.aks.name
   aks_resource_group = data.azurerm_kubernetes_cluster.aks.resource_group_name
-  sql_fqdn = data.azurerm_mssql_server.sql.fully_qualified_domain_name
-  sql_password = data.azurerm_key_vault_secret.sql_password.value
-  sql_user = data.azurerm_key_vault_secret.sql_user.value
-  sqldb_name = data.azurerm_mssql_database.sqldb.name
-  applications = local.applications
+  sql_fqdn           = data.azurerm_mssql_server.sql.fully_qualified_domain_name
+  kv_id              = data.azurerm_key_vault.kv.id
+  kv_sql_password    = "sqlpassword"
+  kv_sql_name        = "sqluser"
+  sqldb_name         = data.azurerm_mssql_database.sqldb.name
+  applications       = local.applications
 }

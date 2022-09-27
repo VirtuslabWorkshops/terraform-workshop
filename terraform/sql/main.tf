@@ -1,19 +1,3 @@
-terraform {
-  required_version = ">= 1.0"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.22"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {
-  }
-}
-
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
@@ -47,7 +31,7 @@ resource "azurerm_key_vault_secret" "sql_user" {
 resource "azurerm_mssql_server" "sql" {
   name                         = "sql-${local.postfix}"
   location                     = var.location
-  resource_group_name          = var.resource_group_name
+  resource_group_name          = var.rg_name
   version                      = "12.0"
   administrator_login          = local.sql_user
   administrator_login_password = random_password.sql_password.result

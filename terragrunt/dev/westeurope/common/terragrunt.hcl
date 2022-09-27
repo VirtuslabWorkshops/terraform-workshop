@@ -1,3 +1,4 @@
+
 include "region" {
   path   = find_in_parent_folders()
   expose = true
@@ -13,14 +14,12 @@ include "root" {
   expose = true
 }
 
-locals {
-  sku = "standard"
-}
 
 terraform {
-  source = "../../../..//terraform/kv"
+  source = "../../../..//terraform/common"
 }
 
 inputs = {
-  kv_sku = local.sku
+  cr_sku = "Basic"
+  kv_sku = "standard"
 }
