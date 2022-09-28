@@ -24,7 +24,7 @@ dependency "common" {
 }
 
 terraform {
-  source = "../../../..//terraform/sql"
+  source = "git::git@github.com:VirtuslabCloudyna/cloudyna_sql.git?ref=0.0.2"
 }
 
 inputs = {
