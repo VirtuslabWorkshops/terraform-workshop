@@ -14,7 +14,7 @@ include "root" {
 }
 
 locals {
-  apiimage = "aclogin.azurecr.io/backend:latest"
+  apiimage = "crmgmtdevwesteurope.azurecr.io/api:latest"
 }
 
 terraform {
@@ -62,22 +62,10 @@ inputs = {
   sqldb_name         = dependency.sql.outputs.sqldb_name
   sql_fqdn           = dependency.sql.outputs.sql_fqdn
   applications = {
-    app01 = {
-      name            = "app01"
-      ip_address_type = "Public"
-      image           = "aclogin.azurecr.io/backend:latest"
-      cpu_min         = "200m"
-      memory_min      = "256Mi"
-      cpu_max         = "0.5"
-      memory_max      = "512Mi"
-      port            = 80
-      protocol        = "TCP"
-      replicas        = 1
-    }
     api = {
       name            = "api"
       ip_address_type = "Private"
-      image           = "aclogin.azurecr.io/backend:latest"
+      image           = "crmgmtdevwesteurope.azurecr.io/api:latest"
       cpu_min         = "200m"
       memory_min      = "256Mi"
       cpu_max         = "0.5"
