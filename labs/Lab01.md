@@ -51,7 +51,7 @@ From execution standpoint you need to initiate and apply terraform files one by 
     - kv
     - vnet
     - sql
-      > Optional: execute content of file [`populateDB.sql`](/scripts/populateDB.sql)` against created database. Use Azure Portal, find database and use Query tool available there.
+      > Optional: execute content of file [`populateDB.sql`](/scripts/populateDB.sql) against created database. Use Azure Portal, find database and use Query tool available there.
     - ci
       - output is FQDN which directs to your application
 
@@ -61,7 +61,9 @@ From execution standpoint you need to initiate and apply terraform files one by 
 
 3. Remove `ci` (container instance) from Portal and execute `terraform apply` again - what is the effect?
 
-4. Secret management notes  
+4. Check new files created in resource directories, navigate to `sql` one  - there is plenty of terrafrom files and `*.tfstate` - open file in text editor and investigate its content
+
+5. Secret management notes  
   [Lab01 - infrastructure secrets 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534018073640&cot=14)  
   Terraform knows to get secret, there is already pre-defined function for that. There is function to generate secret in general (yay!), beside that it's possible to pass secret as 'secret' type rather than plain text (yay2!). Eventually password is in plain text in state file (not yay at all).
 
@@ -72,5 +74,6 @@ From execution standpoint you need to initiate and apply terraform files one by 
 
 ## Pain points
 - if you would like to deploy new environment you would have to copy all files
+- your secrets are stored in plain text in `.tfstate` file
 - it's code, it requires validations
 - no automation
