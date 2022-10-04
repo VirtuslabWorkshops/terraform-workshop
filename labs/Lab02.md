@@ -20,12 +20,22 @@ Add tooling to perform code validation.
     git checkout lab02
     ```
 
-2. Context
+2. Context  
+   As it's state in name Infrastructure as _Code_, you would like to adopt best practices for any code maintenance. First you will play a bit with state to understand a bit more of Terraform and how it manages state. Then you will setup pipeline in GitHub Action to enable CI and code quality check.
 
-## Add tags to VNet
-1. Navigate to terraform/vnet and edit [`main.tf`](../infra/vnet/main.tf)
+## Add tags to VNet  
+[Lab02 - state](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535124947253&cot=14)  
+Terraform `state` is in some sense database for existing resources. During `apply` Terraform maps created resources inside file, tracks dependencies and keeps metadata. 
+
+> If you do not have intrastructure from Lab01, deploy at least `rg` and `vnet` using terraform.
+
+1. Navigate to [Azure Portal](https://portal.azure.com) find your VNET and add tag: `owner` with value `<yourInitials>`
+
+2. Navigate to [vnet](../infra/vnet/) directory and run `terraform plan -var="workload=<yourinitials>" -var="environment=test"` - what is effect?
+
+3. Navigate to terraform/vnet and edit [`main.tf`](../infra/vnet/main.tf)
    
-2. Add tags to resource definition
+4. Add tags to resource definition
    
     ```terraform
     tags = {
@@ -51,14 +61,28 @@ Add tooling to perform code validation.
     ```
     As you can see, file has proper syntax, but code formatting seems to be a bit off.
 
-3. Run formatting tool
+5. Run formatting tool
     ```bash
     terraform fmt
     ```
     As you can see, file has proper formatting now.
 
-## GitHub setup
+6. Check plan - are you expecting such changes?
+   ```bash
+   terraform plan -var="workload=<yourinitials>" -var="environment=test"
+   ``` 
+  
 
+7. Run - was change successful?
+   ```bash
+   terraform apply -var="workload=<yourinitials>" -var="environment=test"
+   ``` 
+
+## GitHub setup
+[Lab02 - CI](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535127256234&cot=14)  
+Eventually you would like to keep your code in repo outside of your own machine. And since it's code - there are some commons practices for anything that is _code_. Adding CI enables peer review, static code analysis, code quality tools usage and further automation capabilities.
+
+### Repository configuration practices
 Proper setup of repository helps maintainers and contributors to handle code in expected way.
 Prevents from accidental pushes, unwanted merges, and forces all checks to be present before adding new changes to main branch.
 In repo `Settings` tab, `Branches` go to `Branch protection rules`, `Add rule`:
@@ -70,7 +94,7 @@ In repo `Settings` tab, `Branches` go to `Branch protection rules`, `Add rule`:
 
 We use free instance of GitHub org so those rules won't be enforced, but it is good idea to have at least those.
 
-## Workflows
+### Workflows
 
 Workflows describe ways of collaboration with git when working on the same code base.
 The most popular workflow are:
@@ -98,17 +122,23 @@ While using terraform most common patterns are:
 
 In this project we will use `terraform fmt` and `terraform fmt` for checking the integrity of code, creating tests in Terratest is outside of the scope of this workshop.
 
-To add GitHub action to project add file `.github/workflows/continuous-integration.yaml` with value:
+1. Checkout to branch lab02-ci
+   ```
+   git checkout -b lab02-ci
+   ```
+
+2. To add GitHub action to project add file `.github/workflows/continuous-integration.yaml` with value:
+   > To simplify futher labs as trunk we will treat 'lab02'. In most cases you will setup this for main/master branch.
 ```yaml
 name: CI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the lab2 branch
   push:
-    branches: [ master ]
+    branches: [ lab02 ]
   pull_request:
-    branches: [ master ]
+    branches: [ lab02 ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -129,11 +159,17 @@ The step should look sth like this:
         run: terraform fmt -check -recursive
 ```
 
-Let's merge this into `master` branch. All new PR's will require successful pass of CI pipeline to merge into `master` branch and all new commits on `master` will be checked also.
+Let's merge this into `lab02` branch. All new PR's will require successful pass of CI pipeline to merge into `lab02` branch and all new commits on `lab02` will be checked too.
+
+3. Checkout to branch lab02-test-ci
+   ```
+   git checkout -b lab02-test-ci
+   ```
+
+3. Change value of any tag in `vnet`, save file, commit change, push it and raise PR to branch `lab02`
 
 ## Notes
 
 ## Improvement points
 
-- application uses public network to interact, scalability issues
-- many entrypoints to create (CLI, manual steps)
+- more tests and tools to be added
