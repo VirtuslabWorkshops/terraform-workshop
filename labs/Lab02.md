@@ -17,8 +17,10 @@ Add tooling to perform code validation.
 
 1. Checkout to relevant branch
     ```bash
-    git checkout lab01
+    git checkout lab02
     ```
+
+2. Context
 
 ## Add tags to VNet
 1. Navigate to terraform/vnet and edit [`main.tf`](../infra/vnet/main.tf)
