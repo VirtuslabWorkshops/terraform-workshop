@@ -18,7 +18,8 @@ Introduce remote backend to allow collaboration.
 2. Context  
    [Lab04 - state file 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534089338940&cot=14) So far every resource had `terraform.state` file located in local directory. That makes collaboration difficult and makes terraform very fragile, any disk failure or even unfortunat file deletion can cost you a lot of troubles.  
    [Lab04 - state file 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534465550351&cot=14) Solution for that is moving state file to external storage. You will use `Storage account` for that purpose.
-## Migrate to remote backend
+
+## Create remote backend infrastructure
 
 1. Create storage account to store your state outside of local machine
 
@@ -28,13 +29,15 @@ Introduce remote backend to allow collaboration.
    terraform init
    terraform apply -var="workload=<initials>shared" -var="environment=mgmt" -var="location=westeurope"
    ```
-
+- inspect Storage account defintion in [main.tf](infra/storage_account/main.tf) add missing resources in `locals`
+  
 - create Storage account
    ```
    cd infra/storage_account
    terraform init
    terraform apply -var="workload=<initials>shared" -var="environment=mgmt" -var="location=westeurope"
    ```
+  > It would be nice to get all these containers on screen, right? Think about creating `outputs.tf` file that will list all information you need.
 
 - fetch Storage account key
   ```bash
@@ -43,14 +46,15 @@ Introduce remote backend to allow collaboration.
   ```  
   > You can put this key to Key Vault - you can check in Lab01 how to do it!
 
-2. Add remote backend to AKS
+## Migrate to remote backend
+1. Add remote backend to AKS
 
 - open [`providers.tf`] in [`aks`](../infra/aks/) module and add section within `terraform` block:
   ```terraform
     backend "azurerm" {
       resource_group_name  = "rg-<initials>shared-test-westeurope"
       storage_account_name = "st<initials>sharedtestwesteurope"
-      container_name       = "sc-<initials>shared-test-westeurope"
+      container_name       = "sc-<resource_short_name>-<initials>shared-test-westeurope"
       key                  = "terraform.tfstate"
       access_key           = "<ARM_ACCESS_KEY>"
     }
@@ -69,4 +73,4 @@ Introduce remote backend to allow collaboration.
 
 ## Improvement points
 - no single place to track who applied changes against infrastructure, many executions of terraform
-- impossible to track multiple environments
+- impossible to track multiple environments without copying/pasting code

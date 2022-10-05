@@ -1,6 +1,13 @@
 locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
+
+  azure_resources = toset(
+    rg,
+    vnet,
+    sql,
+    kv
+  )
 }
 
 resource "azurerm_resource_group" "rg_storage_account" {
@@ -22,7 +29,9 @@ resource "azurerm_storage_account" "storage_account" {
 }
 
 resource "azurerm_storage_container" "storage_container" {
-  name                  = "sc-${local.postfix}"
+  for_each = local.azure_resources
+
+  name                  = "sc-${each.key}-${local.postfix}"
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
 }
