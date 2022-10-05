@@ -15,6 +15,13 @@ Create AKS resource and deploy application to AKS using terraform.
     git checkout lab03
     ```
 
+2. Context
+   [Lab03 - infrastructure](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534018715258&cot=14)  
+   To enable scaling of application you will deploy it to `Azure Kubernetes Service`. As you would like also to increase security level there will be few changes introduced:
+   - `AKS` will use managed identity instead of fetching `SP` from `KeyVault`
+   - [Lab03 - infrastructure - networking 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534214261632&cot=14) `AKS node pool` dedicated to application will be deployed to dedicated subnet
+   - [Lab03 - infrastructure - networking 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534023232891&cot=14) this subnet has feature enabled that allows direct connection to `SQL server` known as `service endpoint`
+
 ## Migrate app to K8s
 
 1.  Create resource definition that deploys AKS cluster that has dedicated node pool for applications and is able to fetch container images from Container Registry
@@ -115,6 +122,7 @@ Create AKS resource and deploy application to AKS using terraform.
       skip_service_principal_aad_check = true
     }
     ```
+    
 2. Deploy resource
     ```bash
     terraform init
@@ -127,13 +135,17 @@ Create AKS resource and deploy application to AKS using terraform.
     terraform init
     terraform apply -var="workload=<yourInitials>" -var="environment=test"
     ```
-    Navigate to AKS in Azure Portal and find Cluster, then select 'Services' and find IP address of published service. 
+    > Dive into `aks_application` code, is there place where you actually force your app to be deployed to `appworload` nodepool?
 
-5. Open `URL` to get response.
+    Navigate to AKS in Azure Portal and find Cluster, then select `Services` and find `IP` address of published service. 
 
-6. Open `URL/articles` to see details fetched from database
+5. Open `IP` to see application running.
+
+6. Optional: Open `IP/articles` to see details fetched from database
 
 ## Notes
+
+Kubernetes is entire technology stack.
 
 ## Improvement points
 
