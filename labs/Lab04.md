@@ -15,7 +15,9 @@ Introduce remote backend to allow collaboration.
     ```bash
     git checkout lab04
     ```
-
+2. Context  
+   [Lab04 - state file 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534089338940&cot=14) So far every resource had `terraform.state` file located in local directory. That makes collaboration difficult and makes terraform very fragile, any disk failure or even unfortunat file deletion can cost you a lot of troubles.  
+   [Lab04 - state file 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534465550351&cot=14) Solution for that is moving state file to external storage. You will use `Storage account` for that purpose.
 ## Migrate to remote backend
 
 1. Create storage account to store your state outside of local machine
