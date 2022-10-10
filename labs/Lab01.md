@@ -37,7 +37,7 @@ Setup basic infra using AZ CLI and Terraform.
 
 3. Secret management notes  
 
-  [Lab01 - infrastructure secrets 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534016232150&cot=14)
+  [Lab01 - infrastructure secrets 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534016232150&cot=14)  
   Fetching secrets requires plenty of manual steps. You have to write proper CLI commands, generate the password, and then pass the secret as plain text.
 
 ## Deployment with terraform
@@ -57,8 +57,9 @@ From an execution standpoint, you need to initiate and apply terraform files one
     - kv
     - vnet
     - sql
-      >  Optional: execute contents of the [`populateDB.sql`](/scripts/populateDB.sql) file against the created database. Use Azure Portal, find the database, and use the Query tool available there.
+      >  Optional: execute contents of the [`populateDB.sql`](../scripts/populateDB.sql) file against the created database. Use Azure Portal, find the database, and use the Query tool available there.
     - ci
+      - this one throws error - navigate to [outputs.tf](../infra/ci/outputs.tf), comment line 2 and uncomment line 3
       - output is FQDN which directs to your application
 
 2. Open address you get as output from `ci` execution to get response
