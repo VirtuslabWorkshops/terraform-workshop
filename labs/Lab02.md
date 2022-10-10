@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Setup CI to validate terraform code.
+Setup CI to validate Terraform code.
 Add tooling to perform code validation.
 
 ## Prerequisites
 
-- Machine with SSH client
-- credentials to remote environment (provided by trainers)
+- Machine with an SSH client
+- credentials to the remote environment (provided by trainers)
 - GitHub account
 - Lab01 established
 - fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
@@ -16,27 +16,29 @@ Add tooling to perform code validation.
 ## Initial setup
 
 1. Checkout to relevant branch
+
     ```bash
     git checkout lab02
     ```
 
 2. Context  
-   As it's state in name Infrastructure as _Code_, you would like to adopt best practices for any code maintenance. First you will play a bit with state to understand a bit more of Terraform and how it manages state. Then you will setup pipeline in GitHub Action to enable CI and code quality check.
+    As it's stated in the name, it’s Infrastructure as _Code_. Here you will learn more about it and the best practices for its maintenance. First, you will play a bit with the state to understand a bit more about Terraform and how it manages the state. Then you will set up a pipeline in GitHub Action to enable CI and code quality checks.
 
-## Add tags to VNet  
+## Add tags to VNet
+
 [Lab02 - state](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535124947253&cot=14)  
-Terraform `state` is in some sense database for existing resources. During `apply` Terraform maps created resources inside file, tracks dependencies and keeps metadata. 
+Terraform `state` is in some sense a database for existing resources. During the `apply` operation, Terraform maps created resources inside the state file, tracks dependencies, and keeps metadata. 
 
-> If you do not have intrastructure from Lab01, deploy at least `rg` and `vnet` using terraform.
+> If you do not have intrastructure from Lab01, deploy at least `rg` and `vnet` using Terraform.
 
 1. Navigate to [Azure Portal](https://portal.azure.com) find your VNET and add tag: `owner` with value `<yourInitials>`
 
-2. Navigate to [vnet](../infra/vnet/) directory and run `terraform plan -var="workload=<yourinitials>" -var="environment=test"` - what is effect?
+2. Navigate to [vnet](../infra/vnet/) directory and run `terraform plan -var="workload=<yourinitials>" -var="environment=test"` - what's the effect?
 
 3. Navigate to terraform/vnet and edit [`main.tf`](../infra/vnet/main.tf)
-   
-4. Add tags to resource definition
-   
+
+4. Add tags to the resource definition
+
     ```terraform
     tags = {
       environment = var.environment
@@ -44,8 +46,8 @@ Terraform `state` is in some sense database for existing resources. During `appl
     }
     ```
   
-    final vnet block should look like:
-    
+    Final vnet block should look like:
+
     ```terraform
     resource "azurerm_virtual_network" "vnet" {
       name                = "vnet-${local.postfix}"
@@ -59,37 +61,43 @@ Terraform `state` is in some sense database for existing resources. During `appl
     }
     }
     ```
+
     As you can see, file has proper syntax, but code formatting seems to be a bit off.
 
 5. Run formatting tool
+
     ```bash
     terraform fmt
     ```
+
     As you can see, file has proper formatting now.
 
 6. Check plan - are you expecting such changes?
+
    ```bash
    terraform plan -var="workload=<yourinitials>" -var="environment=test"
-   ``` 
-  
+   ```
 
 7. Run - was change successful?
+
    ```bash
    terraform apply -var="workload=<yourinitials>" -var="environment=test"
-   ``` 
+   ```
 
 ## GitHub setup
+
 [Lab02 - CI](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535127256234&cot=14)  
-Eventually you would like to keep your code in repo outside of your own machine. And since it's code - there are some commons practices for anything that is _code_. Adding CI enables peer review, static code analysis, code quality tools usage and further automation capabilities.
+Eventually, you would like to keep your code in a repo outside of your own machine. And since it's code - there are some common practices for anything that is _code_. Adding CI enables peer review, static code analysis, code quality tools usage, and further automation capabilities.
 
 ### Repository configuration practices
-Proper setup of repository helps maintainers and contributors to handle code in expected way.
-Prevents from accidental pushes, unwanted merges, and forces all checks to be present before adding new changes to main branch.
-In repo `Settings` tab, `Branches` go to `Branch protection rules`, `Add rule`:
+
+  Proper setup of repositProper setup of a repository helps maintainers and contributors handle code in an expected way.
+  It prevents accidental pushes and unwanted merges, and forces all checks to be passed before adding new changes to the main branch.
+  In repo `Settings` tab, `Branches` go to `Branch protection rules`, `Add rule`:
 
 - Set `Branch name pattern` to `master` check boxes:
 - `Require a pull request before merging>Require approvals>2`
-- `Require status checks to pass before merging`. 
+- `Require status checks to pass before merging`.
 - Finally, click `Create`.
 
 We use free instance of GitHub org so those rules won't be enforced, but it is good idea to have at least those.
@@ -112,61 +120,68 @@ Detailed description can be found at [Atlassian documentation](https://www.atlas
 
 ## Setup CI pipeline with code validation
 
-Before merging PR it is useful to add some checks if the code is free of bugs. Infrastructure code also can be checked up to some point.
+Before merging a PR, it is useful to add some checks if the code is free of bugs. Infrastructure code also can be checked up to some point.
 Testing the whole infra is not a trivial task, but some basic validation can be done easily.
 While using terraform most common patterns are:
-- using the command `fmt` - checks if tf files are formatted properly making files easy to read.
-- using the command `validate` - checks if there are no "compile" type, checking local configuration without referencing remote services, errors like missing references, not existing type resources, etc.
-- creating and destroying infrastructure - checking if infrastructure will be successfully created and destroyed. Also, idempotence can be checked here, which is expected most of the time.
-- end-to-end(e2e) tests - since unit testing is quite hard to achieve, e2e tests are set up all infrastructure check for if expected resources are present, if they respond (e.g. kubectl can list pods in Kubernetes cluster), some integration tests between resources, etc. After tests are finished, created infrastructure gets tear down. Most common library for testing terraform is [`Terratest`](https://terratest.gruntwork.io/) written in golang provided by Gruntwork.io.
 
-In this project we will use `terraform fmt` and `terraform fmt` for checking the integrity of code, creating tests in Terratest is outside of the scope of this workshop.
+- using the command `fmt` - checks if .tf files are formatted properly and easily readable.
+- using the command `validate` - validates the configuration files in a local directory, without referring to the remote state or providers’ API
+- creating and destroying infrastructure - checks if the infrastructure can be successfully created and destroyed. Also, idempotence can be checked here, which is expected most of the time.
+- end-to-end(e2e) tests - since unit testing is quite hard to achieve, e2e tests set up the entire infrastructure, check whether expected resources are present and responsive (e.g. kubectl can list pods in Kubernetes cluster), run some integration tests between resources, etc. After tests are finished, created infrastructure gets torn down. The most common library for testing terraform is [`Terratest`](https://terratest.gruntwork.io/). It’s written in Golang and provided by Gruntwork.io.
+
+In this project, we will use `terraform fmt` for checking the integrity of the code. Creating tests in Terratest is outside of the scope of this workshop.
 
 1. Checkout to branch lab02-ci
-   ```
+
+   ```bash
    git checkout -b lab02-ci
    ```
 
-2. To add GitHub action to project add file `.github/workflows/continuous-integration.yaml` with value:
-   > To simplify futher labs as trunk we will treat 'lab02'. In most cases you will setup this for main/master branch.
-```yaml
-name: CI
+2. To add GitHub Actions Workflow to this project, add file `.github/workflows/continuous-integration.yaml` with value:
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the lab2 branch
-  push:
-    branches: [ lab02 ]
-  pull_request:
-    branches: [ lab02 ]
+   ```yaml
+   name: CI
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+   # Controls when the workflow will run
+   on:
+     # Triggers the workflow on push or pull request events but only for the lab2 branch
+     push:
+       branches: [ lab02 ]
+     pull_request:
+       branches: [ lab02 ]
 
-jobs:
-  ci:
-    runs-on: [self-hosted, Linux]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-```
-Now the`ci` job only checks out code locally, we need to add a step to validate formatting for that we will use the command `terraform fmt -check -recursive` in terraform files directory. Flag `check` returns an error code if a file is not formatted and `recursive` runs recursively to check all underlying terraform files.
-The step should look sth like this:
+     # Allows you to run this workflow manually from the Actions tab
+     workflow_dispatch:
 
-```yaml
-      - name: terraform FMT
-        working-directory: ./terraform
-        run: terraform fmt -check -recursive
-```
+   jobs:
+     ci:
+       runs-on: [self-hosted, Linux]
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v3
+   ```
 
-Let's merge this into `lab02` branch. All new PR's will require successful pass of CI pipeline to merge into `lab02` branch and all new commits on `lab02` will be checked too.
+     > To simplify futher labs as trunk we will treat 'lab02'. In most cases you will setup this for main/master branch.
+
+   Now the `ci` job only checks out the code locally. We need to add another step to validate formatting. For that, we will use the command `terraform fmt -check -recursive` in terraform files directory. Flag `check` causes the command to return an error instead of making achange in the file if it’s not formatted properly. Flag `recursive` causes the command to recursively check all underlying terraform files.
+
+   The step should look something like this:
+
+   ```yaml
+         - name: terraform FMT
+           working-directory: ./infra
+           run: terraform fmt -check -recursive
+   ```
+
+   Let's merge this into the `lab02` branch. All new PRs will require a successful pass of the CI pipeline to merge into the `lab02` branch and all new commits on `lab02` will be checked too.
 
 3. Checkout to branch lab02-test-ci
-   ```
+
+   ```bash
    git checkout -b lab02-test-ci
    ```
 
-3. Change value of any tag in `vnet`, save file, commit change, push it and raise PR to branch `lab02`
+4. Change a value of any tag in `vnet`, save file, commit change, push it and raise a PR to the branch `lab02`
 
 ## Notes
 
