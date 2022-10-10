@@ -5,13 +5,3 @@ locals {
 }
 
 data "azurerm_client_config" "current" {}
-
-resource "azurerm_resource" "resource" {
-  name     = "rg-${local.postfix}"
-  location = var.location
-
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
-}
