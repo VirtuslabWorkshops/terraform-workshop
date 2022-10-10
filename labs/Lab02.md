@@ -22,12 +22,13 @@ Add tooling to perform code validation.
     ```
 
 2. Context  
-    As it's stated in the name, it’s Infrastructure as _Code_. Here you will learn more about it and the best practices for its maintenance. First, you will play a bit with the state to understand a bit more about Terraform and how it manages the state. Then you will set up a pipeline in GitHub Action to enable CI and code quality checks.
+    As it's stated in the name, it’s Infrastructure as _Code_. Here you will learn more about it and the best practices for its maintenance.
+    First, you will play a bit with the state to understand a bit more about Terraform and how it manages the state. Then you will set up a pipeline in GitHub Action to enable CI and code quality checks.
 
 ## Add tags to VNet
 
 [Lab02 - state](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535124947253&cot=14)  
-Terraform `state` is in some sense a database for existing resources. During the `apply` operation, Terraform maps created resources inside the state file, tracks dependencies, and keeps metadata. 
+Terraform `state` is in some sense a database for existing resources. During the `apply` operation, Terraform maps created resources inside the state file, tracks dependencies, and keeps metadata.
 
 > If you do not have intrastructure from Lab01, deploy at least `rg` and `vnet` using Terraform.
 
