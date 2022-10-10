@@ -11,7 +11,7 @@ Add tooling to perform code validation.
 - credentials to the remote environment (provided by trainers)
 - GitHub account
 - Lab01 established
-- fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
+- Fork [cloudyna-workshop](https://github.com/VirtuslabCloudyna/cloudyna-workshop) repository
 
 ## Initial setup
 
@@ -88,11 +88,11 @@ Terraform `state` is in some sense a database for existing resources. During the
 ## GitHub setup
 
 [Lab02 - CI](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535127256234&cot=14)  
-Eventually, you would like to keep your code in a repo outside of your own machine. And since it's code - there are some common practices for anything that is _code_. Adding CI enables peer review, static code analysis, code quality tools usage, and further automation capabilities.
+Eventually, you would like to keep your code in a repo outside your own machine. And since it's code - there are some common practices for anything that is _code_. Adding CI enables peer review, static code analysis, code quality tools usage, and further automation capabilities.
 
 ### Repository configuration practices
 
-  Proper setup of repositProper setup of a repository helps maintainers and contributors handle code in an expected way.
+  Proper setup of a repository helps maintainers and contributors handle code in an expected way.
   It prevents accidental pushes and unwanted merges, and forces all checks to be passed before adding new changes to the main branch.
   In repo `Settings` tab, `Branches` go to `Branch protection rules`, `Add rule`:
 
@@ -130,7 +130,7 @@ While using terraform most common patterns are:
 - creating and destroying infrastructure - checks if the infrastructure can be successfully created and destroyed. Also, idempotence can be checked here, which is expected most of the time.
 - end-to-end(e2e) tests - since unit testing is quite hard to achieve, e2e tests set up the entire infrastructure, check whether expected resources are present and responsive (e.g. kubectl can list pods in Kubernetes cluster), run some integration tests between resources, etc. After tests are finished, created infrastructure gets torn down. The most common library for testing terraform is [`Terratest`](https://terratest.gruntwork.io/). It’s written in Golang and provided by Gruntwork.io.
 
-In this project, we will use `terraform fmt` for checking the integrity of the code. Creating tests in Terratest is outside of the scope of this workshop.
+In this project, we will use `terraform fmt` for checking the integrity of the code. Creating tests in Terratest is outside the scope of this workshop.
 
 1. Checkout to branch lab02-ci
 
@@ -162,7 +162,7 @@ In this project, we will use `terraform fmt` for checking the integrity of the c
            uses: actions/checkout@v3
    ```
 
-     > To simplify futher labs as trunk we will treat 'lab02'. In most cases you will setup this for main/master branch.
+     > To simplify further labs as trunk we will treat 'lab02'. In most cases you will setup this for main/master branch.
 
    Now the `ci` job only checks out the code locally. We need to add another step to validate formatting. For that, we will use the command `terraform fmt -check -recursive` in terraform files directory. Flag `check` causes the command to return an error instead of making achange in the file if it’s not formatted properly. Flag `recursive` causes the command to recursively check all underlying terraform files.
 
