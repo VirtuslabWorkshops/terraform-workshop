@@ -86,4 +86,4 @@
 - it's chicken-egg problem, you need to deploy first infra to host your statefiles remotely (or you can use Terraform Cloud as offering)
 - remote backend allows to collaborate, there is even `lock` mechanism to avoid override when multiple people works on same resource
 - remote backend partially resolves multiple environment problem, you simply need to deploy more containers in `Storage Account` 
-- you still have to run apply everywhere
+- you still have to run `apply` everywhere
