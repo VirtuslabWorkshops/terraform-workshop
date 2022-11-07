@@ -1,9 +1,10 @@
 # Lab02
 
-## Purpose
+## Objectives
 
-Setup CI to validate Terraform code.
-Add tooling to perform code validation.
+- peform simple change in Terraform code: add tags to VNET
+- setup CI to validate Terraform code
+- add tooling to perform code validation
 
 ## Prerequisites
 
@@ -15,10 +16,10 @@ Add tooling to perform code validation.
 
 ## Initial setup
 
-1. Checkout to relevant branch
+1. Go to relevant directory
 
     ```bash
-    git checkout lab02
+    cd lab02
     ```
 
 2. Context  
@@ -184,8 +185,11 @@ In this project, we will use `terraform fmt` for checking the integrity of the c
 
 4. Change a value of any tag in `vnet`, save file, commit change, push it and raise a PR to the branch `lab02`
 
-## Notes
-
 ## Improvement points
 
 - more tests and tools to be added
+
+## Takeaways
+
+- every code should go through validation process before it will be added to master, Continuous Integration applies to everything what is code
+- basic formatting can be done via `terraform fmt`, there are plenty of other tools to check security ([checkov](https://www.checkov.io)) or improve documentation quality ([terraform-docs](https://terraform-docs.io))

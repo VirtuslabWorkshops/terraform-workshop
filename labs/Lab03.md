@@ -1,8 +1,13 @@
 # Lab03
 
-## Purpose
+## Objectives
 
-Create AKS resource and deploy an application to AKS using Terraform.
+- create Terraform configuration files to deploy Kubernetes Cluster in Azure (Azure Kubernetes Services)
+- understand purpose of having different subnets for management and application nodes
+- understand how SQL is connected securely via `Service endpoint`
+- deploy Azure Kubernetes Services via Terraform
+- familiarize with concept of `Managed identity` which delegates overhead to cloud provider
+- deploy application to AKS using Terraform
 
 ## Prerequisites
 
@@ -10,10 +15,10 @@ Create AKS resource and deploy an application to AKS using Terraform.
 
 ## Initial setup
 
-1. Checkout branch `lab03'
+1. Go to relevant directory
 
     ```bash
-    git checkout lab03
+    cd lab03
     ```
 
 2. Context
@@ -164,10 +169,14 @@ Create AKS resource and deploy an application to AKS using Terraform.
 
 ## Notes
 
-Kubernetes is the entire technology stack.
+Kubernetes is the entire technology stack, it's not part of this lab.
 
-## Improvement points
 
-- plenty of `terraform apply` operations
-- managing multiple environments
-- state is stored on local drive, how to collaborate?
+## Takeaways
+
+- Terraform allows to deploy cloud resource (Azure Kubernetes Service) and whats 'inside', Kubernetes in this example, notice that it uses different providers
+- there are plenty of `*.tf` files, it's for your convenience, Terraform merges them into one before executing it
+- it is good to separate resource deployment (`aks`) and resource configuration (`aks_application`)
+- Kubernetes allows to separate management nodes and application nodes - you can deploy nodes to dedicated subnets that have different security rules - eg. application nodes need to have secured connection to Database or may be public facing (via ingress controller ideally)
+- bare Terraform makes it a bit difficult to manage multiple environments (nothing to worry about)
+- statefile stored locally makes it difficult to collaborate

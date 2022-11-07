@@ -1,8 +1,12 @@
 # Lab01
 
-## Purpose
+## Objectives
 
-Setup basic infra using AZ CLI and Terraform.
+- deploy infrastructure in Azure using bash and AZ CLI: Resource group, Container Registry, KeyVault, SQL Server and Container instance
+- familiarize with terraform basics
+- deploy infrastructure in Azure using Terraform: Resource group, Container Registry, VNET, KeyVault, SQL Server and Container instance
+- understand how Terraform can generate and pass secrets (SQL Server and KeyVault)
+- introduction to security basics: storing secrets in KeyVault
 
 ## Prerequisites
 
@@ -10,10 +14,10 @@ Setup basic infra using AZ CLI and Terraform.
 
 ## Initial setup
 
-1. Checkout to relevant branch
+1. Go to relevant directory
 
     ```bash
-    git checkout lab01
+    cd lab01
     ```
 
 2. Context and tasks to perform 
@@ -70,19 +74,19 @@ From an execution standpoint, you need to initiate and apply terraform files one
 
 4. Check new files created in resource directories, and navigate to `sql` one  - there are plenty of terraform files and `*.tfstate`. Open this file in the text editor and investigate its content.
 
-5. Secret management notes  
+5. Secret management  
   [Lab01 - infrastructure secrets 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534018073640&cot=14)  
   Terraform knows how to get a secret - there is already a pre-defined function for that. There is a function to generate secrets in general (yay!), besides that, it's possible to pass a secret as a 'secret' type rather than plain text (yay2!). Eventually, the password is in plain text in the state file (not yay at all).
 
-## Notes
 
-- Terraform keeps ‘state’ that allows keeping track of the deployed resources and well as restoring them.
-- Terraform requires a bit of preparation
+## Takeaways
+
+- deployment via CLi is quick but it's not sustainable over time, it does not provide any way to track changes
 - deploying resources has plenty of auxiliary steps
-
-## Pain points
-
-- if you would like to deploy a new environment you would have to copy all files
-- your secrets are stored in plain text in `.tfstate` file
-- it's code, it requires validations
-- no automation
+- Terraform does not release you from understanding how resources are connected/dependend
+- Terraform requires a bit of preparation
+- Terraform uses `provider` (think of it as library) to interact with Azure, Kubernetes, or generic resources like password, files etc.
+- it is possible to import existing resources to terraform (not covered in this lab)
+- Terraform keeps ‘state’ that allows keeping track of the deployed resources and well as restoring them
+- Terraform can create resources (in Azure, generic like passwords etc.), fetch data from existing ones and pass outputs for further usage
+- Terraform configuration files are code therefore should be treated in the same way as any other programming language

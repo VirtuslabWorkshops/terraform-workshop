@@ -1,6 +1,6 @@
 # Lab06
 
-## Purpose
+## Objectives
 
 Enable company-wide collaboration via shared resource definitions.
 
@@ -10,9 +10,10 @@ Enable company-wide collaboration via shared resource definitions.
 
 ## Initial setup
 
-1. Checkout to branch `lab06'
+1. Go to relevant directory
+
     ```bash
-    git checkout lab06
+    cd lab06
     ```
 
 ## Move to terragrunt

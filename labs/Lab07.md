@@ -1,6 +1,6 @@
 # Lab07
 
-## Purpose
+## Objectives
 
 Enable company-wide collaboration via shared resource definitions.
 
@@ -10,9 +10,10 @@ Enable company-wide collaboration via shared resource definitions.
 
 ## Initial setup
 
-1. Checkout to branch `lab07'
+1. Go to relevant directory
+
     ```bash
-    git checkout lab07
+    cd lab07
     ```
 
 ## Publish modules to dedicated repo

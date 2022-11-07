@@ -1,8 +1,11 @@
 # Lab04
 
-## Purpose
+## Objectives
 
-Introduce remote backend to allow collaboration.
+- understand statefile requirements
+- deploy via Terraform infrastructure to host statefiles -  `Storage Account`
+- update configuration for existing resources to use `remote backend`
+- migrate backend to remote storage
 
 ## Prerequisites
 
@@ -11,10 +14,10 @@ Introduce remote backend to allow collaboration.
 
 ## Initial setup
 
-1. Checkout to branch `lab04'
+1. Go to relevant directory
 
     ```bash
-    git checkout lab04
+    cd lab03
     ```
 
 2. Context  
@@ -78,7 +81,9 @@ Introduce remote backend to allow collaboration.
 
 ## Notes
 
-## Improvement points
+## Takeaways
 
-- no single place to track who applied changes against infrastructure, many executions of terraform
-- impossible to track multiple environments without copying/pasting code
+- it's chicken-egg problem, you need to deploy first infra to host your statefiles remotely (or you can use Terraform Cloud as offering)
+- remote backend allows to collaborate, there is even `lock` mechanism to avoid override when multiple people works on same resource
+- remote backend partially resolves multiple environment problem, you simply need to deploy more containers in `Storage Account` 
+- you still have to run apply everywhere

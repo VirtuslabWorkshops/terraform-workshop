@@ -1,8 +1,10 @@
 # Lab01
 
-## Purpose
+## Objectives
 
-Familiarize with technology stack, login to remote environment.
+- familiarize with technology stack
+- login to remote environment via VS Code and Remote SSH
+- validate remote environment: check software versions
 
 ## Prerequisites
 
@@ -68,3 +70,7 @@ Familiarize with technology stack, login to remote environment.
    and follow instructions on screen.
 
    > Use browser in incognito mode to avoid conflict with current sessions you may have.
+
+## Takeaways
+
+- tools have own lifecycle and maintaining versions across entire organization can be difficult, remote environment provides everyone same working configuration and enforces standards
