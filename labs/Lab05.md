@@ -1,6 +1,6 @@
 # Lab05
 
-## Purpose
+## Objectives
 
 Introduce Terragrunt to manage multiple environments and simplify execution.
 
@@ -10,9 +10,10 @@ Introduce Terragrunt to manage multiple environments and simplify execution.
 
 ## Initial setup
 
-1. Checkout to branch `lab05'
+1. Go to relevant directory
+
     ```bash
-    git checkout lab05
+    cd lab05
     ```
 
 ## Setup terragrunt
