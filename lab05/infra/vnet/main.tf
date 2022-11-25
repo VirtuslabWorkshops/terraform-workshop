@@ -14,11 +14,6 @@ resource "azurerm_virtual_network" "vnet" {
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   address_space       = ["10.0.0.0/8"]
-
-  tags = {
-    environment = var.environment
-    team        = var.team_name
-  }
 }
 
 resource "azurerm_subnet" "aks-default" {

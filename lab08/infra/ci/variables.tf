@@ -4,7 +4,7 @@ variable "workload" {
     condition     = can(regex("^[\\w-]+$", var.workload))
     error_message = "Workload group name is not valid."
   }
-  default = "mgmt"
+  default = "vl"
 }
 
 variable "team_name" {
@@ -34,12 +34,17 @@ variable "location" {
   default = "westeurope"
 }
 
-variable "cr" {
-  type = string
-  default = "crmgmtdevwesteurope.azurecr.io"
+variable "app01image" {
+  type    = string
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
+}
+
+variable "app02image" {
+  type    = string
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }
 
 variable "apiimage" {
   type    = string
-  default = "api:latest"
+  default = "mcr.microsoft.com/azuredocs/aci-helloworld"
 }

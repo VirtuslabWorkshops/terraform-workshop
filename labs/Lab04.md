@@ -1,89 +1,92 @@
-# Lab04
+# Lab01
 
 ## Objectives
 
-- understand statefile requirements
-- deploy via Terraform infrastructure to host statefiles -  `Storage Account`
-- update configuration for existing resources to use `remote backend`
-- migrate backend to remote storage
+- deploy infrastructure in Azure using bash and AZ CLI: Resource group, Container Registry, KeyVault, SQL Server and Container instance
+- familiarize with terraform basics
+- deploy infrastructure in Azure using Terraform: Resource group, Container Registry, VNET, KeyVault, SQL Server and Container instance
+- understand how Terraform can generate and pass secrets (SQL Server and KeyVault)
+- introduction to security basics: storing secrets in KeyVault
 
 ## Prerequisites
 
 - setup as per Lab00
-- infrastructure deployed as in Lab03
 
 ## Initial setup
 
 1. Go to relevant directory
 
     ```bash
-    cd lab03
+    cd lab01
     ```
 
-2. Context  
-   [Lab04 - state file 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534089338940&cot=14) So far, every resource had `terraform.state` file located in local directory. That makes collaboration difficult and makes terraform very fragile. Any disk failure or even an unfortunate file deletion can cause you a lot of trouble.  
-   [Lab04 - state file 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534465550351&cot=14) Solution for that is moving the state file to an external storage. You will use `Storage account` for that purpose.
+2. Context and tasks to perform 
 
-## Create remote backend infrastructure
+    [Lab01 - business context](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764535120396272&cot=14)  
+    In the current scenario, an application is already provided and hosted in Azure Container Registry. It's a simple API that is delivered as a container.
 
-1. Create a storage account to store your state outside of the local machine
+    [Lab01 - infrastructure](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534014741919&cot=14)  
+    Your task is to deploy infrastructure to host your own instance of this application. You need to set up `Resource Group`, `Key Vault`, `SQL server` with the database, and eventually `Container Instance/Group` to run the application.
+    There is already provided `Key Vault` in the shared `Resource group`. It contains `Service Principal` - the service account you will be passing to `Container Instance/Group`, so it will be able to authenticate against other Azure resources like `Container Registry` and fetch the application image.
 
-- inspect Storage account defintion in [main.tf](infra/storage_account/main.tf) add missing resources in `locals`
+## Semi-manual deployment with AZ CLI
+
+1. Create an environment using CLI stored in [deployBasicInfra](../scripts/deployBasicInfra.sh)
+
+   > You can find application files in [application](../application/), but don't do it for sake of your own sanity.
   
-- create Storage account
+2. Once the environment is set, validate it by opening URL you got at the end by running `echo $APIURL`
 
-   ```bash
-   cd infra/storage_account
-   terraform init
-   terraform apply -var="workload=<initials>shared" -var="environment=mgmt" -var="location=westeurope"
-   ```
+    > It may take up to a few minutes before the URL is reachable.
 
-   > It would be nice to get all these containers on screen, right? Think about creating `outputs.tf` file that will list all information you need.
+3. Secret management notes  
 
-- fetch Storage account key
+  [Lab01 - infrastructure secrets 1](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534016232150&cot=14)  
+  Fetching secrets requires plenty of manual steps. You have to write proper CLI commands, generate the password, and then pass the secret as plain text.
 
-  ```bash
-  export ARM_ACCESS_KEY=$(az storage account keys list --resource-group "rg-<initials>shared-mgmt-westeurope" --account-name "st<initials>sharedmgmtwesteurope" --query '[0].value' -o tsv)
-  echo $ARM_ACCESS_KEY
-  ```
+## Deployment with terraform
 
-  > You can put this key to Key Vault - you can check in Lab01 how to do it!
+> In this project, every Azure resource is kept in a dedicated directory. From Terraform's standpoint, it means that every resource is standalone. Although Terraform is able to see other resources, it doesn’t keep them in the state nor manage them.
+From an execution standpoint, you need to initiate and apply terraform files one by one in a particular order. Understanding proper order comes from domain knowledge - you need to have a basic understanding of the cloud or application you are about to configure.
 
-## Migrate to remote backend
+1. Navigate to [infra](infra/) and execute:
 
-1. Add remote backend to AKS
+    ```bash
+    terraform init
+    terraform apply -var="workload=<yourinitials>" -var="environment=test" #confirm with yes or use --auto-approve flag
+    ```
 
-   - open [`versions.tf`] in [`aks`](infra/aks/) module and add section within `terraform` block:
+    in order:
+    - rg
+    - kv
+    - vnet
+    - sql
+      >  Optional: execute contents of the [`populateDB.sql`](../scripts/populateDB.sql) file against the created database. Use Azure Portal, find the database, and use the Query tool available there.
+    - ci
+      - this one throws error - navigate to [outputs.tf](infra/ci/outputs.tf), comment line 2 and uncomment line 3
+      - output is FQDN which directs to your application
 
-     ```terraform
-       backend "azurerm" {
-         resource_group_name  = "rg-<initials>shared-test-westeurope"
-         storage_account_name = "st<initials>sharedtestwesteurope"
-         container_name       = "sc-<resource_short_name>-<initials>shared-test-westeurope"
-         key                  = "terraform.tfstate"
-         access_key           = "<ARM_ACCESS_KEY>"
-       }
-     ```
+2. Open address you get as output from `ci` execution to get response
 
-     > You can skip passing Access_key here if you export `ARM_ACCESS_KEY` as environmental variable.
+    > Optional: Open `FQDN/articles` to see details fetched from database
 
-2. Initialize backend
+3. Remove `ci` (container instance) from the Portal and execute `terraform apply` again - what is the effect?
 
-   - run:
+4. Check new files created in resource directories, and navigate to `sql` one  - there are plenty of terraform files and `*.tfstate`. Open this file in the text editor and investigate its content.
 
-     ```bash
-     terraform init
-     ```
+5. Secret management  
+  [Lab01 - infrastructure secrets 2](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534018073640&cot=14)  
+  Terraform knows how to get a secret - there is already a pre-defined function for that. There is a function to generate secrets in general (yay!), besides that, it's possible to pass a secret as a 'secret' type rather than plain text (yay2!). Eventually, the password is in plain text in the state file (not yay at all).
 
-   - confirm with `yes`
-
-   - go through your modules, update `versions.tf` with relevant values and perform `terraform init` to migrate them to remote state
-
-## Notes
 
 ## Takeaways
 
-- it's chicken-egg problem, you need to deploy first infra to host your statefiles remotely (or you can use Terraform Cloud as offering)
-- remote backend allows to collaborate, there is even `lock` mechanism to avoid override when multiple people works on same resource
-- remote backend partially resolves multiple environment problem, you simply need to deploy more containers in `Storage Account` 
-- you still have to run `apply` everywhere
+- deployment via CLi is quick but it's not sustainable over time, it does not provide any way to track changes
+- deploying resources has plenty of auxiliary steps
+- Terraform does not release you from understanding how resources are connected/dependend
+- Terraform requires a bit of preparation
+- Terraform uses `provider` (think of it as library) to interact with Azure, Kubernetes, or generic resources like password, files etc.
+- it is possible to import existing resources to terraform (not covered in this lab)
+- Terraform keeps ‘state’ that allows keeping track of the deployed resources and well as restoring them
+- Terraform can create resources (in Azure, generic like passwords etc.), fetch data from existing ones and pass outputs for further usage
+- Terraform configuration files are code therefore should be treated in the same way as any other programming language
