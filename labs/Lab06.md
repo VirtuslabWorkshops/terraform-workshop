@@ -39,7 +39,7 @@
     cp template\*.tf aks
     ```
 
-    - in [`main.tf`](infra/aks/main.tf), add section to fetch details of resource groups:
+    - in [`infra/aks/main.tf`](infra/aks/main.tf), add section to fetch details of resource groups:
 
     ```terraform
     data "azurerm_resource_group" "rg" {
