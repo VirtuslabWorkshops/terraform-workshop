@@ -2,19 +2,21 @@
 
 ## Objectives
 
-- Understand `state`
+- Import existing resources to bind them with Terraform state
+- Inspect `state`
 - Modify `state` by removing and importing objects
 - Add rule to ignore certain changes in object
 
 ## Terraform state
 
-Terraform keeps information about effect of its work in `state`. Effectively this is text file which helds information about objects managed by Terraform.
+Terraform keeps information about effect of its work in `state`. 
 
+Key points:
+- effectively this is text file which helds information about objects managed by Terraform
+- `state` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state
+- it is possible to import existing resource to `state` to bind it with configuration files
 
-Terraform allows us to group resources together into modules for reuse or to just group them logically.
-Look at [network](./infra/modules/network/) module. Notice the `count` meta argument, it allows you to define how many instances of that resource Terraform should create.
-See `data` type of object in Terraform in [data.tf](./infra/modules/network/data.tf) - this type of resource allows to get information about existing object (could be almost anything, don't have to be created via Terraform).
-
+1. Create sample resources using 
 1. Apply configuration from [`infra`](./infra/) directory.
    1. Run `terraform show` 
    2. Examin `.terraform.statefile` and compare with result from above
@@ -22,7 +24,17 @@ See `data` type of object in Terraform in [data.tf](./infra/modules/network/data
    
 2. Make changes to [`infra/main.tf`](./infra/main.tf) file to deploy the subnet, then run `terraform apply`.
 
-<details><summary>Solution</summary>THis is hidden spojler</details>
+<details>
+<summary>Solution</summary>
+```
+data "azurerm_client_config" "current" {}
+
+data "azurerm_resource_group" "rg" {
+  name = local.rg_group_name
+}
+fgfh
+```
+</details>
    
 1. Uncomment output in [`infra/modules/network/outputs.tf`](./infra/modules/network/outputs.tf) then apply the changes. Make appropriate changes to fix the `network` module.
    
