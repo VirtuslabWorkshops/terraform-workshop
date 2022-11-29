@@ -3,7 +3,7 @@
 set -e
 [[ "${DEBUG}" ]] && set -x
 
-export PROJECTNAME="<yourInitial>" 
+export PROJECTNAME="wg" 
 export ENVIRONMENT="dev"
 export LOCATION="westeurope"
 export LOCATIONSHORT="weu"
@@ -15,6 +15,7 @@ let "RAND=$RANDOM"
 
 export SANAME="sa${PROJECTNAME}${ENVIRONMENT}${LOCATIONSHORT}${RAND}"
 
-az storage account create --location $LOCATION
+az storage account create --name $SANAME --resource-group $RGNAME --location $LOCATION --sku Standard_ZRS
 
-az storage account create --name $SANAME --resource-group $RGNAME --location $LOCATION --sku Standard_LRS
+echo "RG name: ${RGNAME}"
+echo "SA name: ${SANAME}"
