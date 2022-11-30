@@ -1,13 +1,13 @@
 module "rg" {
   source = "./modules/rg"
 
-  rg_name = "rg-wg-dev-weu"
+  rg_name = "RGNAME"
   location = "westeurope"
 }
 
 module "storageaccount" {
   source = "./modules/storageaccount"
   
-  rg_name = "rg-wg-dev-weu"
-  sa_name = "sawgdevweu31663"
+  rg_name = "RGNAME"
+  sa_name = "SANAME"
 }

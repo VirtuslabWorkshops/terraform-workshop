@@ -7,7 +7,6 @@ variable "environment" {
   default = "dev"
 }
 
-
 variable "rg_name" {
   type = string
   validation {

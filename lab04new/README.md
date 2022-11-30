@@ -2,6 +2,7 @@
 
 ## Objectives
 
+- Understand how you can adapt terraform in projects with existing infrastructure
 - Import existing resources to bind them with Terraform `state`
 - Modify `state` by removing and importing objects
 - Inspect `state` 
@@ -19,40 +20,53 @@ Key points:
 - terraform allows to bind existing resource with state using import command
 
 ### Importing resources
+   
 1. Create sample resources using bash script
-  - run [/scripts/createRGSA.sh](./scripts/createRGSA.sh)
-     ```bash
-     cd scripts
-     chmod +x createRGSA.sh
-     ./createRGSA.sh
-     ```
-  - note `RGNAME` and `SANAME` values on the side
-
+    - inspect [/scripts/createRGSA.sh](./scripts/createRGSA.sh) and put your initials in relevant places
+    - run script
+       ```bash
+       cd scripts
+       chmod +x createRGSA.sh
+       ./createRGSA.sh
+       ```
+    - note `RGNAME` and `SANAME` values on the side
+  
 2. Compare terraform config versus exising state
-  - update [main.tf](infra/main.tf) with your RGNAME and SANAME values in relevat placeholders
-  - run `terraform plan` in infra directory
-    ```bash
-    cd infra
-    terraform plan
-    ```
-    Notice that terraform wants to create all resources.
+    - update [main.tf](infra/main.tf) with your `RGNAME` and `SANAME` values from previous step
+    - initialize terraform
+    - run `terraform plan` in infra directory
+      ```bash
+      cd infra
+      terraform plan
+      ```
+      Notice that terraform wants to create all resources.
 
-3. Run terraform apply and import resources to state
-  - follow error messages and online documentation for this particular provider
-  - you can list resources using az cli
-    ```bash
-    az group list -o tsv
-    az storage account list -o tsv
-    ```
-  - fix configuration missmatches in code
+3. Import resources to state
+    - call `terraform apply`
+    - follow error messages and check online documentation for this particular provider
+    - you can list resources using az cli
+      ```bash
+      az group list -o tsv
+      az storage account list -o tsv
+      ```
+    - align configuration missmatches in code (consider cloud as source of truth for now)
+    - run `terraform plan` often
+    - finally run `terraform apply`, but **do not** confirm yet - notice what terraform wants to change
 
 4. Inspect state
-  - check `terraform.statefile` file
-  - list objects in state via `terraform state list`
-  - list state via `terraform state` and check details of particular resource via `terraform state show <resourceid>`
+    - check `terraform.statefile` file
+    - list objects in state via `terraform state list`
+    - list state via `terraform state` and check details of particular resource via `terraform state show <resourceid>`
 
 5. Assume that tags can be changed by non-technical team. Update configuration to ignore tag changes and test it.
-  - use [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
+    - use [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
   
 6. Remove `resource group` from state and perform `terraform destroy`
-  - you are expected to remove storage account but keep resource group out there
+    - you are expected to remove storage account but keep resource group out there
+
+<details>
+<summary>Snippets</summary>
+terraform import module.rg.azurerm_resource_group.rg /subscriptions/[subscription-id]/resourceGroups/[rg-name]
+
+terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions/[subscription-id]/resourceGroups/rg-wg-dev-weu/providers/Microsoft.Storage/storageAccounts/[sa-name]
+</details>
