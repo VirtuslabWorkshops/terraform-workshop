@@ -12,7 +12,7 @@
 
 Terraform keeps information about effect of its work in `state`. 
 In this scenario you will create resources manually and then map them with configuration files.
-After that you will remove resource from `state` but not not from cloud.
+After that you will remove resource from `state` and apply configuration.
 
 Key points:
 - effectively this is text file which helds information about objects managed by Terraform
