@@ -56,10 +56,17 @@ Key points:
 From now on other team members will use same state file as you.
 
 ### Remote backend for multiple environments
-Chaning 'env' variable does 
-You need to find a way to point terraform to another state file.
-1. Add another environment to regular infra and ensure it uses remote backend
+
+You will setup terraform and learn how make terraform use different backend configuration.
+
+1. Add container to store remote backend to another environment
+
+   - add new environment in [infra-remote-backend](./infra-remote-backend/main.tf) and apply configuration
+
+2. Update backend in [infra/providera.tf](./infra/providers.tf)
    - extract backend parameters to `<env>.backend.hcl` file - [sample](.infra/../infra/backend.hcl.sample)
-   - every environment should use own container in Azure Storage Account - add new environment in [infra-remote-backend](./infra-remote-backend/main.tf)
-   - use `terraform apply -backend-config=<env>.backend.hcl
+   - use `terraform apply -backend-config=env.backend.hcl -reconfigure` to validate dev environment
+
+3. Create pre environent
+4. Inspect Storage Account to find state file there
   

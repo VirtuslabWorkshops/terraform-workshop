@@ -32,17 +32,16 @@ Key points:
     - note `RGNAME` and `SANAME` values on the side
   
 2. Compare terraform config versus exising state
-    - update [main.tf](infra/main.tf) with your `RGNAME` and `SANAME` values from previous step
     - initialize terraform
-    - run `terraform plan` in infra directory
+    - run `terraform plan` in infra directory and pass Resource Group name and Storage Account name values as parameters to execution
       ```bash
       cd infra
-      terraform plan
+      terraform plan -var="rg_name=<RGNAME>" -var="sa_name=<SANAME>"
       ```
       Notice that terraform wants to create all resources.
 
 3. Import resources to state
-    - call `terraform apply`
+    - call `terraform apply` (remembers to pass variable values for Resource group name and Storage Account name)
     - follow error messages and check online documentation for this particular provider
     - you can list resources using az cli
       ```bash
