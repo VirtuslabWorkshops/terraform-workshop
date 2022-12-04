@@ -4,7 +4,7 @@ locals {
   postfix         = "${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
 
-  environments = toset(["dev", "shared", "pre"])
+  environments = toset(["dev", "shared"])
 }
 
 resource "azurerm_resource_group" "remote_backend_rg_name" {
