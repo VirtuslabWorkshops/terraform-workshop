@@ -35,7 +35,7 @@ variable "location" {
 }
 
 variable "cr" {
-  type = string
+  type    = string
   default = "crmgmtdevwesteurope.azurecr.io"
 }
 

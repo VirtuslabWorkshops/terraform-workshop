@@ -35,11 +35,11 @@ variable "location" {
 }
 
 variable "cr" {
-  type = string
+  type    = string
   default = "crmgmtdevwesteurope"
 }
 
 variable "cr_rg" {
-  type = string
+  type    = string
   default = "rg-mgmt-dev-westeurope"
 }
