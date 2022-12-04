@@ -1,10 +1,11 @@
-# Terraform practitioner - Lab 02
+# Terraform practitioner - Lab 03
 
 ## Objectives
 
-- Setup infrastructure for `remote backend` for multimple environments
-- Migrate current state to `remote backend`
-- Use variables to manage different environments
+- Infrastructure lifecyle managemet: Upgrade Kubernetes version and propagate change through environments
+- Organize infastructure
+- Understand how terraform 'knows' which resources to use
+- Deploy application using terraform
 
 ## Remote backend
 
@@ -23,11 +24,13 @@ Key points:
 
 1. Create storage account to host backend
    - apply configuration from [infra-remote-backend](./infra-remote-backend/)
-     - pass parameters values inline
-     - notice that you are deploying one storage account and two containers inside
+     - notice that you are deploying one storage account and three containers inside
    - state file for this storage account is still locall - you will move it later (this is chicken-egg problem)
+   
+2. Deploy regular infra 
+    - apply configuration from [infra](./infra/)
   
-2. Enable remote backend for... remote backend infra and migrate state file
+3. Enable remote backend for... remote backend infra and migrate state file
    - fetch storage account key
      ```bash
      export ARM_ACCESS_KEY=$(az storage account keys list --resource-group "<remote_backend_rg>" --account-name "<remote_backend_storage_account>" --query '[0].value' -o tsv)
@@ -43,13 +46,12 @@ Key points:
         access_key           = "<ARM_ACCESS_KEY>"
       }
       ```
-3. Migrate state to remote backend
+4. Migrate state to remote backend
 
    - re-initialize terraform
    - go through messages and confirm
 
-4. Update backend files for regular infra
-   - populate files `dev.backend.hcl` and `pre.backend.hcl` in all resource directories in [infra](./infra/)
+5. Migrate regular infra from point 2.
 
 From now on other team members will use same state file as you.
 
