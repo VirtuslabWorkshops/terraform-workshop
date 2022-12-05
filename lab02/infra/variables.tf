@@ -1,4 +1,5 @@
 variable "prefix" {
-  type        = string
+  type        = stirng
+
   description = "description"
 }

@@ -14,8 +14,12 @@
 3. Run `terraform plan` to see changes that will be applied by terraform
 
 4. Run `terraform apply` and approve the changes.
+   - inline way to pass value:
+     ```bash
+     terraform apply -var="prefix=vl"
+     ```
 
-5. Check out the files that have been created, terraform.tfstate in particular.
+5. Check out the files that have been created, `terraform.tfstate` in particular.
 
 6. Now that we successfully created `resource group`, let's create `Virtual Network`. Add following code to `main.tf` and apply the changes.
    ```hcl
@@ -27,8 +31,8 @@
    }
    ```
 
-1. Let's say someone __accidentaly__ removed the Virtual Network using Azure Portal... Remove it, then run `terraform apply` again.
+7. Let's say someone __accidentaly__ removed the Virtual Network using Azure Portal... Remove it, then run `terraform apply` again.
 
-2. Your client want you to tag all resources with `environment=prod` and `owner=<putyournamehere>`. Make required changes to the terraform config and apply the changes. If you are having troubles, check [docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
+8. Your client want you to tag all resources with `environment=prod` and `owner=<putyournamehere>`. Make required changes to the terraform config and apply the changes. If you are having troubles, check [docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 
-3. Run `terraform destroy` to decomission resources.
+9.  Run `terraform destroy` to decomission resources.

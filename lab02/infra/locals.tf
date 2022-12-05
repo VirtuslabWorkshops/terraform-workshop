@@ -1,3 +1,5 @@
 locals {
-  location = "West Europe"
+  location =  "West Europe"
+
+  
 }
