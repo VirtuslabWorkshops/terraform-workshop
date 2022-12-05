@@ -1,4 +1,4 @@
-# Lab06
+# Lab - App in AKS
 
 ## Objectives
 
@@ -15,13 +15,7 @@
 
 ## Initial setup
 
-1. Go to relevant directory
-
-    ```bash
-    cd lab06
-    ```
-
-2. Context
+1. Context
    [Lab03 - infrastructure](https://miro.com/app/board/uXjVPUuX2NQ=/?moveToWidget=3458764534018715258&cot=14)  
    To enable scaling of the application, you will deploy it to `Azure Kubernetes Service`. As you would like also to increase security level there will be few changes introduced:
    - `AKS` will use managed identity instead of fetching `SP` from `KeyVault`
@@ -35,11 +29,11 @@
   
     ```bash
     cd infra
-    mkdir aks
+    mkdir app
     cp template\*.tf aks
     ```
 
-    - in [`infra/aks/main.tf`](infra/aks/main.tf), add section to fetch details of resource groups:
+    - in [`infra/aks/main.tf`](infra/app/main.tf), add section to fetch details of Resource Grous:
 
     ```terraform
     data "azurerm_resource_group" "rg" {
@@ -47,7 +41,7 @@
     }
     ```
 
-    - in [`variables.tf`](infra/aks/variables.tf), add Container Registry default values:
+    - in [`variables.tf`](infra/app/variables.tf), add Container Registry default values:
 
     ```terraform
     variable "cr" {
@@ -61,7 +55,7 @@
     }
     ```
 
-    - in [`main.tf`](infra/aks/main.tf), add section to fetch details of Container Registry which holds our API container:
+    - in [`main.tf`](infra/app/main.tf), add section to fetch details of Container Registry which holds our API container:
 
     ```terraform
     data "azurerm_container_registry" "cr" {
@@ -70,7 +64,7 @@
     }
     ```
 
-    - in [`main.tf`](infra/aks/main.tf), add subnets:
+    - in [`main.tf`](infra/app/main.tf), add subnets:
 
     ```terraform
     data "azurerm_subnet" "aks_default" {
@@ -86,7 +80,7 @@
     }
     ```
 
-    - in [`main.tf`](infra/aks/main.tf) add AKS cluster definition which uses reference to a Resource Group and has default node pool deployed in the dedicated subnet.
+    - in [`main.tf`](infra/app/main.tf) add AKS cluster definition which uses reference to a Resource Group and has default node pool deployed in the dedicated subnet.
     AKS will use `SystemAssigned` identity which simplifies management.
 
     ```terraform
@@ -114,7 +108,7 @@
     }
     ```
 
-    - in [`main.tf`](infra/aks/main.tf) add node pool dedicated for applications. It will use dedicated subnet
+    - in [`main.tf`](infra/app/main.tf) add node pool dedicated for applications. It will use dedicated subnet
 
     ```terraform
     resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {
@@ -132,7 +126,7 @@
     }
     ```
 
-    - in [`main.tf`](infra/aks/main.tf) add role assignment - let identity access Container registry
+    - in [`main.tf`](infra/app/main.tf) add role assignment - let identity access Container registry
 
     ```terraform
     resource "azurerm_role_assignment" "akstoacrrole" {
