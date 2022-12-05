@@ -41,7 +41,7 @@ Key points:
       Notice that terraform wants to create all resources.
 
 3. Import resources to state
-    - call `terraform apply` (remembers to pass variable values for Resource group name and Storage Account name)
+    - call `terraform apply` and confirm (remembers to pass variable values for Resource group name and Storage Account name)
     - follow error messages and check online documentation for this particular provider
     - you can list resources using az cli
       ```bash
@@ -60,12 +60,12 @@ Key points:
 5. Assume that tags can be changed by non-technical team. Update configuration to ignore tag changes and test it.
     - use [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
   
-6. Remove `resource group` from state and perform `terraform destroy`
+6. Remove `resource group` from `state` and perform `terraform destroy`
     - you are expected to remove storage account but keep resource group out there
 
 <details>
 <summary>Snippets</summary>
 terraform import module.rg.azurerm_resource_group.rg /subscriptions/[subscription-id]/resourceGroups/[rg-name]
 
-terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions/[subscription-id]/resourceGroups/rg-wg-dev-weu/providers/Microsoft.Storage/storageAccounts/[sa-name]
+terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions/[subscription-id]/resourceGroups/[rg-name]/providers/Microsoft.Storage/storageAccounts/[sa-name]
 </details>
