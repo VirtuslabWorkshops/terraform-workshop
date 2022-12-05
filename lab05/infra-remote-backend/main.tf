@@ -1,7 +1,6 @@
 locals {
-  location = var.location == "euw" ? "westeurope" : "northeurope"
 
-  postfix         = "${var.workload}-${var.environment}-${var.location}"
+  postfix         = "${var.team_name}-${var.workload}-${var.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
 
   environments = toset(["dev", "shared"])

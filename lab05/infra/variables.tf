@@ -4,7 +4,6 @@ variable "environment" {
     condition     = can(regex("^[\\w-]+$", var.environment))
     error_message = "Environment name is not valid."
   }
-  default = "dev"
 }
 
 variable "location" {

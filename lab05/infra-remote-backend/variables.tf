@@ -7,6 +7,7 @@ variable "workload" {
   }
   default = "mgmt"
 }
+
 variable "environment" {
   type = string
   validation {
@@ -23,4 +24,13 @@ variable "location" {
     error_message = "Location group name is not valid."
   }
   default = "westeurope"
+}
+
+variable "team_name" {
+  type = string
+  validation {
+    condition     = can(regex("^[\\w-]+$", var.team_name))
+    error_message = "Workload group name is not valid."
+  }
+  default = "vl"
 }

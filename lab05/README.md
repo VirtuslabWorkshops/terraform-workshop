@@ -34,7 +34,7 @@ Key points:
      echo $ARM_ACCESS_KEY #yes, this is secret!
      ```
     - update [](./infra-remote-backend/providers.tf) in `terraform` block
-      ```terraform
+      ```hcl
       backend "azurerm" {
         resource_group_name  = "<remote_backend_rg>"
         storage_account_name = "<remote_backend_storage_account>"
@@ -48,23 +48,20 @@ Key points:
    - re-initialize terraform
    - go through messages and confirm
 
-4. Update backend files for regular infra
-   - populate files `dev.backend.hcl` and `pre.backend.hcl` in all resource directories in [infra](./infra/)
-
-From now on other team members will use same state file as you.
-
 ### Remote backend for multiple environments
 
-You will setup terraform and learn how make terraform use different backend configuration.
+You will learn how to use same configuration with different backends, for example to keep different stages of infrastructure.
 
-1. Add container to store remote backend to another environment
+1. Add remote backend block to [infra/providers.tf](./infra/providers.tf) but extract all parameters to `<env>.backend.hcl` file
+   - create `dev.backend.hcl` file by copying and renaming [sample](.infra/../infra/backend.hcl.sample)
+   - use `terraform init -backend-config=dev.backend.hcl -reconfigure` to setup dev environmnet
 
-   - add new environment in [infra-remote-backend](./infra-remote-backend/main.tf) and apply configuration
+2. Add container to store remote backend for another environment
+   - add new environment named `pre` in [infra-remote-backend](./infra-remote-backend/main.tf) and apply configuration
 
-2. Update backend in [infra/providera.tf](./infra/providers.tf)
-   - extract backend parameters to `<env>.backend.hcl` file - [sample](.infra/../infra/backend.hcl.sample)
-   - use `terraform apply -backend-config=env.backend.hcl -reconfigure` to validate dev environment
+3. Update backend `.hcl` file for pre env
+   - copy `dev.backend.hcl` and adjust content
 
-3. Create pre environent
-4. Inspect Storage Account to find state file there
-  
+3. Add random tag to Storage account and deploy it first to dev and later to pre env
+
+4. Inspect storage account containers to check if state file really follows your changes
