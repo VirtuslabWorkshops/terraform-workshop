@@ -30,7 +30,7 @@
     ```bash
     cd infra
     mkdir app
-    cp template\*.tf aks
+    cp template\*.tf app
     ```
 
     - in [`infra/aks/main.tf`](infra/app/main.tf), add section to fetch details of Resource Grous:
