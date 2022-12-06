@@ -5,3 +5,8 @@ variable "name_prefix" {
 variable "subnet_id" {
   type = string
 }
+
+variable "enable_public_ip" {
+  type = bool
+  default = true
+}

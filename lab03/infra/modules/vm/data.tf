@@ -1,3 +1,3 @@
 data "azurerm_resource_group" "rg" {
-  name = "vl-workshop"
+  name = "${var.name_prefix}-workshop"
 }
