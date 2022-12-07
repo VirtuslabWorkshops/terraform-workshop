@@ -17,7 +17,7 @@ See `data` type of object in Terraform in [data.tf](./infra/modules/network/data
 1. Apply changes from [`infra`](./infra/) directory. Notice that, by default subnet was not created.
    
 2. Make changes to [`infra/main.tf`](./infra/main.tf) file to deploy the subnet, then run `terraform apply`.
-   - Take a use of `cidrsubnets` function
+   - Use `cidrsubnets` function
    
 3. Uncomment output in [`infra/modules/network/outputs.tf`](./infra/modules/network/outputs.tf) then apply the changes. Make appropriate changes to fix the `network` module.
 
