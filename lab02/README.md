@@ -8,7 +8,7 @@
 
 You want to keep your terraform code formatted and check it validity before applying. Terraform gives you the tools to do so. First let's check formatting. Run the following command to check if code is properly formatted.
 
-```
+```bash
 cd ./lab02/infra
 terraform fmt -check -recursive
 ```

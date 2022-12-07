@@ -31,8 +31,8 @@
    }
    ```
 
-7. Let's say someone __accidentaly__ removed the Virtual Network using Azure Portal... Remove it, then run `terraform apply` again.
+7. Let's say someone __accidentally__ removed the Virtual Network using Azure Portal... Remove it, then run `terraform apply` again.
 
 8. Your client want you to tag all resources with `environment=prod` and `owner=<putyournamehere>`. Make required changes to the terraform config and apply the changes. If you are having troubles, check [docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 
-9.  Run `terraform destroy` to decomission resources.
+9.  Run `terraform destroy` to decommission resources.

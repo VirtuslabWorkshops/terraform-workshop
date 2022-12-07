@@ -2,8 +2,8 @@
 
 ## Objectives
 
-- Infrastructure lifecyle managemet: Upgrade Kubernetes version and propagate change through environments
-- Organize infastructure
+- Infrastructure lifecycle management: Upgrade Kubernetes version and propagate change through environments
+- Organize infrastructure
 - Understand how terraform 'knows' which resources to use
 - Deploy application using terraform
 
@@ -11,7 +11,7 @@
 
 Terraform allows to store `state` in external storage, like cloud solution (Storage Account from Azure, S3 from AWS etc.). 
 
-> HashiCorp offers Terraform Cloud to store your state but it's not part of this exercise.
+> HashiCorp offers Terraform Cloud to store your state, but it's not part of this exercise.
 
 In this scenario you will create storage in Azure to host state file in Cloud, create basic infra with local state, migrate it to cloud and eventually learn how to enable multiple environments (like dev, test and prod) using variables.
 
@@ -25,7 +25,7 @@ Key points:
 1. Create storage account to host backend
    - apply configuration from [infra-remote-backend](./infra-remote-backend/)
      - notice that you are deploying one storage account and three containers inside
-   - state file for this storage account is still locall - you will move it later (this is chicken-egg problem)
+   - state file for this storage account is still local - you will move it later (this is chicken-egg problem)
    
 2. Deploy regular infra 
     - apply configuration from [infra](./infra/)
@@ -57,7 +57,7 @@ From now on other team members will use same state file as you.
 
 ### Remote backend for multiple environments
 
-You will setup terraform and learn how make terraform use different backend configuration.
+You will set up terraform and learn how make terraform use different backend configuration.
 
 1. Add container to store remote backend to another environment
 
@@ -67,6 +67,6 @@ You will setup terraform and learn how make terraform use different backend conf
    - extract backend parameters to `<env>.backend.hcl` file - [sample](.infra/../infra/backend.hcl.sample)
    - use `terraform apply -backend-config=env.backend.hcl -reconfigure` to validate dev environment
 
-3. Create pre environent
+3. Create pre environment
 4. Inspect Storage Account to find state file there
   

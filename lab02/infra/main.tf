@@ -1,3 +1,7 @@
+locals {
+  location = "West Europe"
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "vl-workshop-rg"
 location = local.location
