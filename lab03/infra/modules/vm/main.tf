@@ -36,7 +36,7 @@ resource "azurerm_network_interface" "nic" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = var.subnet_id # Set subnet id from network module
+    subnet_id                     = "" # Set subnet id from network module
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = can(azurerm_public_ip.pip[0].id)? azurerm_public_ip.pip[0].id: null
   }
