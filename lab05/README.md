@@ -2,15 +2,16 @@
 
 ## Objectives
 
-- Setup infrastructure for `remote backend` for multimple environments
 - Migrate current state to `remote backend`
+- Setup infrastructure for `remote backend` for multimple environments
 - Use variables to manage different environments
+- Migrate currTerraform allows to state to `remote backend`
 
 ## Remote backend
 
-Terraform allows to store `state` in external storage, like cloud solution (Storage Account from Azure, S3 from AWS etc.). 
+Terraform allows to store `state ` in external storage, like cloud solution (Storage Account from Azure, S3 from AWS etc.). 
 
-> HashiCorp offers Terraform Cloud to store your state but it's not part of this exercise.
+> HashiCorp offers Terraform Cloud to store your state, but it's not part of this exercise.
 
 In this scenario you will create storage in Azure to host state file in Cloud, create basic infra with local state, 
 migrate it to cloud and eventually learn how to enable multiple environments (like dev, test and prod) using variables.

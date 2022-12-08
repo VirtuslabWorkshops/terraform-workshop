@@ -3,7 +3,7 @@
 ## Objectives
 
 - Import existing resources to bind them with the Terraform `state`
-- Inspect `state` 
+- Inspect terraform `state` 
 - Add rule to ignore certain changes in objects
 
 ## Terraform state
