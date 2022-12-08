@@ -14,13 +14,13 @@ After that we will remove resource from `state` and apply configuration.
 
 ### Importing resources
    
-1. Inspect script [createRGSA.sh](./scripts/createRGSA.sh), put your initials in relevant places and run it. 
-Note `RG_NAME` and `SA_NAME` values on the side.
+1. Inspect script [createRGSA.sh](./scripts/createRGSA.sh), put your initials in relevant places and run it `./createRGSA.sh`. 
+Note resource group and service account names on the side.
   
-2. Run `terraform plan` and compare the execution plan with existing infrastructure on the Azure portal. 
+2. Run `terraform plan` with variables from `createRGSA.sh` script and compare the execution plan with existing infrastructure on the Azure portal. 
 Notice that terraform wants to create all resources.
 
-3. Run `terraform apply` and check how terraform handles existing resources.
+3. Run `terraform apply` with variables from `createRGSA.sh` and check how terraform handles existing resources.
 
 4. Import manually created resources into state file. Inspect state file before and after operations.
 
