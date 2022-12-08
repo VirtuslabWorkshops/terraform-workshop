@@ -2,14 +2,13 @@
 
 ## Objectives
 
-- Import existing resources to bind them with Terraform `state`
-- Modify `state` by removing and importing objects
+- Import existing resources to bind them into Terraform `state`
 - Inspect `state` 
 - Add rule to ignore certain changes in objects
 
 ## Terraform state
 
-Terraform keeps information about effect of its work in file `terraform.tfstate` often referred as`statefile` . 
+Terraform keeps information about effect of its work in file `terraform.tfstate` often referred as`state` or `state file`. 
 In this scenario we will create resources manually and then import them into Terraform state.
 After that we will remove resource from `state` and apply configuration.
 
@@ -23,20 +22,17 @@ Notice that terraform wants to create all resources.
 
 3. Run `terraform apply` and check how terraform handles existing resources.
 
-4. Import manually created resources into state file. Inspect state before and after operations.
+4. Import manually created resources into state file. Inspect state file before and after operations.
 
-5. Lets try applying terraform configuration again.
+5. Let's try applying terraform configuration again.
 
+6. See how terraform handles external changes. Add new tag to storage account in azure portal and re apply terraform.
 
-[//]: # (############ todo)
-5. Assume that tags can be changed by non-technical team. Update configuration to ignore tag changes and test it.
-    - Use [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
-  
-6. Remove `resource group` from `state` and perform `terraform destroy`
-    - You are expected to remove storage account but keep resource group out there
+7. Check [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) 
+and find a way for terraform to now change tags after external change.
 
 <details>
-<summary>Snippets</summary>
+<summary>Snippet how import resources</summary>
 
 ```bash
 terraform import module.rg.azurerm_resource_group.rg /subscriptions/<subscription-id>/resourceGroups/<rg-name>
@@ -45,7 +41,7 @@ terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions
 
 </details>
 
-## Key points
+### Key points
 - Effectively `statefile` is text file which holds information about objects managed by Terraform
 - `statefile` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state
 - Terraform binds existing resource with state using `import` command
