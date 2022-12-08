@@ -12,7 +12,8 @@ Terraform allows to store `state` in external storage, like cloud solution (Stor
 
 > HashiCorp offers Terraform Cloud to store your state but it's not part of this exercise.
 
-In this scenario you will create storage in Azure to host state file in Cloud, create basic infra with local state, migrate it to cloud and eventually learn how to enable multiple environments (like dev, test and prod) using variables.
+In this scenario you will create storage in Azure to host state file in Cloud, create basic infra with local state, 
+migrate it to cloud and eventually learn how to enable multiple environments (like dev, test and prod) using variables.
 
 Key points:
 - keeping state in remote location allows to cooperate within team

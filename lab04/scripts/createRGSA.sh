@@ -3,19 +3,19 @@
 set -e
 [[ "${DEBUG}" ]] && set -x
 
-export PROJECTNAME="wg" 
+export PROJECT_NAME="wg"
 export ENVIRONMENT="dev"
 export LOCATION="westeurope"
-export LOCATIONSHORT="weu"
-export RGNAME="rg-${PROJECTNAME}-${ENVIRONMENT}-${LOCATIONSHORT}"
+export LOCATION_SHORT="weu"
+export RG_NAME="rg-${PROJECT_NAME}-${ENVIRONMENT}-${LOCATION_SHORT}"
 
-az group create --location $LOCATION --name $RGNAME
+az group create --location $LOCATION --name $RG_NAME
 
 let "RAND=$RANDOM"
 
-export SANAME="sa${PROJECTNAME}${ENVIRONMENT}${LOCATIONSHORT}${RAND}"
+export SA_NAME="sa${PROJECT_NAME}${ENVIRONMENT}${LOCATION_SHORT}${RAND}"
 
-az storage account create --name $SANAME --resource-group $RGNAME --location $LOCATION --sku Standard_ZRS
+az storage account create --name $SA_NAME --resource-group $RG_NAME --location $LOCATION --sku Standard_ZRS
 
-echo "RG name: ${RGNAME}"
-echo "SA name: ${SANAME}"
+echo "Resource Group name: ${RG_NAME}"
+echo "Storage Account name: ${SA_NAME}"

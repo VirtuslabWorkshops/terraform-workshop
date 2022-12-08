@@ -2,70 +2,46 @@
 
 ## Objectives
 
-- Understand how you can adapt terraform in projects with existing infrastructure
-- Import existing resources to bind them with Terraform `state`
-- Modify `state` by removing and importing objects
+- Import existing resources to bind them with the Terraform `state`
 - Inspect `state` 
 - Add rule to ignore certain changes in objects
 
 ## Terraform state
 
-Terraform keeps information about effect of its work in `state`. 
-In this scenario you will create resources manually and then map them with configuration files.
-After that you will remove resource from `state` and apply configuration.
-
-Key points:
-- effectively this is text file which helds information about objects managed by Terraform
-- `state` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state
-- terraform allows to bind existing resource with state using import command
+Terraform keeps information about effect of its work in file `terraform.tfstate` often referred as`state` or `state file`. 
+In this scenario we will create resources manually and then import them into Terraform state.
+After that we will remove resource from `state` and apply configuration.
 
 ### Importing resources
    
-1. Create sample resources using bash script
-    - inspect [/scripts/createRGSA.sh](./scripts/createRGSA.sh) and put your initials in relevant places
-    - run script
-       ```bash
-       cd scripts
-       chmod +x createRGSA.sh
-       ./createRGSA.sh
-       ```
-    - note `RGNAME` and `SANAME` values on the side
+1. Inspect script [createRGSA.sh](./scripts/createRGSA.sh), put your initials in relevant places and run it `./createRGSA.sh`. 
+Note resource group and service account names on the side.
   
-2. Compare terraform config versus exising state
-    - initialize terraform
-    - run `terraform plan` in infra directory and pass Resource Group name and Storage Account name values as parameters to execution
-      ```bash
-      cd infra
-      terraform plan -var="rg_name=<RGNAME>" -var="sa_name=<SANAME>"
-      ```
-      Notice that terraform wants to create all resources.
+2. Run `terraform plan` with variables from `createRGSA.sh` script and compare the execution plan with existing infrastructure on the Azure portal. 
+Notice that terraform wants to create all resources.
 
-3. Import resources to state
-    - call `terraform apply` and confirm (remembers to pass variable values for Resource group name and Storage Account name)
-    - follow error messages and check online documentation for this particular provider
-    - you can list resources using az cli
-      ```bash
-      az group list -o tsv
-      az storage account list -o tsv
-      ```
-    - align configuration missmatches in code (consider cloud as source of truth for now)
-    - run `terraform plan` often
-    - finally run `terraform apply`, but **do not** confirm yet - notice what terraform wants to change
+3. Run `terraform apply` with variables from `createRGSA.sh` and check how terraform handles existing resources.
 
-4. Inspect state
-    - check `terraform.statefile` file
-    - list objects in state via `terraform state list`
-    - list state via `terraform state` and check details of particular resource via `terraform state show <resourceid>`
+4. Import manually created resources into state file. Inspect state file before and after operations.
 
-5. Assume that tags can be changed by non-technical team. Update configuration to ignore tag changes and test it.
-    - use [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
-  
-6. Remove `resource group` from `state` and perform `terraform destroy`
-    - you are expected to remove storage account but keep resource group out there
+5. Let's try applying terraform configuration again.
+
+6. See how terraform handles external changes. Add a new tag to the storage account in the Azure portal and re-apply terraform.
+
+7. Check [lifecycle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) 
+and find a way for terraform to now change tags after external change.
 
 <details>
-<summary>Snippets</summary>
-terraform import module.rg.azurerm_resource_group.rg /subscriptions/[subscription-id]/resourceGroups/[rg-name]
+<summary>Snippet how import resources</summary>
 
-terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions/[subscription-id]/resourceGroups/[rg-name]/providers/Microsoft.Storage/storageAccounts/[sa-name]
+```bash
+terraform import module.rg.azurerm_resource_group.rg /subscriptions/<subscription-id>/resourceGroups/<rg-name>
+terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.Storage/storageAccounts/<sa-name>
+```
+
 </details>
+
+### Key points
+- Effectively `statefile` is text file which holds information about objects managed by Terraform
+- `statefile` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state
+- Terraform binds existing resource with state using `import` command
