@@ -2,7 +2,7 @@
 
 ## Objectives
 
-- Import existing resources to bind them into Terraform `state`
+- Import existing resources to bind them with the Terraform `state`
 - Inspect `state` 
 - Add rule to ignore certain changes in objects
 
@@ -17,7 +17,7 @@ After that we will remove resource from `state` and apply configuration.
 1. Inspect script [createRGSA.sh](./scripts/createRGSA.sh), put your initials in relevant places and run it. 
 Note `RG_NAME` and `SA_NAME` values on the side.
   
-2. Run `terraform plan` and compare execution plan with exising infrastructure on the azure portal. 
+2. Run `terraform plan` and compare the execution plan with existing infrastructure on the Azure portal. 
 Notice that terraform wants to create all resources.
 
 3. Run `terraform apply` and check how terraform handles existing resources.
@@ -26,9 +26,9 @@ Notice that terraform wants to create all resources.
 
 5. Let's try applying terraform configuration again.
 
-6. See how terraform handles external changes. Add new tag to storage account in azure portal and re apply terraform.
+6. See how terraform handles external changes. Add a new tag to the storage account in the Azure portal and re-apply terraform.
 
-7. Check [lifecyle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) 
+7. Check [lifecycle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) 
 and find a way for terraform to now change tags after external change.
 
 <details>
