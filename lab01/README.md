@@ -21,7 +21,7 @@
 
 5. Check out the files that have been created, `terraform.tfstate` in particular.
 
-6. Now that we successfully created `resource group`, let's create `Virtual Network`. Add following code to `main.tf` and apply the changes.
+6. Now that we successfully created `resource group`, let's create a `Virtual Network`. Add following code to `main.tf` and apply the changes.
    ```hcl
    resource "azurerm_virtual_network" "vnet" {
      name                = "${var.prefix}-vnet"

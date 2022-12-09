@@ -1,20 +1,15 @@
-resource "azurerm_resource_group" "rg" {
-  name     = "${var.name_prefix}-vl-workshop-lab03-rg"
-  location = "West Europe"
-}
-
 resource "azurerm_public_ip" "pip" {
   count = var.enable_public_ip ? 1 : 0
-  name                = "vl-workshop-pip"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${var.name_prefix}-workshop-pip"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_security_group" "nsg" {
   name                = "nsg"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   security_rule {
     name                       = "SSH"
@@ -31,8 +26,8 @@ resource "azurerm_network_security_group" "nsg" {
 
 resource "azurerm_network_interface" "nic" {
   name                = "nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   ip_configuration {
     name                          = "internal"
@@ -49,12 +44,12 @@ resource "azurerm_network_interface_security_group_association" "nsg" {
 
 resource "azurerm_linux_virtual_machine" "vm" {
   name                            = "${var.name_prefix}-vl-workshop-lab03-vm"
-  resource_group_name             = azurerm_resource_group.rg.name
-  location                        = azurerm_resource_group.rg.location
+  resource_group_name             = data.azurerm_resource_group.rg.name
+  location                        = data.azurerm_resource_group.rg.location
   size                            = "Standard_B1ls"
   admin_username                  = "adminuser"
   disable_password_authentication = false
-  admin_password                  = "supersecretpassword" #is it really that super and secret? ;)
+  admin_password                  = "supersecretpassword" #is it really that super and secret? ;) for ambitious, see https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
