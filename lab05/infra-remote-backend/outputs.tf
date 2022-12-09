@@ -9,3 +9,13 @@ output "remote_backend_storage_account" {
 output "remote_backend_container" {
   value = values(azurerm_storage_container.remote_backend_storage_container).*.name
 }
+
+output "remote_backend_storage_account_access_key1" {
+  value = azurerm_storage_account.remote_backend_storage_account.primary_access_key
+  sensitive = true
+}
+
+output "remote_backend_storage_account_access_key2" {
+  value = azurerm_storage_account.remote_backend_storage_account.secondary_access_key
+  sensitive = true
+}
