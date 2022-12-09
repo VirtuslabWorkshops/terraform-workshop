@@ -1,3 +1,3 @@
-# output "subnet_ids" {
-#   value       = module.network.subnet_id
+# output "subnet_id" {
+#   value = azurerm_subnet. #fix the path
 # }

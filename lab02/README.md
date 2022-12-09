@@ -12,11 +12,20 @@ You want to keep your terraform code formatted and check it validity before appl
 cd ./lab02/infra
 terraform fmt -check -recursive
 ```
-If the output is empty, it means that your terraform code is well formatted, otherwise it will print incorrectly formatted files. Fix the formatting and run the above command again.
 
-Next, we want to check if our terraform code is valid. Run the following command to check that.
+If the output is empty, it means that your terraform code is well formatted, otherwise it will print incorrectly formatted files. 
+You can view what exactly is wrong with formatting:
+
+```bash
+terraform fmt -check -recursive -diff
 ```
+
+Fix the formatting and run the above command again.
+Next, we want to check if our terraform code is valid. Run the following command to check that.
+
+```bash
 terraform init
 terraform validate
 ```
+
 Follow instructions to make your code valid and run above command again.
