@@ -1,6 +1,7 @@
 locals {
+  environment = "shared"
 
-  postfix         = "${var.team_name}-${var.workload}-${var.environment}-${var.location}"
+  postfix         = "${var.team_name}-${var.workload}-${local.environment}-${var.location}"
   postfix_no_dash = replace(local.postfix, "-", "")
 
   environments = toset(["dev", "shared"])
@@ -19,12 +20,12 @@ resource "azurerm_storage_account" "remote_backend_storage_account" {
   account_replication_type = "LRS"
 
   tags = {
-    environment = var.environment
+    environment = local.environment
   }
 }
 
 resource "azurerm_storage_container" "remote_backend_storage_container" {
-  for_each = local.environments
+  for_each = var.environments
 
   name                  = "sc-tf-backend-${each.key}"
   storage_account_name  = azurerm_storage_account.remote_backend_storage_account.name

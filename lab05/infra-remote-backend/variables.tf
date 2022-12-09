@@ -8,13 +8,15 @@ variable "workload" {
   default = "mgmt"
 }
 
-variable "environment" {
-  type = string
+variable "environments" {
+  type = set(string)
   validation {
-    condition     = can(regex("^[\\w-]+$", var.environment))
-    error_message = "Environment group name is not valid."
+      condition = alltrue([
+        for environment in var.environments : can(regex("^[\\w-]+$", environment))
+      ])
+    error_message = "At least one environment name is not valid."
   }
-  default = "shared"
+  default = ["dev", "prod"]
 }
 
 variable "location" {

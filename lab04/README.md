@@ -2,34 +2,34 @@
 
 ## Objectives
 
-- Import existing resources to bind them with the Terraform `state`
-- Inspect terraform `state` 
-- Add rule to ignore certain changes in objects
+- Import existing resources to bind them with the Terraform `state`.
+- Inspect terraform `state`.
+- Add a rule to ignore certain changes in objects.
 
 ## Terraform state
 
-Terraform keeps information about effect of its work in file `terraform.tfstate` often referred as`state` or `state file`. 
-In this scenario we will create resources manually and then import them into Terraform state.
-After that we will remove resource from `state` and apply configuration.
+Terraform keeps the information about the effect of its work in file `terraform.tfstate` often referred to as `state` or `state file`.
+In this scenario, we will create resources manually and then import them into Terraform state.
+After that, we will remove a resource from `state` and apply the configuration.
 
 ### Importing resources
-   
-1. Inspect script [createRGSA.sh](./scripts/createRGSA.sh), put your initials in relevant places and run it `./createRGSA.sh`. 
-Note resource group and service account names on the side.
-  
-2. Run `terraform plan` with variables from `createRGSA.sh` script and compare the execution plan with existing infrastructure on the Azure portal. 
-Notice that terraform wants to create all resources.
 
-3. Run `terraform apply` with variables from `createRGSA.sh` and check how terraform handles existing resources.
+1. Inspect script [createRGSA.sh](./scripts/createRGSA.sh), put your initials in relevant places and run it `./createRGSA.sh`.
+   Note resource group and service account names on the side.
 
-4. Import manually created resources into state file. Inspect state file before and after operations.
+2. Run the `terraform plan` with variables from the `createRGSA.sh` script and compare the execution plan with existing infrastructure on the Azure portal.
+   Notice that Terraform wants to create all resources.
 
-5. Let's try applying terraform configuration again.
+3. Run `terraform apply` with variables from `createRGSA.sh` and check how Terraform handles existing resources.
 
-6. See how terraform handles external changes. Add a new tag to the storage account in the Azure portal and re-apply terraform.
+4. [Import manually](https://developer.hashicorp.com/terraform/cli/import) created resources into the state. Inspect the state file before and after operations.
 
-7. Check [lifecycle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) 
-and find a way for terraform to now change tags after external change.
+5. Let's try applying Terraform configuration again.
+
+6. See how Terraform handles external changes. Add a new tag to the storage account in the Azure portal and re-apply terraform.
+
+7. Check [lifecycle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
+   and find a way for Terraform to now change tags after the external change.
 
 <details>
 <summary>Snippet how import resources</summary>
@@ -42,6 +42,7 @@ terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions
 </details>
 
 ### Key points
-- Effectively `statefile` is text file which holds information about objects managed by Terraform
-- `statefile` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state
-- Terraform binds existing resource with state using `import` command
+
+- Effectively `state` is a text file which holds information about objects managed by Terraform.
+- `state` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state.
+- Terraform binds existing resources with state using the `import` command.
