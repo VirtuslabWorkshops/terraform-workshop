@@ -41,7 +41,7 @@ Key points:
        storage_account_name = "<remote_backend_storage_account>"
        container_name       = "<remote_backend_container>" #dev one
        key                  = "terraform.tfstate"
-       access_key           = "<ARM_ACCESS_KEY>" # We can authorize our self by az cli client user or service account
+       access_key           = "<ARM_ACCESS_KEY>" # We can authorize ourselves by Azure CLI client user or service account
      }
      ```
    - Extra task: try to template the backend block in output.
@@ -56,7 +56,7 @@ We will learn how to use the same configuration with different backends, for exa
 
 1. Add remote backend block to [infra/providers.tf](./infra/providers.tf) but extract all parameters to `<env>.backend.hcl` file
    - create `dev.backend.hcl` file by copying and renaming [sample](./infra/sample.backend.hcl)
-   - run `terraform init -backend-config=dev.backend.hcl -reconfigure` to the setup dev environment
+   - run `terraform init -backend-config=dev.backend.hcl -reconfigure` to setup the dev environment
 
 2. Add a container to store the remote state for another environment
    - add new environment named `prod` in [infra-remote-backend](./infra-remote-backend/main.tf) and apply configuration
@@ -64,4 +64,4 @@ We will learn how to use the same configuration with different backends, for exa
 3. Update backend `.hcl` file for pre env
    - copy `dev.backend.hcl` and adjust the content
 
-4. Add a random tag to the Storage account and deploy it first to dev and later to pre env
+4. Add a random tag to the Storage account and deploy it, firstly to dev and later to pre env

@@ -43,6 +43,6 @@ terraform import module.storageaccount.azurerm_storage_account.sa /subscriptions
 
 ### Key points
 
-- Effectively `state` is a text file which holds information about objects managed by Terraform.
+- Effectively `state` is a text file that holds information about objects managed by Terraform.
 - `state` is what Terraform _believes_ is out there, it is being used to compare expected vs existing state.
 - Terraform binds existing resources with state using the `import` command.
