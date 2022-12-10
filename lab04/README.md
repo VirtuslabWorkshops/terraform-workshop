@@ -29,7 +29,7 @@ After that, we will remove a resource from `state` and apply the configuration.
 6. See how Terraform handles external changes. Add a new tag to the storage account in the Azure portal and re-apply terraform.
 
 7. Check [lifecycle meta-argument](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
-   and find a way for Terraform to now change tags after the external change.
+   and find a way for Terraform to not change tags after the external change.
 
 <details>
 <summary>Snippet how import resources</summary>
