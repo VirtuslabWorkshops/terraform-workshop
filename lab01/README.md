@@ -1,27 +1,26 @@
-# Terraform fundamentals - Lab 01
+# Terraform Fundamentals - Lab 01
 
 ## Objectives
 
-- Familiarize with sample terraform config
-- Run terraform init/plan/apply/destroy to see what will happen
+- Become familiar with a sample Terraform configuration.
+- Execute Terraform init/plan/apply/destroy commands to observe the results.
 
-## Basic Terraform CLI commands
+## Basic Terraform CLI Commands
 
-1. Navigate to [`infra`](./infra/).
+1. Navigate to the [`infra`](./infra/) directory.
 
-2. Run `terraform init` to initialize working directory. Read the logs, try to understand what is going on.
+2. Run `terraform init` to initialize the working directory. Carefully read the logs and try to understand what is happening.
 
-3. Run `terraform plan` to see changes that will be applied by terraform
+3. Run `terraform plan` to view the changes that will be applied by Terraform.
 
-4. Run `terraform apply` and approve the changes.
-   - inline way to pass value:
+4. Run `terraform apply` and approve the changes. You can also pass values inline like this:
      ```bash
-     terraform apply -var="prefix=vl"
+     terraform apply -var=prefix=vl
      ```
 
-5. Check out the files that have been created, `terraform.tfstate` in particular.
+5. Take a look at the files that have been created, particularly `terraform.tfstate`.
 
-6. Now that we successfully created `resource group`, let's create a `Virtual Network`. Add following code to `main.tf` and apply the changes.
+6. Now that we have successfully created a `resource group`, let's create a `Virtual Network`. Add the following code to `main.tf` and apply the changes:
    ```hcl
    resource "azurerm_virtual_network" "vnet" {
      name                = "${var.prefix}-vnet"
@@ -31,8 +30,6 @@
    }
    ```
 
-7. Let's say someone __accidentally__ removed the Virtual Network using Azure Portal... Remove it, then run `terraform apply` again.
+7. Suppose someone __accidentally__ removed the Virtual Network using the Azure Portal... Remove it, then run `terraform apply` again.
 
-8. Your client want you to tag all resources with `environment=prod` and `owner=<putyournamehere>`. Make required changes to the terraform config and apply the changes. If you are having troubles, check [docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
-
-9.  Run `terraform destroy` to decommission resources.
+8. Your client wants you to tag all resources with `environment=prod` and `owner=<putyournamehere>`. Make the necessary changes to the Terraform configuration and apply the changes. If you are having.
