@@ -31,15 +31,21 @@ resource "azurerm_network_interface" "nic" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = "" # Set subnet id from network module
+    subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = can(azurerm_public_ip.pip[0].id)? azurerm_public_ip.pip[0].id: null
-  }
+    public_ip_address_id          = can(azurerm_public_ip.pip[0].id) ? azurerm_public_ip.pip[0].id : null
+  } 
 }
 
 resource "azurerm_network_interface_security_group_association" "nsg" {
   network_interface_id      = azurerm_network_interface.nic.id
   network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
@@ -49,7 +55,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   size                            = "Standard_B1ls"
   admin_username                  = "adminuser"
   disable_password_authentication = false
-  admin_password                  = "supersecretpassword" #is it really that super and secret? ;) for ambitious, see https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password
+  admin_password                  = random_password.password.result
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]

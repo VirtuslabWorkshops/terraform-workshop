@@ -5,6 +5,6 @@ locals {
 module "network" {
   source = "./modules/network"
 
-  name_prefix = var.name_prefix
+  prefix = var.prefix
   address_space = local.address_space
 }
