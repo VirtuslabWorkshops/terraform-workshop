@@ -7,6 +7,6 @@ variable "subnet_id" {
 }
 
 variable "enable_public_ip" {
-  type = bool
+  type    = bool
   default = true
 }

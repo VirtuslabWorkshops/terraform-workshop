@@ -5,15 +5,15 @@ locals {
 module "network" {
   source = "./modules/network"
 
-  prefix = var.prefix
+  prefix        = var.prefix
   address_space = local.address_space
-  subnets = [local.address_space]
+  subnets       = [local.address_space]
 }
 
 module "vm" {
   source = "./modules/vm"
 
-  prefix = var.prefix
+  prefix    = var.prefix
   subnet_id = module.network.subnet_id
   # enable_public_ip = false # requires a destroy first 
 }

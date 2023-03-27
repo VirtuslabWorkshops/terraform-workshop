@@ -3,6 +3,6 @@ variable "prefix" {
 }
 
 variable "number_of_containers" {
-  type = number
+  type    = number
   default = 1
 }

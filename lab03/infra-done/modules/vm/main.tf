@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "pip" {
-  count = var.enable_public_ip ? 1 : 0
+  count               = var.enable_public_ip ? 1 : 0
   name                = "${var.prefix}-workshop-pip"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -34,7 +34,7 @@ resource "azurerm_network_interface" "nic" {
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = can(azurerm_public_ip.pip[0].id) ? azurerm_public_ip.pip[0].id : null
-  } 
+  }
 }
 
 resource "azurerm_network_interface_security_group_association" "nsg" {
