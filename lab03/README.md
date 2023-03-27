@@ -12,13 +12,13 @@
 
 Terraform allows us to group resources together into modules for reuse or to just group them logically.
 Look at [network](./infra/modules/network/) module. Notice the `count` meta argument, it allows you to define how many instances of that resource Terraform should create.
-See `data` type of object in Terraform in [data.tf](./infra/modules/network/data.tf) - this type of resource allows to get information about existing object (could be almost anything, don't have to be created via Terraform).
+See `data` type of object in Terraform in [data.tf](./infra/modules/network/data.tf) - this type of resource allows to get information about existing object (could be almost anything, doesn't have to be created via Terraform).
 
 1. Create a resource group outside of Terraform
    - it can be done either from Azure Portal or using Azure CLI
 
 ```bash
-az group create --name "<name_prefix>-workshop" --location westeurope 
+az group create --name "<prefix>-workshop" --location westeurope 
 ```
 
 1. Apply changes from [`infra`](./infra/) directory. Notice that, by default subnet was not created.
