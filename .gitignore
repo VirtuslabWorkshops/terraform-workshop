@@ -1,0 +1,56 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with 'go test -c'
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.txt
+
+# Temporary Build Files
+tmp/_output/
+vendor/
+cross/
+*.export
+*.log
+*.bak
+go.sum
+
+# IntelliJ/Goland
+.idea/
+
+# OS stuff
+.DS_Store
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Personal Docker configuration
+docker-compose.override.yaml
+
+# Terraform debug output
+terraform_debug.log
+
+backend.tf
+# providers.tf
+.terraform.lock.hcl
+**/.terragrunt-cache/*
