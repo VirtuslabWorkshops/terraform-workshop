@@ -34,5 +34,5 @@ variable "team_name" {
     condition     = can(regex("^[\\w-]+$", var.team_name))
     error_message = "Workload group name is not valid."
   }
-  default = "mk"
+  default = "vl"
 }
