@@ -51,20 +51,14 @@
 3. Login to Azure via [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_Billing/SubscriptionsBlade) and ensure you can see subscription named `Cloudyna`
 
 4. Clone your repository 
-   
-   - login to to GitHub using GH Cli
-   - 
-     ```bash
-     gh auth login
-     ```
-
-     and follow defaults
 
    - clone repository
 
      ```bash
-      gh repo clone VirtuslabWorkshops/cloudyna-workshop
-      cd cloudyna-workshop
+      gh repo clone VirtuslabWorkshops/terraform-workshop
+      # or 
+      git clone https://github.com/VirtuslabWorkshops/terraform-workshop.git
+      cd terraform-workshop
      ```
 
 5. Login to Azure via Azure CLI
